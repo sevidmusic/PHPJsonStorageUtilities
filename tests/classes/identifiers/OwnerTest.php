@@ -2,9 +2,9 @@
 
 namespace Darling\PHPJsonStorageUtilities\tests\classes\identifiers;
 
-use Darling\PHPJsonStorageUtilities\classes\identifiers\Owner;
-use Darling\PHPJsonStorageUtilities\tests\PHPJsonStorageUtilitiesTest;
-use Darling\PHPJsonStorageUtilities\tests\interfaces\identifiers\OwnerTestTrait;
+use \Darling\PHPJsonStorageUtilities\classes\identifiers\Owner;
+use \Darling\PHPJsonStorageUtilities\tests\PHPJsonStorageUtilitiesTest;
+use \Darling\PHPJsonStorageUtilities\tests\interfaces\identifiers\OwnerTestTrait;
 
 class OwnerTest extends PHPJsonStorageUtilitiesTest
 {

@@ -2,7 +2,7 @@
 
 namespace Darling\PHPJsonStorageUtilities\tests\interfaces\identifiers;
 
-use Darling\PHPJsonStorageUtilities\interfaces\identifiers\Owner;
+use \Darling\PHPJsonStorageUtilities\interfaces\identifiers\Owner;
 
 /**
  * The OwnerTestTrait defines common tests for
