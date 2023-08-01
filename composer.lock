@@ -8,16 +8,16 @@
     "packages": [
         {
             "name": "darling/php-darling-dev-tools",
-            "version": "v1.0.6",
+            "version": "v1.0.7",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sevidmusic/PHPDarlingDevTools.git",
-                "reference": "5fda9084c7931328f4a7a8599693f647d8b3d06b"
+                "reference": "0c6ea7a3c4fcfdb43f607d10701c0e5c80b5ada8"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sevidmusic/PHPDarlingDevTools/zipball/5fda9084c7931328f4a7a8599693f647d8b3d06b",
-                "reference": "5fda9084c7931328f4a7a8599693f647d8b3d06b",
+                "url": "https://api.github.com/repos/sevidmusic/PHPDarlingDevTools/zipball/0c6ea7a3c4fcfdb43f607d10701c0e5c80b5ada8",
+                "reference": "0c6ea7a3c4fcfdb43f607d10701c0e5c80b5ada8",
                 "shasum": ""
             },
             "require": {
@@ -46,9 +46,9 @@
             "description": "Development tools for development of Darling PHP libraries and projects. ",
             "support": {
                 "issues": "https://github.com/sevidmusic/PHPDarlingDevTools/issues",
-                "source": "https://github.com/sevidmusic/PHPDarlingDevTools/tree/v1.0.6"
+                "source": "https://github.com/sevidmusic/PHPDarlingDevTools/tree/v1.0.7"
             },
-            "time": "2023-07-06T23:07:13+00:00"
+            "time": "2023-08-01T15:10:15+00:00"
         },
         {
             "name": "darling/php-json-utilities",
