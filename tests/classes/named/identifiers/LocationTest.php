@@ -12,8 +12,8 @@ class LocationTest extends PHPJsonStorageUtilitiesTest
 {
 
     /**
-     * The LocationTestTrait defines
-     * common tests for implementations of the
+     * The LocationTestTrait defines common tests for implementations
+     * of the
      * Darling\PHPJsonStorageUtilities\interfaces\named\identifiers\Location
      * interface.
      *

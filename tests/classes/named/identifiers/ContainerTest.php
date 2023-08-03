@@ -12,8 +12,8 @@ class ContainerTest extends PHPJsonStorageUtilitiesTest
 {
 
     /**
-     * The ContainerTestTrait defines
-     * common tests for implementations of the
+     * The ContainerTestTrait defines common tests for
+     * implementations of the
      * Darling\PHPJsonStorageUtilities\interfaces\named\identifiers\Container
      * interface.
      *

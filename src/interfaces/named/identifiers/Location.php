@@ -5,7 +5,8 @@ namespace Darling\PHPJsonStorageUtilities\interfaces\named\identifiers;
 use \Darling\PHPJsonStorageUtilities\interfaces\named\identifiers\NamedIdentifier;
 
 /**
- * Description of this interface.
+ * A Location is a NamedIdentifier that can be used to identify
+ * stored Json.
  *
  * @example
  *

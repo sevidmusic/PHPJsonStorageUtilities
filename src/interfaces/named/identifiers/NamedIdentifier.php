@@ -6,7 +6,7 @@ use \Darling\PHPTextTypes\interfaces\strings\Name;
 use \Stringable;
 
 /**
- * Description of this interface.
+ * A NamedIdentifier can be used to identify stored Json.
  *
  * @example
  *

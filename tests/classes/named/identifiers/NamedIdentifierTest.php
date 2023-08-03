@@ -12,8 +12,8 @@ class NamedIdentifierTest extends PHPJsonStorageUtilitiesTest
 {
 
     /**
-     * The NamedIdentifierTestTrait defines
-     * common tests for implementations of the
+     * The NamedIdentifierTestTrait defines common tests for
+     * implementations of the
      * Darling\PHPJsonStorageUtilities\interfaces\named\identifiers\NamedIdentifier
      * interface.
      *
