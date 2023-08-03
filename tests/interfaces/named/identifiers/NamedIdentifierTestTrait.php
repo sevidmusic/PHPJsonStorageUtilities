@@ -16,20 +16,28 @@ trait NamedIdentifierTestTrait
 {
 
     /**
-     * @var NamedIdentifier $namedIdentifier
-     *                              An instance of a
-     *                              NamedIdentifier
-     *                              implementation to test.
+     * @var NamedIdentifier $namedIdentifier An instance of a
+     *                                       NamedIdentifier
+     *                                       implementation
+     *                                       to test.
      */
     protected NamedIdentifier $namedIdentifier;
 
+    /**
+     * @var Name $expectedName
+     */
     private Name $expectedName;
 
     /**
      * Set up an instance of a NamedIdentifier implementation to test.
      *
-     * This method must also set the NamedIdentifier implementation instance
-     * to be tested via the setNamedIdentifierTestInstance() method.
+     * This method must set the NamedIdentifier implementation
+     * instance to be tested via the setNamedIdentifierTestInstance()
+     * method.
+     *
+     * This method must also set the Name that is expected to be
+     * assigned to the NamedIdentifier implementation instance
+     * being tested via the setExpectedName() method..
      *
      * This method may also be used to perform any additional setup
      * required by the implementation being tested.
@@ -41,8 +49,10 @@ trait NamedIdentifierTestTrait
      * ```
      * protected function setUp(): void
      * {
+     *     $expectedName = new Name(new Text($this->randomChars()));
+     *     $this->setExpectedName($expectedName);
      *     $this->setNamedIdentifierTestInstance(
-     *         new \Darling\PHPJsonStorageUtilities\classes\named\identifiers\NamedIdentifier()
+     *         new NamedIdentifier($expectedName)
      *     );
      * }
      *
@@ -98,6 +108,14 @@ trait NamedIdentifierTestTrait
         $this->expectedName = $name;
     }
 
+    /**
+     * Return the Name instance that is expected to be returned
+     * by the NamedIdentifier implementation instance to test's
+     * name() method.
+     *
+     * @return Name
+     *
+     */
     private function expectedName(): Name
     {
         return $this->expectedName;
@@ -144,5 +162,6 @@ trait NamedIdentifierTestTrait
             ),
         );
     }
+
 }
 
