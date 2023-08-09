@@ -17,12 +17,6 @@ use \Stringable;
 interface JsonStorageDirectoryPath extends \Stringable
 {
 
-    public function directoryName(): Name;
-
-    public function rootDirectoryPath(): string;
-
-    public function parentDirectoryPath(): string;
-
     public function storageDirectoryPath(): string;
 
 }

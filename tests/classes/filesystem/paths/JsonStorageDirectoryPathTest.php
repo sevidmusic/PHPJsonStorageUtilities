@@ -24,10 +24,8 @@ class JsonStorageDirectoryPathTest extends PHPJsonStorageUtilitiesTest
 
     public function setUp(): void
     {
-        $expectedName = new Name(new Text($this->randomChars()));
-        $this->setExpectedName($expectedName);
         $this->setJsonStorageDirectoryPathTestInstance(
-            new JsonStorageDirectoryPath($expectedName)
+            new JsonStorageDirectoryPath()
         );
     }
 }
