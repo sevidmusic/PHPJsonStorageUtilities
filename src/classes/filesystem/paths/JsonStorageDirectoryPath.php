@@ -11,44 +11,31 @@ use \Darling\PHPTextTypes\classes\strings\Text as TextClass;
 class JsonStorageDirectoryPath implements JsonStorageDirectoryPathInterface
 {
 
-    public function __construct() {}
-
     public function __toString(): string
     {
-        return $this->storageDirectoryPath();
-    }
-
-    public function storageDirectoryPath(): string
-    {
         $userInfo = posix_getpwuid(posix_geteuid());
-        $relativeRootDirectoryPath =
-            '.local' .
-            DIRECTORY_SEPARATOR .
-            'share';
-        $storageDirectoryPath = (
-            is_array($userInfo)
+        if(is_array($userInfo) && isset($userInfo['dir'])) {
+            $storageDirectoryPath = realpath(
+                $userInfo['dir'] .
+                DIRECTORY_SEPARATOR .
+                '.local' .
+                DIRECTORY_SEPARATOR .
+                'share'
+            );
+        }
+        return (
+            isset($storageDirectoryPath)
             &&
-            isset($userInfo['dir'])
+            $storageDirectoryPath !== false
             &&
-            file_exists(
-                $storageDirectoryPath = strval(
-                    realpath($userInfo['dir'] .
-                    DIRECTORY_SEPARATOR .
-                    $relativeRootDirectoryPath
-                    )
-                )
-            )
+            is_writable($storageDirectoryPath)
             ? $storageDirectoryPath
-            : DIRECTORY_SEPARATOR .
-            'tmp' .
-            DIRECTORY_SEPARATOR .
-            $relativeRootDirectoryPath
-        );
-        return $storageDirectoryPath .
-            DIRECTORY_SEPARATOR .
-            'darling' .
-            DIRECTORY_SEPARATOR .
-            'data';
+            : DIRECTORY_SEPARATOR . 'tmp'
+        ) .
+        DIRECTORY_SEPARATOR .
+        'darling' .
+        DIRECTORY_SEPARATOR .
+        'data';
     }
 
 }

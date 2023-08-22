@@ -14,8 +14,7 @@ class JsonStorageDirectoryPathTest extends PHPJsonStorageUtilitiesTest
     /**
      * The JsonStorageDirectoryPathTestTrait defines
      * common tests for implementations of the
-     * Darling\PHPJsonStorageUtilities\interfaces\filesystem\paths\JsonStorageDirectoryPath
-     * interface.
+     * \Darling\PHPJsonStorageUtilities\interfaces\filesystem\paths\JsonStorageDirectoryPath interface.
      *
      * @see JsonStorageDirectoryPathTestTrait
      *

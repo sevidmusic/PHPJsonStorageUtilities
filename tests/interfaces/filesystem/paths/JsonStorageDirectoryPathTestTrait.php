@@ -24,10 +24,12 @@ trait JsonStorageDirectoryPathTestTrait
     protected JsonStorageDirectoryPath $jsonStorageDirectoryPath;
 
     /**
-     * Set up an instance of a JsonStorageDirectoryPath implementation to test.
+     * Set up an instance of a JsonStorageDirectoryPath implementation
+     * to test.
      *
-     * This method must also set the JsonStorageDirectoryPath implementation instance
-     * to be tested via the setJsonStorageDirectoryPathTestInstance() method.
+     * This method must also set the JsonStorageDirectoryPath
+     * implementation instance to be tested via the
+     * setJsonStorageDirectoryPathTestInstance() method.
      *
      * This method may also be used to perform any additional setup
      * required by the implementation being tested.
@@ -50,7 +52,8 @@ trait JsonStorageDirectoryPathTestTrait
     abstract protected function setUp(): void;
 
     /**
-     * Return the JsonStorageDirectoryPath implementation instance to test.
+     * Return the JsonStorageDirectoryPath implementation instance to
+     * test.
      *
      * @return JsonStorageDirectoryPath
      *
@@ -82,51 +85,28 @@ trait JsonStorageDirectoryPathTestTrait
     private function expectedStorageDirectoryPath(): string
     {
         $userInfo = posix_getpwuid(posix_geteuid());
-        $rootDirectoryPath = (
-            is_array($userInfo)
-            &&
-            isset($userInfo['dir'])
-            &&
-            file_exists(
+        if(is_array($userInfo) && isset($userInfo['dir'])) {
+            $storageDirectoryPath = realpath(
                 $userInfo['dir'] .
                 DIRECTORY_SEPARATOR .
                 '.local' .
                 DIRECTORY_SEPARATOR .
                 'share'
-            )
-            ? $userInfo['dir'] .
-            DIRECTORY_SEPARATOR .
-            '.local' .
-            DIRECTORY_SEPARATOR .
-            'share'
+            );
+        }
+        return (
+            isset($storageDirectoryPath)
+            &&
+            $storageDirectoryPath !== false
+            &&
+            is_writable($storageDirectoryPath)
+            ? $storageDirectoryPath
             : DIRECTORY_SEPARATOR . 'tmp'
-        );
-        return $rootDirectoryPath .
-            DIRECTORY_SEPARATOR .
-            'darling' .
-            DIRECTORY_SEPARATOR .
-            'data';
-    }
-
-
-    /**
-     * Test storageDirectoryPath returns the expected stroage directroy path.
-     *
-     * @return void
-     *
-     * @covers JsonStorageDirectoryPath->storageDirectoryPath()
-     */
-    public function test_storageDirectoryPath_returns_the_expectedStorageDirectroyPath(): void {
-        $this->assertEquals(
-            $this->expectedStorageDirectoryPath(),
-            $this->jsonStorageDirectoryPathTestInstance()->storageDirectoryPath(),
-            $this->testFailedMessage(
-                $this->jsonStorageDirectoryPathTestInstance(),
-                'storageDirectoryPath',
-                'return the expected storage directory path: ' .
-                $this->expectedStorageDirectoryPath(),
-            ),
-        );
+        ) .
+        DIRECTORY_SEPARATOR .
+        'darling' .
+        DIRECTORY_SEPARATOR .
+        'data';
     }
 
     /**
