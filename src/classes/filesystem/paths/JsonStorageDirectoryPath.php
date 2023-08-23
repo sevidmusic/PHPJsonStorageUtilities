@@ -37,7 +37,9 @@ class JsonStorageDirectoryPath implements JsonStorageDirectoryPathInterface
         DIRECTORY_SEPARATOR .
         'darling' .
         DIRECTORY_SEPARATOR .
-        'data';
+        'data' .
+        DIRECTORY_SEPARATOR .
+        $this->name()->__toString();
     }
 
     public function name(): Name

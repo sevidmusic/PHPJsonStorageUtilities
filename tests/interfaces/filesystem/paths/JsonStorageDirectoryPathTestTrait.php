@@ -108,7 +108,9 @@ trait JsonStorageDirectoryPathTestTrait
         DIRECTORY_SEPARATOR .
         'darling' .
         DIRECTORY_SEPARATOR .
-        'data';
+        'data' .
+        DIRECTORY_SEPARATOR .
+        $this->expectedName()->__toString();
     }
 
     private function setExpectedName(Name $name): void
