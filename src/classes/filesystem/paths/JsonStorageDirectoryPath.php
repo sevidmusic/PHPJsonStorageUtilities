@@ -11,6 +11,8 @@ use \Darling\PHPTextTypes\classes\strings\Text as TextClass;
 class JsonStorageDirectoryPath implements JsonStorageDirectoryPathInterface
 {
 
+    public function __construct(private Name $name) {}
+
     public function __toString(): string
     {
         $userInfo = posix_getpwuid(posix_geteuid());
@@ -38,5 +40,9 @@ class JsonStorageDirectoryPath implements JsonStorageDirectoryPathInterface
         'data';
     }
 
+    public function name(): Name
+    {
+        return $this->name;
+    }
 }
 

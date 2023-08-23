@@ -23,6 +23,8 @@ trait JsonStorageDirectoryPathTestTrait
      */
     protected JsonStorageDirectoryPath $jsonStorageDirectoryPath;
 
+    private Name $expectedName;
+
     /**
      * Set up an instance of a JsonStorageDirectoryPath implementation
      * to test.
@@ -109,8 +111,18 @@ trait JsonStorageDirectoryPathTestTrait
         'data';
     }
 
+    private function setExpectedName(Name $name): void
+    {
+        $this->expectedName = $name;
+    }
+
+    private function expectedName(): Name
+    {
+        return $this->expectedName;
+    }
+
     /**
-     * Test __toString returns the expected root directroy path.
+     * Test __toString() returns the expected root directroy path.
      *
      * @return void
      *
@@ -125,6 +137,26 @@ trait JsonStorageDirectoryPathTestTrait
                 '__toString',
                 'return the expected storage directory path: ' .
                 $this->expectedStorageDirectoryPath(),
+            ),
+        );
+    }
+
+    /**
+     * Test name() returns the expected name.
+     * @return void
+     *
+     * @covers JsonStorageDirectoryPath->name()
+     */
+    public function test_name_returns_the_expected_name(): void
+    {
+        $this->assertEquals(
+            $this->expectedName(),
+            $this->jsonStorageDirectoryPathTestInstance()->name(),
+            $this->testFailedMessage(
+                $this->jsonStorageDirectoryPathTestInstance(),
+                'name',
+                'return the expected name: ' .
+                $this->expectedName(),
             ),
         );
     }

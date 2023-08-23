@@ -56,5 +56,7 @@ interface JsonStorageDirectoryPath extends \Stringable
 
     public function __toString(): string;
 
+    public function name(): Name;
+
 }
 
