@@ -11,7 +11,25 @@ use \Darling\PHPTextTypes\classes\strings\Text as TextClass;
 class JsonStorageDirectoryPath implements JsonStorageDirectoryPathInterface
 {
 
+    /**
+     * Instantiate a new instance of a JsonStorageDirectoryPath.
+     *
+     * @example
+     *
+     * ```
+     * $jsonStorageDirectoryPath = new JsonStorageDirectoryPath(
+     *     new Name('FooBarBaz')
+     * );
+     *
+     * ```
+     *
+     */
     public function __construct(private Name $name) {}
+
+    public function name(): Name
+    {
+        return $this->name;
+    }
 
     public function __toString(): string
     {
@@ -42,9 +60,5 @@ class JsonStorageDirectoryPath implements JsonStorageDirectoryPathInterface
         $this->name()->__toString();
     }
 
-    public function name(): Name
-    {
-        return $this->name;
-    }
 }
 

@@ -23,6 +23,11 @@ trait JsonStorageDirectoryPathTestTrait
      */
     protected JsonStorageDirectoryPath $jsonStorageDirectoryPath;
 
+    /**
+     * @var Name $expectedName The Name that is expected to be
+     *                         returned by the JsonStorageDirectoryPath
+     *                         implementation to test's name() method.
+     */
     private Name $expectedName;
 
     /**
@@ -32,6 +37,10 @@ trait JsonStorageDirectoryPathTestTrait
      * This method must also set the JsonStorageDirectoryPath
      * implementation instance to be tested via the
      * setJsonStorageDirectoryPathTestInstance() method.
+     *
+     * This method must also set the Name that is expected to be
+     * returned by the JsonStorageDirectoryPath to test's
+     * name() method via the setExpectedName() method.
      *
      * This method may also be used to perform any additional setup
      * required by the implementation being tested.
@@ -43,8 +52,10 @@ trait JsonStorageDirectoryPathTestTrait
      * ```
      * protected function setUp(): void
      * {
+     *     $expectedName = new Name(new Text($this->randomChars()));
+     *     $this->setExpectedName($expectedName);
      *     $this->setJsonStorageDirectoryPathTestInstance(
-     *         new \Darling\PHPJsonStorageUtilities\classes\filesystem\paths\JsonStorageDirectoryPath()
+     *         new JsonStorageDirectoryPath($expectedName)
      *     );
      * }
      *
@@ -84,6 +95,13 @@ trait JsonStorageDirectoryPathTestTrait
         $this->jsonStorageDirectoryPath = $jsonStorageDirectoryPathTestInstance;
     }
 
+    /**
+     * Return the path that is expected to be returned by the
+     * JsonStorageDirectoryPath to test's __toString() method.
+     *
+     * @return string
+     *
+     */
     private function expectedStorageDirectoryPath(): string
     {
         $userInfo = posix_getpwuid(posix_geteuid());
@@ -113,11 +131,25 @@ trait JsonStorageDirectoryPathTestTrait
         $this->expectedName()->__toString();
     }
 
+    /**
+     * Set the Name instance that is expected to be returned by the
+     * JsonStorageDirectoryPath to test's name() method.
+     *
+     * @return void
+     *
+     */
     private function setExpectedName(Name $name): void
     {
         $this->expectedName = $name;
     }
 
+    /**
+     * Return the Name instance that is expected to be returned by the
+     * JsonStorageDirectoryPath to test's name() method.
+     *
+     * @return Name
+     *
+     */
     private function expectedName(): Name
     {
         return $this->expectedName;
