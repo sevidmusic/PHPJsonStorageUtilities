@@ -8,7 +8,7 @@ use \Darling\PHPJsonStorageUtilities\tests\interfaces\named\identifiers\Containe
 use \Darling\PHPTextTypes\classes\strings\Name;
 use \Darling\PHPTextTypes\classes\strings\Text;
 
-class ContainerTest extends PHPJsonStorageUtilitiesTest
+final class ContainerTest extends PHPJsonStorageUtilitiesTest
 {
 
     /**

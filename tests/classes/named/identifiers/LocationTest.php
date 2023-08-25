@@ -8,7 +8,7 @@ use \Darling\PHPJsonStorageUtilities\tests\interfaces\named\identifiers\Location
 use \Darling\PHPTextTypes\classes\strings\Name;
 use \Darling\PHPTextTypes\classes\strings\Text;
 
-class LocationTest extends PHPJsonStorageUtilitiesTest
+final class LocationTest extends PHPJsonStorageUtilitiesTest
 {
 
     /**

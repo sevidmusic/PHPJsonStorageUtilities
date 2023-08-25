@@ -8,7 +8,7 @@ use \Darling\PHPJsonStorageUtilities\tests\interfaces\named\identifiers\OwnerTes
 use \Darling\PHPTextTypes\classes\strings\Name;
 use \Darling\PHPTextTypes\classes\strings\Text;
 
-class OwnerTest extends PHPJsonStorageUtilitiesTest
+final class OwnerTest extends PHPJsonStorageUtilitiesTest
 {
 
     /**

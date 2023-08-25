@@ -10,7 +10,7 @@ use \Darling\PHPJsonStorageUtilities\tests\interfaces\filesystem\paths\JsonFileP
 use \Darling\PHPTextTypes\interfaces\strings\Id;
 use \Darling\PHPTextTypes\interfaces\strings\Name;
 
-class JsonFilePath implements JsonFilePathInterface
+final class JsonFilePath implements JsonFilePathInterface
 {
 
     public function __construct(
