@@ -71,7 +71,7 @@ class JsonFilePath implements JsonFilePathInterface
 
     private function shardId(Id $id): string
     {
-        $index = rand(2, 3);
+        $index = 3;
         $parentDir = substr($id->__toString(), 0, $index);
         $subDir = substr($id->__toString(), $index);
         return $parentDir . DIRECTORY_SEPARATOR . $subDir . '.json';
