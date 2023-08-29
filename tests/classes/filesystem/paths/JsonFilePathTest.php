@@ -11,9 +11,10 @@ use \Darling\PHPJsonStorageUtilities\tests\PHPJsonStorageUtilitiesTest;
 use \Darling\PHPJsonStorageUtilities\tests\interfaces\filesystem\paths\JsonFilePathTestTrait;
 use \Darling\PHPTextTypes\classes\strings\Id;
 use \Darling\PHPTextTypes\classes\strings\Name;
+use \Darling\PHPTextTypes\classes\strings\ClassString;
 use \Darling\PHPTextTypes\classes\strings\Text;
 
-class JsonFilePathTest extends PHPJsonStorageUtilitiesTest
+final class JsonFilePathTest extends PHPJsonStorageUtilitiesTest
 {
 
     /**
@@ -44,9 +45,11 @@ class JsonFilePathTest extends PHPJsonStorageUtilitiesTest
             )
         );
         $expectedContainer = new Container(
-            new Name(
-                new Text(
-                    $this->randomChars()
+            new ClassString(
+                new Name(
+                    new Text(
+                        $this->randomChars()
+                    )
                 )
             )
         );

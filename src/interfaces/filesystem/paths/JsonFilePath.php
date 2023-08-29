@@ -18,6 +18,5 @@ interface JsonFilePath extends \Stringable
     public function owner(): Owner;
     public function name(): Name;
     public function id(): Id;
-#    public function __toString(): string;
-
+    public function __toString(): string;
 }

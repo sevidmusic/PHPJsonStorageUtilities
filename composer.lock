@@ -102,16 +102,16 @@
         },
         {
             "name": "darling/php-mocking-utilities",
-            "version": "v1.0.5",
+            "version": "v1.0.8",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sevidmusic/PHPMockingUtilities.git",
-                "reference": "0aab4054b6eaa782b64691ed5ae8a14b7534f9b2"
+                "reference": "bc8d3706ca48f754065a8d4a836963ef59cfc464"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sevidmusic/PHPMockingUtilities/zipball/0aab4054b6eaa782b64691ed5ae8a14b7534f9b2",
-                "reference": "0aab4054b6eaa782b64691ed5ae8a14b7534f9b2",
+                "url": "https://api.github.com/repos/sevidmusic/PHPMockingUtilities/zipball/bc8d3706ca48f754065a8d4a836963ef59cfc464",
+                "reference": "bc8d3706ca48f754065a8d4a836963ef59cfc464",
                 "shasum": ""
             },
             "require": {
@@ -145,9 +145,9 @@
             "description": "The PHPMockingUtilities library provides classes that can be used to mock various types of values.",
             "support": {
                 "issues": "https://github.com/sevidmusic/PHPMockingUtilities/issues",
-                "source": "https://github.com/sevidmusic/PHPMockingUtilities/tree/v1.0.5"
+                "source": "https://github.com/sevidmusic/PHPMockingUtilities/tree/v1.0.8"
             },
-            "time": "2023-07-08T01:08:17+00:00"
+            "time": "2023-08-29T05:50:01+00:00"
         },
         {
             "name": "darling/php-reflection-utilities",
@@ -517,16 +517,16 @@
         },
         {
             "name": "phpstan/phpstan",
-            "version": "1.10.30",
+            "version": "1.10.32",
             "source": {
                 "type": "git",
                 "url": "https://github.com/phpstan/phpstan.git",
-                "reference": "2910afdd3fe33e5afd71c09f3fb0d0845b48c410"
+                "reference": "c47e47d3ab03137c0e121e77c4d2cb58672f6d44"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phpstan/phpstan/zipball/2910afdd3fe33e5afd71c09f3fb0d0845b48c410",
-                "reference": "2910afdd3fe33e5afd71c09f3fb0d0845b48c410",
+                "url": "https://api.github.com/repos/phpstan/phpstan/zipball/c47e47d3ab03137c0e121e77c4d2cb58672f6d44",
+                "reference": "c47e47d3ab03137c0e121e77c4d2cb58672f6d44",
                 "shasum": ""
             },
             "require": {
@@ -575,7 +575,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2023-08-22T13:48:25+00:00"
+            "time": "2023-08-24T21:54:50+00:00"
         },
         {
             "name": "phpunit/php-code-coverage",

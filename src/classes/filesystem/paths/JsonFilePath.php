@@ -10,7 +10,7 @@ use \Darling\PHPJsonStorageUtilities\tests\interfaces\filesystem\paths\JsonFileP
 use \Darling\PHPTextTypes\interfaces\strings\Id;
 use \Darling\PHPTextTypes\interfaces\strings\Name;
 
-class JsonFilePath implements JsonFilePathInterface
+final class JsonFilePath implements JsonFilePathInterface
 {
 
     public function __construct(
@@ -66,7 +66,8 @@ class JsonFilePath implements JsonFilePathInterface
             DIRECTORY_SEPARATOR .
             $this->name()->__toString() .
             DIRECTORY_SEPARATOR .
-            $this->shardId($this->id());
+            $this->shardId($this->id()) .
+            '.json';
     }
 
     private function shardId(Id $id): string
@@ -74,7 +75,7 @@ class JsonFilePath implements JsonFilePathInterface
         $index = 3;
         $parentDir = substr($id->__toString(), 0, $index);
         $subDir = substr($id->__toString(), $index);
-        return $parentDir . DIRECTORY_SEPARATOR . $subDir . '.json';
+        return $parentDir . DIRECTORY_SEPARATOR . $subDir;
     }
 }
 

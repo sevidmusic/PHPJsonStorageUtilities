@@ -286,7 +286,8 @@ trait JsonFilePathTestTrait
             DIRECTORY_SEPARATOR .
             $this->expectedName()->__toString() .
             DIRECTORY_SEPARATOR .
-            $this->shardId($this->expectedId());
+            $this->shardId($this->expectedId()) .
+            '.json';
     }
 
     private function shardId(Id $id): string
@@ -294,7 +295,7 @@ trait JsonFilePathTestTrait
         $index = 3;
         $parentDir = substr($id->__toString(), 0, $index);
         $subDir = substr($id->__toString(), $index);
-        return $parentDir . DIRECTORY_SEPARATOR . $subDir . '.json';
+        return $parentDir . DIRECTORY_SEPARATOR . $subDir;
     }
 
     /**

@@ -8,7 +8,7 @@ use \Darling\PHPTextTypes\classes\strings\Name as NameClass;
 use \Darling\PHPTextTypes\interfaces\strings\Text;
 use \Darling\PHPTextTypes\classes\strings\Text as TextClass;
 
-class JsonStorageDirectoryPath implements JsonStorageDirectoryPathInterface
+final class JsonStorageDirectoryPath implements JsonStorageDirectoryPathInterface
 {
 
     /**
