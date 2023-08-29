@@ -102,16 +102,16 @@
         },
         {
             "name": "darling/php-mocking-utilities",
-            "version": "v1.0.6",
+            "version": "v1.0.7",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sevidmusic/PHPMockingUtilities.git",
-                "reference": "99f9d3f8c689ded2abd364dbafd74e3d07227eb9"
+                "reference": "d949c6f30aeaf5580730edc5166acfac9494dfcb"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sevidmusic/PHPMockingUtilities/zipball/99f9d3f8c689ded2abd364dbafd74e3d07227eb9",
-                "reference": "99f9d3f8c689ded2abd364dbafd74e3d07227eb9",
+                "url": "https://api.github.com/repos/sevidmusic/PHPMockingUtilities/zipball/d949c6f30aeaf5580730edc5166acfac9494dfcb",
+                "reference": "d949c6f30aeaf5580730edc5166acfac9494dfcb",
                 "shasum": ""
             },
             "require": {
@@ -145,9 +145,9 @@
             "description": "The PHPMockingUtilities library provides classes that can be used to mock various types of values.",
             "support": {
                 "issues": "https://github.com/sevidmusic/PHPMockingUtilities/issues",
-                "source": "https://github.com/sevidmusic/PHPMockingUtilities/tree/v1.0.6"
+                "source": "https://github.com/sevidmusic/PHPMockingUtilities/tree/v1.0.7"
             },
-            "time": "2023-08-29T02:16:55+00:00"
+            "time": "2023-08-29T05:19:24+00:00"
         },
         {
             "name": "darling/php-reflection-utilities",
