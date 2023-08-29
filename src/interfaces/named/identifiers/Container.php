@@ -8,11 +8,12 @@ use \Darling\PHPJsonStorageUtilities\interfaces\named\identifiers\NamedIdentifie
  * A Container is a NamedIdentifier that can be used to identify
  * stored Json.
  *
- * @example
+ * A Container's Name will either be a hash of the value of a
+ * \Darling\PHPJsonStorageUtilities\enumerations\Type, or a
+ * hash of the value returned by a
+ * \Darling\PHPTextTypes\classes\strings\ClassString intance's
+ * __toString() method.
  *
- * ```
- *
- * ```
  */
 interface Container extends NamedIdentifier
 {
