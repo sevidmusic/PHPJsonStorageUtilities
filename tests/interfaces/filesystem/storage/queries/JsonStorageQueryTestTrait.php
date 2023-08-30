@@ -42,6 +42,21 @@ trait JsonStorageQueryTestTrait
 
 
     /**
+     * @var array<int, Container> The array of
+     *                                           Container
+     *                                           instances that is
+     *                                           expected to be
+     *                                           returned by the
+     *                                           JsonStorageQuery
+     *                                           being tested's
+     *                                           containers()
+     *                                           method.
+     */
+    private array $expectedContainers;
+
+
+
+    /**
      * @var array<int, Location> The array of
      *                                           Location
      *                                           instances that is
@@ -176,6 +191,59 @@ trait JsonStorageQueryTestTrait
             ),
         );
     }
+
+
+    /**
+     * Set the array of Container instances
+     * that is expected to be returned by the JsonStorageQuery
+     * instance being tested's containers() method.
+     *
+     * @param array<int, Container> $containers
+     *
+     */
+    protected function setExpectedContainers(
+        array $containers
+    ): void
+    {
+        $this->expectedContainers = $containers;
+    }
+
+    /**
+     * Return the array of Container instances
+     * that is expected to be returned by the JsonStorageQuery
+     * instance being tested's containers() method.
+     *
+     * @return array<int, Container>
+     *
+     */
+    protected function expectedContainers(): array
+    {
+        return $this->expectedContainers;
+    }
+
+    /**
+     * Test that the containers() method returns the
+     * expected array of Container instances.
+     *
+     * @return void
+     *
+     * @covers JsonStorageQuery->containers()
+     *
+     */
+    public function test_containers_returns_an_array_of_the_expected_Container_instances(): void
+    {
+        $this->assertEquals(
+            $this->expectedContainers(),
+            $this->jsonStorageQueryTestInstance()->containers(),
+            $this->testFailedMessage(
+                $this->jsonStorageQueryTestInstance(),
+                'containers',
+                'return an array of the expected ' .
+                'Container instances'
+            ),
+        );
+    }
+
 
 
     /**
