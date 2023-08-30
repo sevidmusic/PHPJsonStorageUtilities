@@ -6,6 +6,7 @@ use \Darling\PHPJsonStorageUtilities\interfaces\filesystem\paths\JsonStorageDire
 use \Darling\PHPJsonStorageUtilities\interfaces\filesystem\paths\JsonFilePath;
 use \Darling\PHPJsonStorageUtilities\interfaces\named\identifiers\Owner;
 use \Darling\PHPTextTypes\interfaces\strings\Name;
+use \Darling\PHPTextTypes\interfaces\strings\Id;
 use \Darling\PHPJsonStorageUtilities\interfaces\named\identifiers\Location;
 use \Darling\PHPJsonStorageUtilities\interfaces\named\identifiers\Container;
 use \Darling\PHPJsonStorageUtilities\interfaces\filesystem\storage\queries\JsonStorageQuery as JsonStorageQueryInterface;
@@ -22,6 +23,7 @@ class JsonStorageQuery implements JsonStorageQueryInterface
      * @param array<int, Container>|null $containers
      * @param array<int, Owner>|null $owners
      * @param array<int, Name>|null $names
+     * @param array<int, Id>|null $ids
      *
      */
     public function __construct(
@@ -31,6 +33,7 @@ class JsonStorageQuery implements JsonStorageQueryInterface
         private array|null $containers = null,
         private array|null $owners = null,
         private array|null $names = null,
+        private array|null $ids = null,
     ) { }
 
     public function jsonStorageDirectoryPaths(): array
@@ -62,5 +65,11 @@ class JsonStorageQuery implements JsonStorageQueryInterface
     {
         return $this->names ?? [];
     }
+
+    public function ids(): array
+    {
+        return $this->ids ?? [];
+    }
+
 }
 

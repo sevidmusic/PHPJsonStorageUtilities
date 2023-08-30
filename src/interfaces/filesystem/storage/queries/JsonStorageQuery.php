@@ -8,6 +8,7 @@ use \Darling\PHPJsonStorageUtilities\interfaces\named\identifiers\Location;
 use \Darling\PHPJsonStorageUtilities\interfaces\named\identifiers\Owner;
 use \Darling\PHPJsonStorageUtilities\interfaces\named\identifiers\Container;
 use \Darling\PHPTextTypes\interfaces\strings\Name;
+use \Darling\PHPTextTypes\interfaces\strings\Id;
 
 /**
  * Description of this interface.
@@ -76,5 +77,13 @@ interface JsonStorageQuery
      */
     public function names(): array;
 
+    /**
+     * Return an array of Id instances that will determine
+     * which ids will be queried.
+     *
+     * @return array<int, Id>
+     *
+     */
+    public function ids(): array;
 }
 

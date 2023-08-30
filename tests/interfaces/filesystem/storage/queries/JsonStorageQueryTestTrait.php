@@ -5,10 +5,11 @@ namespace Darling\PHPJsonStorageUtilities\tests\interfaces\filesystem\storage\qu
 use \Darling\PHPJsonStorageUtilities\interfaces\filesystem\paths\JsonStorageDirectoryPath;
 use \Darling\PHPJsonStorageUtilities\interfaces\filesystem\paths\JsonFilePath;
 use \Darling\PHPJsonStorageUtilities\interfaces\filesystem\storage\queries\JsonStorageQuery;
-use \Darling\PHPJsonStorageUtilities\classes\named\identifiers\Location;
-use \Darling\PHPJsonStorageUtilities\classes\named\identifiers\Owner;
-use \Darling\PHPTextTypes\classes\strings\Name;
-use \Darling\PHPJsonStorageUtilities\classes\named\identifiers\Container;
+use \Darling\PHPJsonStorageUtilities\interfaces\named\identifiers\Location;
+use \Darling\PHPJsonStorageUtilities\interfaces\named\identifiers\Owner;
+use \Darling\PHPTextTypes\interfaces\strings\Name;
+use \Darling\PHPTextTypes\interfaces\strings\Id;
+use \Darling\PHPJsonStorageUtilities\interfaces\named\identifiers\Container;
 
 /**
  * The JsonStorageQueryTestTrait defines common tests for
