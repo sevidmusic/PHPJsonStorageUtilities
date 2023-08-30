@@ -3,11 +3,17 @@
 namespace Darling\PHPJsonStorageUtilities\tests\classes\filesystem\storage\queries;
 
 use \Darling\PHPJsonStorageUtilities\classes\filesystem\paths\JsonStorageDirectoryPath;
+use \Darling\PHPJsonStorageUtilities\classes\filesystem\paths\JsonFilePath;
 use \Darling\PHPJsonStorageUtilities\classes\filesystem\storage\queries\JsonStorageQuery;
 use \Darling\PHPJsonStorageUtilities\tests\PHPJsonStorageUtilitiesTest;
 use \Darling\PHPJsonStorageUtilities\tests\interfaces\filesystem\storage\queries\JsonStorageQueryTestTrait;
 use \Darling\PHPTextTypes\classes\strings\Name;
+use \Darling\PHPTextTypes\classes\strings\ClassString;
 use \Darling\PHPTextTypes\classes\strings\Text;
+use \Darling\PHPTextTypes\classes\strings\Id;
+use \Darling\PHPJsonStorageUtilities\classes\named\identifiers\Location;
+use \Darling\PHPJsonStorageUtilities\classes\named\identifiers\Owner;
+use \Darling\PHPJsonStorageUtilities\classes\named\identifiers\Container;
 
 class JsonStorageQueryTest extends PHPJsonStorageUtilitiesTest
 {
@@ -51,8 +57,28 @@ class JsonStorageQueryTest extends PHPJsonStorageUtilitiesTest
         $this->setExpectedJsonStorageDirectoryPaths(
             $expectedJsonStorageDirectoryPaths
         );
+        $expectedJsonFilePaths = [
+            new JsonFilePath(
+                new JsonStorageDirectoryPath(
+                    new Name(
+                        new Text(
+                            $this->randomChars()
+                        )
+                    )
+                ),
+                new Location(new Name(new Text($this->randomChars()))),
+                new Container(new ClassString(Name::class)),
+                new Owner(new Name(new Text($this->randomChars()))),
+                new Name(new Text($this->randomChars())),
+                new Id(),
+            ),
+        ];
+        $this->setExpectedJsonFilePaths($expectedJsonFilePaths);
         $this->setJsonStorageQueryTestInstance(
-            new JsonStorageQuery($expectedJsonStorageDirectoryPaths)
+            new JsonStorageQuery(
+                jsonStorageDirectoryPaths: $expectedJsonStorageDirectoryPaths,
+                jsonFilePaths: $expectedJsonFilePaths,
+            )
         );
     }
 }

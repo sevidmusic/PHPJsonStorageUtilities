@@ -3,6 +3,7 @@
 namespace Darling\PHPJsonStorageUtilities\tests\interfaces\filesystem\storage\queries;
 
 use \Darling\PHPJsonStorageUtilities\interfaces\filesystem\paths\JsonStorageDirectoryPath;
+use \Darling\PHPJsonStorageUtilities\interfaces\filesystem\paths\JsonFilePath;
 use \Darling\PHPJsonStorageUtilities\interfaces\filesystem\storage\queries\JsonStorageQuery;
 
 /**
@@ -35,6 +36,21 @@ trait JsonStorageQueryTestTrait
      *                                           method.
      */
     private array $expectedJsonStorageDirectoryPaths;
+
+
+    /**
+     * @var array<int, JsonFilePath> The array of
+     *                                           JsonFilePath
+     *                                           instances that is
+     *                                           expected to be
+     *                                           returned by the
+     *                                           JsonStorageQuery
+     *                                           being tested's
+     *                                           jsonFilePaths()
+     *                                           method.
+     */
+    private array $expectedJsonFilePaths;
+
 
     /**
      * Set up an instance of a JsonStorageQuery implementation to test.
@@ -143,5 +159,71 @@ trait JsonStorageQueryTestTrait
         );
     }
 
+
+    /**
+     * Set the array of JsonFilePath instances
+     * that is expected to be returned by the JsonStorageQuery
+     * instance being tested's jsonFilePaths() method.
+     *
+     * @param array<int, JsonFilePath> $jsonFilePaths
+     *
+     */
+    protected function setExpectedJsonFilePaths(
+        array $jsonFilePaths
+    ): void
+    {
+        $this->expectedJsonFilePaths = $jsonFilePaths;
+    }
+
+    /**
+     * Return the array of JsonFilePath instances
+     * that is expected to be returned by the JsonStorageQuery
+     * instance being tested's jsonFilePaths() method.
+     *
+     * @return array<int, JsonFilePath>
+     *
+     */
+    protected function expectedJsonFilePaths(): array
+    {
+        return $this->expectedJsonFilePaths;
+    }
+
+    /**
+     * Test that the jsonFilePaths() method returns the
+     * expected array of JsonFilePath instances.
+     *
+     * @return void
+     *
+     * @covers JsonStorageQuery->jsonFilePaths()
+     *
+     */
+    public function test_jsonFilePaths_returns_an_array_of_the_expected_JsonFilePath_instances(): void
+    {
+        $this->assertEquals(
+            $this->expectedJsonFilePaths(),
+            $this->jsonStorageQueryTestInstance()->jsonFilePaths(),
+            $this->testFailedMessage(
+                $this->jsonStorageQueryTestInstance(),
+                'jsonFilePaths',
+                'return an array of the expected ' .
+                'JsonFilePath instances'
+            ),
+        );
+    }
+
+
 }
+
+# JsonFilePaths
+# jsonFilePaths
+# Locations
+# locations
+# Containers
+# containers
+# Owners
+# owners
+# Names
+# names
+# Ids
+# ids
 
