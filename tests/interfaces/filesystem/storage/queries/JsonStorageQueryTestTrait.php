@@ -43,6 +43,21 @@ trait JsonStorageQueryTestTrait
 
 
     /**
+     * @var array<int, Id> The array of
+     *                                           Id
+     *                                           instances that is
+     *                                           expected to be
+     *                                           returned by the
+     *                                           JsonStorageQuery
+     *                                           being tested's
+     *                                           ids()
+     *                                           method.
+     */
+    private array $expectedIds;
+
+
+
+    /**
      * @var array<int, Name> The array of
      *                                           Name
      *                                           instances that is
@@ -222,6 +237,59 @@ trait JsonStorageQueryTestTrait
             ),
         );
     }
+
+
+    /**
+     * Set the array of Id instances
+     * that is expected to be returned by the JsonStorageQuery
+     * instance being tested's ids() method.
+     *
+     * @param array<int, Id> $ids
+     *
+     */
+    protected function setExpectedIds(
+        array $ids
+    ): void
+    {
+        $this->expectedIds = $ids;
+    }
+
+    /**
+     * Return the array of Id instances
+     * that is expected to be returned by the JsonStorageQuery
+     * instance being tested's ids() method.
+     *
+     * @return array<int, Id>
+     *
+     */
+    protected function expectedIds(): array
+    {
+        return $this->expectedIds;
+    }
+
+    /**
+     * Test that the ids() method returns the
+     * expected array of Id instances.
+     *
+     * @return void
+     *
+     * @covers JsonStorageQuery->ids()
+     *
+     */
+    public function test_ids_returns_an_array_of_the_expected_Id_instances(): void
+    {
+        $this->assertEquals(
+            $this->expectedIds(),
+            $this->jsonStorageQueryTestInstance()->ids(),
+            $this->testFailedMessage(
+                $this->jsonStorageQueryTestInstance(),
+                'ids',
+                'return an array of the expected ' .
+                'Id instances'
+            ),
+        );
+    }
+
 
 
     /**
@@ -489,17 +557,4 @@ trait JsonStorageQueryTestTrait
 
 
 }
-
-# JsonFilePaths
-# jsonFilePaths
-# Locations
-# locations
-# Containers
-# containers
-# Owners
-# owners
-# Names
-# names
-# Ids
-# ids
 
