@@ -2,8 +2,8 @@
 
 namespace Darling\PHPJsonStorageUtilities\tests\interfaces\filesystem\storage\queries;
 
-use \Darling\PHPJsonStorageUtilities\interfaces\filesystem\storage\queries\JsonStorageQuery;
 use \Darling\PHPJsonStorageUtilities\interfaces\filesystem\paths\JsonStorageDirectoryPath;
+use \Darling\PHPJsonStorageUtilities\interfaces\filesystem\storage\queries\JsonStorageQuery;
 
 /**
  * The JsonStorageQueryTestTrait defines common tests for
@@ -100,7 +100,9 @@ trait JsonStorageQueryTestTrait
      * @param array<int, JsonStorageDirectoryPath> $jsonStorageDirectoryPaths
      *
      */
-    protected function setExpectedJsonStorageDirectoryPaths(array $jsonStorageDirectoryPaths): void
+    protected function setExpectedJsonStorageDirectoryPaths(
+        array $jsonStorageDirectoryPaths
+    ): void
     {
         $this->expectedJsonStorageDirectoryPaths = $jsonStorageDirectoryPaths;
     }

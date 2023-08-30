@@ -2,8 +2,8 @@
 
 namespace Darling\PHPJsonStorageUtilities\classes\filesystem\storage\queries;
 
-use \Darling\PHPJsonStorageUtilities\interfaces\filesystem\storage\queries\JsonStorageQuery as JsonStorageQueryInterface;
 use \Darling\PHPJsonStorageUtilities\interfaces\filesystem\paths\JsonStorageDirectoryPath;
+use \Darling\PHPJsonStorageUtilities\interfaces\filesystem\storage\queries\JsonStorageQuery as JsonStorageQueryInterface;
 
 class JsonStorageQuery implements JsonStorageQueryInterface
 {
