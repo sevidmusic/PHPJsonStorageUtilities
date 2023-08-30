@@ -5,6 +5,7 @@ namespace Darling\PHPJsonStorageUtilities\interfaces\filesystem\storage\queries;
 use \Darling\PHPJsonStorageUtilities\interfaces\filesystem\paths\JsonStorageDirectoryPath;
 use \Darling\PHPJsonStorageUtilities\interfaces\filesystem\paths\JsonFilePath;
 use \Darling\PHPJsonStorageUtilities\interfaces\named\identifiers\Location;
+use \Darling\PHPJsonStorageUtilities\interfaces\named\identifiers\Container;
 
 /**
  * Description of this interface.
@@ -45,6 +46,15 @@ interface JsonStorageQuery
      *
      */
     public function locations(): array;
+
+    /**
+     * Return an array of Location instances that will determine
+     * which containers will be queried.
+     *
+     * @return array<int, Container>
+     *
+     */
+    public function containers(): array;
 
 }
 
