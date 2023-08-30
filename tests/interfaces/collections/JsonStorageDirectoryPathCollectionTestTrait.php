@@ -6,8 +6,9 @@ use \Darling\PHPJsonStorageUtilities\interfaces\collections\JsonStorageDirectory
 use \Darling\PHPJsonStorageUtilities\interfaces\filesystem\paths\JsonStorageDirectoryPath;
 
 /**
- * The JsonStorageDirectoryPathCollectionTestTrait defines common tests for
- * implementations of the JsonStorageDirectoryPathCollection interface.
+ * The JsonStorageDirectoryPathCollectionTestTrait defines common
+ * tests for implementations of the JsonStorageDirectoryPathCollection
+ * interface.
  *
  * @see JsonStorageDirectoryPathCollection
  *
@@ -24,15 +25,30 @@ trait JsonStorageDirectoryPathCollectionTestTrait
     protected JsonStorageDirectoryPathCollection $jsonStorageDirectoryPathCollection;
 
     /**
-     * @var array<int, JsonStorageDirectoryPath>
+     * @var array<int, JsonStorageDirectoryPath> The array of
+     *                                           JsonStorageDirectoryPath
+     *                                           instances that is
+     *                                           expected to be
+     *                                           returned by the
+     *                                           JsonStorageDirectoryPathCollection
+     *                                           instance being
+     *                                           tested's collection()
+     *                                           method.
      */
     private array $expectedCollection = [];
 
     /**
-     * Set up an instance of a JsonStorageDirectoryPathCollection implementation to test.
+     * Set up an instance of a JsonStorageDirectoryPathCollection
+     * implementation to test.
      *
-     * This method must also set the JsonStorageDirectoryPathCollection implementation instance
-     * to be tested via the setJsonStorageDirectoryPathCollectionTestInstance() method.
+     * This method must set the JsonStorageDirectoryPathCollection
+     * implementation instance to be tested via the
+     * setJsonStorageDirectoryPathCollectionTestInstance() method.
+     *
+     * This method must also set the array of JsonStorageDirectoryPath
+     * instances that is expected to be returned by the
+     * JsonStorageDirectoryPathCollection instance being tested's
+     * collection() method via the setExpectedCollection() method.
      *
      * This method may also be used to perform any additional setup
      * required by the implementation being tested.
@@ -42,10 +58,31 @@ trait JsonStorageDirectoryPathCollectionTestTrait
      * @example
      *
      * ```
-     * protected function setUp(): void
+     * public function setUp(): void
      * {
+     *     $this->setExpectedCollection(
+     *         [
+     *             new JsonStorageDirectoryPath(
+     *                 new Name(new Text($this->randomChars())),
+     *             ),
+     *             new JsonStorageDirectoryPath(
+     *                 new Name(new Text($this->randomChars())),
+     *             ),
+     *             new JsonStorageDirectoryPath(
+     *                 new Name(new Text($this->randomChars())),
+     *             ),
+     *             new JsonStorageDirectoryPath(
+     *                 new Name(new Text($this->randomChars())),
+     *             ),
+     *             new JsonStorageDirectoryPath(
+     *                 new Name(new Text($this->randomChars())),
+     *             ),
+     *         ]
+     *     );
      *     $this->setJsonStorageDirectoryPathCollectionTestInstance(
-     *         new \Darling\PHPJsonStorageUtilities\classes\collections\JsonStorageDirectoryPathCollection()
+     *         new JsonStorageDirectoryPathCollection(
+     *             ...$this->expectedCollection(),
+     *         )
      *     );
      * }
      *
@@ -55,7 +92,8 @@ trait JsonStorageDirectoryPathCollectionTestTrait
     abstract protected function setUp(): void;
 
     /**
-     * Return the JsonStorageDirectoryPathCollection implementation instance to test.
+     * Return the JsonStorageDirectoryPathCollection implementation
+     * instance to test.
      *
      * @return JsonStorageDirectoryPathCollection
      *
@@ -66,13 +104,15 @@ trait JsonStorageDirectoryPathCollectionTestTrait
     }
 
     /**
-     * Set the JsonStorageDirectoryPathCollection implementation instance to test.
+     * Set the JsonStorageDirectoryPathCollection implementation
+     * instance to test.
      *
      * @param JsonStorageDirectoryPathCollection $jsonStorageDirectoryPathCollectionTestInstance
-     *                              An instance of an
-     *                              implementation of
-     *                              the JsonStorageDirectoryPathCollection
-     *                              interface to test.
+     *                                           An instance of an
+     *                                           implementation of
+     *                                           the
+     *                                           JsonStorageDirectoryPathCollection
+     *                                           interface to test.
      *
      * @return void
      *
@@ -133,5 +173,6 @@ trait JsonStorageDirectoryPathCollectionTestTrait
             ),
         );
     }
+
 }
 

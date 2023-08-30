@@ -3,11 +3,11 @@
 namespace Darling\PHPJsonStorageUtilities\tests\classes\collections;
 
 use \Darling\PHPJsonStorageUtilities\classes\collections\JsonStorageDirectoryPathCollection;
-use \Darling\PHPTextTypes\classes\strings\Name;
-use \Darling\PHPTextTypes\classes\strings\Text;
+use \Darling\PHPJsonStorageUtilities\classes\filesystem\paths\JsonStorageDirectoryPath;
 use \Darling\PHPJsonStorageUtilities\tests\PHPJsonStorageUtilitiesTest;
 use \Darling\PHPJsonStorageUtilities\tests\interfaces\collections\JsonStorageDirectoryPathCollectionTestTrait;
-use \Darling\PHPJsonStorageUtilities\classes\filesystem\paths\JsonStorageDirectoryPath;
+use \Darling\PHPTextTypes\classes\strings\Name;
+use \Darling\PHPTextTypes\classes\strings\Text;
 
 class JsonStorageDirectoryPathCollectionTest extends PHPJsonStorageUtilitiesTest
 {
@@ -50,5 +50,6 @@ class JsonStorageDirectoryPathCollectionTest extends PHPJsonStorageUtilitiesTest
             )
         );
     }
+
 }
 
