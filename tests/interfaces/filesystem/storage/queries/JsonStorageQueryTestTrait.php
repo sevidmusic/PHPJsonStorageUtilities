@@ -42,6 +42,21 @@ trait JsonStorageQueryTestTrait
 
 
     /**
+     * @var array<int, Owner> The array of
+     *                                           Owner
+     *                                           instances that is
+     *                                           expected to be
+     *                                           returned by the
+     *                                           JsonStorageQuery
+     *                                           being tested's
+     *                                           owners()
+     *                                           method.
+     */
+    private array $expectedOwners;
+
+
+
+    /**
      * @var array<int, Container> The array of
      *                                           Container
      *                                           instances that is
@@ -191,6 +206,59 @@ trait JsonStorageQueryTestTrait
             ),
         );
     }
+
+
+    /**
+     * Set the array of Owner instances
+     * that is expected to be returned by the JsonStorageQuery
+     * instance being tested's owners() method.
+     *
+     * @param array<int, Owner> $owners
+     *
+     */
+    protected function setExpectedOwners(
+        array $owners
+    ): void
+    {
+        $this->expectedOwners = $owners;
+    }
+
+    /**
+     * Return the array of Owner instances
+     * that is expected to be returned by the JsonStorageQuery
+     * instance being tested's owners() method.
+     *
+     * @return array<int, Owner>
+     *
+     */
+    protected function expectedOwners(): array
+    {
+        return $this->expectedOwners;
+    }
+
+    /**
+     * Test that the owners() method returns the
+     * expected array of Owner instances.
+     *
+     * @return void
+     *
+     * @covers JsonStorageQuery->owners()
+     *
+     */
+    public function test_owners_returns_an_array_of_the_expected_Owner_instances(): void
+    {
+        $this->assertEquals(
+            $this->expectedOwners(),
+            $this->jsonStorageQueryTestInstance()->owners(),
+            $this->testFailedMessage(
+                $this->jsonStorageQueryTestInstance(),
+                'owners',
+                'return an array of the expected ' .
+                'Owner instances'
+            ),
+        );
+    }
+
 
 
     /**
