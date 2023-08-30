@@ -7,6 +7,7 @@ use \Darling\PHPJsonStorageUtilities\interfaces\filesystem\paths\JsonFilePath;
 use \Darling\PHPJsonStorageUtilities\interfaces\filesystem\storage\queries\JsonStorageQuery;
 use \Darling\PHPJsonStorageUtilities\classes\named\identifiers\Location;
 use \Darling\PHPJsonStorageUtilities\classes\named\identifiers\Owner;
+use \Darling\PHPTextTypes\classes\strings\Name;
 use \Darling\PHPJsonStorageUtilities\classes\named\identifiers\Container;
 
 /**
@@ -39,6 +40,21 @@ trait JsonStorageQueryTestTrait
      *                                           method.
      */
     private array $expectedJsonStorageDirectoryPaths;
+
+
+    /**
+     * @var array<int, Name> The array of
+     *                                           Name
+     *                                           instances that is
+     *                                           expected to be
+     *                                           returned by the
+     *                                           JsonStorageQuery
+     *                                           being tested's
+     *                                           names()
+     *                                           method.
+     */
+    private array $expectedNames;
+
 
 
     /**
@@ -206,6 +222,59 @@ trait JsonStorageQueryTestTrait
             ),
         );
     }
+
+
+    /**
+     * Set the array of Name instances
+     * that is expected to be returned by the JsonStorageQuery
+     * instance being tested's names() method.
+     *
+     * @param array<int, Name> $names
+     *
+     */
+    protected function setExpectedNames(
+        array $names
+    ): void
+    {
+        $this->expectedNames = $names;
+    }
+
+    /**
+     * Return the array of Name instances
+     * that is expected to be returned by the JsonStorageQuery
+     * instance being tested's names() method.
+     *
+     * @return array<int, Name>
+     *
+     */
+    protected function expectedNames(): array
+    {
+        return $this->expectedNames;
+    }
+
+    /**
+     * Test that the names() method returns the
+     * expected array of Name instances.
+     *
+     * @return void
+     *
+     * @covers JsonStorageQuery->names()
+     *
+     */
+    public function test_names_returns_an_array_of_the_expected_Name_instances(): void
+    {
+        $this->assertEquals(
+            $this->expectedNames(),
+            $this->jsonStorageQueryTestInstance()->names(),
+            $this->testFailedMessage(
+                $this->jsonStorageQueryTestInstance(),
+                'names',
+                'return an array of the expected ' .
+                'Name instances'
+            ),
+        );
+    }
+
 
 
     /**

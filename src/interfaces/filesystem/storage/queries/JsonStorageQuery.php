@@ -5,8 +5,9 @@ namespace Darling\PHPJsonStorageUtilities\interfaces\filesystem\storage\queries;
 use \Darling\PHPJsonStorageUtilities\interfaces\filesystem\paths\JsonStorageDirectoryPath;
 use \Darling\PHPJsonStorageUtilities\interfaces\filesystem\paths\JsonFilePath;
 use \Darling\PHPJsonStorageUtilities\interfaces\named\identifiers\Location;
-use \Darling\PHPJsonStorageUtilities\classes\named\identifiers\Owner;
+use \Darling\PHPJsonStorageUtilities\interfaces\named\identifiers\Owner;
 use \Darling\PHPJsonStorageUtilities\interfaces\named\identifiers\Container;
+use \Darling\PHPTextTypes\interfaces\strings\Name;
 
 /**
  * Description of this interface.
@@ -65,6 +66,15 @@ interface JsonStorageQuery
      *
      */
     public function owners(): array;
+
+    /**
+     * Return an array of Name instances that will determine
+     * which names will be queried.
+     *
+     * @return array<int, Name>
+     *
+     */
+    public function names(): array;
 
 }
 

@@ -80,6 +80,12 @@ class JsonStorageQueryTest extends PHPJsonStorageUtilitiesTest
             new Owner(new Name(new Text($this->randomChars()))),
         ];
         $this->setExpectedOwners($expectedOwners);
+        $expectedNames = [
+            new Name(new Name(new Text($this->randomChars()))),
+            new Name(new Name(new Text($this->randomChars()))),
+            new Name(new Name(new Text($this->randomChars()))),
+        ];
+        $this->setExpectedNames($expectedNames);
         $this->setJsonStorageQueryTestInstance(
             new JsonStorageQuery(
                 jsonStorageDirectoryPaths: $expectedJsonStorageDirectoryPaths,
@@ -87,6 +93,7 @@ class JsonStorageQueryTest extends PHPJsonStorageUtilitiesTest
                 locations: $expectedLocations,
                 containers: $expectedContainers,
                 owners: $expectedOwners,
+                names: $expectedNames,
             )
         );
     }
