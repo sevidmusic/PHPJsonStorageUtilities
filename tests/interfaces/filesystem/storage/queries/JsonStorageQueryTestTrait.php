@@ -5,6 +5,9 @@ namespace Darling\PHPJsonStorageUtilities\tests\interfaces\filesystem\storage\qu
 use \Darling\PHPJsonStorageUtilities\interfaces\filesystem\paths\JsonStorageDirectoryPath;
 use \Darling\PHPJsonStorageUtilities\interfaces\filesystem\paths\JsonFilePath;
 use \Darling\PHPJsonStorageUtilities\interfaces\filesystem\storage\queries\JsonStorageQuery;
+use \Darling\PHPJsonStorageUtilities\classes\named\identifiers\Location;
+use \Darling\PHPJsonStorageUtilities\classes\named\identifiers\Owner;
+use \Darling\PHPJsonStorageUtilities\classes\named\identifiers\Container;
 
 /**
  * The JsonStorageQueryTestTrait defines common tests for
@@ -36,6 +39,21 @@ trait JsonStorageQueryTestTrait
      *                                           method.
      */
     private array $expectedJsonStorageDirectoryPaths;
+
+
+    /**
+     * @var array<int, Location> The array of
+     *                                           Location
+     *                                           instances that is
+     *                                           expected to be
+     *                                           returned by the
+     *                                           JsonStorageQuery
+     *                                           being tested's
+     *                                           locations()
+     *                                           method.
+     */
+    private array $expectedLocations;
+
 
 
     /**
@@ -158,6 +176,59 @@ trait JsonStorageQueryTestTrait
             ),
         );
     }
+
+
+    /**
+     * Set the array of Location instances
+     * that is expected to be returned by the JsonStorageQuery
+     * instance being tested's locations() method.
+     *
+     * @param array<int, Location> $locations
+     *
+     */
+    protected function setExpectedLocations(
+        array $locations
+    ): void
+    {
+        $this->expectedLocations = $locations;
+    }
+
+    /**
+     * Return the array of Location instances
+     * that is expected to be returned by the JsonStorageQuery
+     * instance being tested's locations() method.
+     *
+     * @return array<int, Location>
+     *
+     */
+    protected function expectedLocations(): array
+    {
+        return $this->expectedLocations;
+    }
+
+    /**
+     * Test that the locations() method returns the
+     * expected array of Location instances.
+     *
+     * @return void
+     *
+     * @covers JsonStorageQuery->locations()
+     *
+     */
+    public function test_locations_returns_an_array_of_the_expected_Location_instances(): void
+    {
+        $this->assertEquals(
+            $this->expectedLocations(),
+            $this->jsonStorageQueryTestInstance()->locations(),
+            $this->testFailedMessage(
+                $this->jsonStorageQueryTestInstance(),
+                'locations',
+                'return an array of the expected ' .
+                'Location instances'
+            ),
+        );
+    }
+
 
 
     /**

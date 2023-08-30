@@ -74,10 +74,17 @@ class JsonStorageQueryTest extends PHPJsonStorageUtilitiesTest
             ),
         ];
         $this->setExpectedJsonFilePaths($expectedJsonFilePaths);
+        $expectedLocations = [
+            new Location(new Name(new Text($this->randomChars()))),
+            new Location(new Name(new Text($this->randomChars()))),
+            new Location(new Name(new Text($this->randomChars()))),
+        ];
+        $this->setExpectedLocations($expectedLocations);
         $this->setJsonStorageQueryTestInstance(
             new JsonStorageQuery(
                 jsonStorageDirectoryPaths: $expectedJsonStorageDirectoryPaths,
                 jsonFilePaths: $expectedJsonFilePaths,
+                locations: $expectedLocations,
             )
         );
     }
