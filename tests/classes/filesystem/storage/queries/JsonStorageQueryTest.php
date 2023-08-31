@@ -2,6 +2,7 @@
 
 namespace Darling\PHPJsonStorageUtilities\tests\classes\filesystem\storage\queries;
 
+use \Darling\PHPJsonStorageUtilities\classes\collections\OwnerCollection;
 use \Darling\PHPJsonStorageUtilities\classes\collections\IdCollection;
 use \Darling\PHPJsonStorageUtilities\classes\collections\JsonStorageDirectoryPathCollection;
 use \Darling\PHPJsonStorageUtilities\classes\collections\NameCollection;
@@ -78,11 +79,11 @@ class JsonStorageQueryTest extends PHPJsonStorageUtilitiesTest
             new Container(new ClassString(Id::class)),
         ];
         $this->setExpectedContainers($expectedContainers);
-        $expectedOwners = [
+        $expectedOwners = new OwnerCollection(
             new Owner(new Name(new Text($this->randomChars()))),
             new Owner(new Name(new Text($this->randomChars()))),
             new Owner(new Name(new Text($this->randomChars()))),
-        ];
+        );
         $this->setExpectedOwners($expectedOwners);
         $expectedNames = new NameCollection(
             new Name(new Text($this->randomChars())),

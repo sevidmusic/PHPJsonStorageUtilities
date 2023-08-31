@@ -2,6 +2,7 @@
 
 namespace Darling\PHPJsonStorageUtilities\interfaces\filesystem\storage\queries;
 
+use \Darling\PHPJsonStorageUtilities\interfaces\collections\OwnerCollection;
 use \Darling\PHPJsonStorageUtilities\interfaces\collections\IdCollection;
 use \Darling\PHPJsonStorageUtilities\interfaces\collections\JsonStorageDirectoryPathCollection;
 use \Darling\PHPJsonStorageUtilities\interfaces\collections\NameCollection;
@@ -57,13 +58,13 @@ interface JsonStorageQuery
     public function containers(): array;
 
     /**
-     * Return an array of Owner instances that will determine
-     * which owners will be queried.
+     * Return OwnerCollection instance that will determine which
+     * owners will be queried.
      *
-     * @return array<int, Owner>
+     * @return OwnerCollection
      *
      */
-    public function owners(): array;
+    public function owners(): OwnerCollection;
 
     /**
      * Return a NameCollection instance that will determine which
@@ -82,5 +83,6 @@ interface JsonStorageQuery
      *
      */
     public function ids(): IdCollection;
+
 }
 

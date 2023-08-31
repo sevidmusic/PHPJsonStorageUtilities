@@ -2,9 +2,11 @@
 
 namespace Darling\PHPJsonStorageUtilities\classes\filesystem\storage\queries;
 
+use \Darling\PHPJsonStorageUtilities\classes\collections\OwnerCollection as OwnerCollectionDefault;
 use \Darling\PHPJsonStorageUtilities\classes\collections\IdCollection as IdCollectionDefault;
 use \Darling\PHPJsonStorageUtilities\classes\collections\JsonStorageDirectoryPathCollection as JsonStorageDirectoryPathCollectionDefault;
 use \Darling\PHPJsonStorageUtilities\classes\collections\NameCollection as NameCollectionDefault;
+use \Darling\PHPJsonStorageUtilities\interfaces\collections\OwnerCollection;
 use \Darling\PHPJsonStorageUtilities\interfaces\collections\IdCollection;
 use \Darling\PHPJsonStorageUtilities\interfaces\collections\JsonStorageDirectoryPathCollection;
 use \Darling\PHPJsonStorageUtilities\interfaces\collections\NameCollection;
@@ -27,7 +29,7 @@ class JsonStorageQuery implements JsonStorageQueryInterface
      * @param array<int, JsonFilePath>|null $jsonFilePaths
      * @param array<int, Location>|null $locations
      * @param array<int, Container>|null $containers
-     * @param array<int, Owner>|null $owners
+     * @param OwnerCollection|null $owners
      * @param NameCollection|null $names
      * @param IdCollection $ids|null
      *
@@ -37,7 +39,7 @@ class JsonStorageQuery implements JsonStorageQueryInterface
         private array|null $jsonFilePaths = null,
         private array|null $locations = null,
         private array|null $containers = null,
-        private array|null $owners = null,
+        private OwnerCollection|null $owners = null,
         private NameCollection|null $names = null,
         private IdCollection|null $ids = null,
     ) { }
@@ -62,9 +64,9 @@ class JsonStorageQuery implements JsonStorageQueryInterface
         return $this->containers ?? [];
     }
 
-    public function owners(): array
+    public function owners(): OwnerCollection
     {
-        return $this->owners ?? [];
+        return $this->owners ?? new OwnerCollectionDefault();
     }
 
     public function names(): NameCollection

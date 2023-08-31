@@ -2,6 +2,7 @@
 
 namespace Darling\PHPJsonStorageUtilities\tests\interfaces\filesystem\storage\queries;
 
+use \Darling\PHPJsonStorageUtilities\interfaces\collections\OwnerCollection;
 use \Darling\PHPJsonStorageUtilities\interfaces\collections\IdCollection;
 use \Darling\PHPJsonStorageUtilities\interfaces\collections\JsonStorageDirectoryPathCollection;
 use \Darling\PHPJsonStorageUtilities\interfaces\collections\NameCollection;
@@ -69,12 +70,12 @@ trait JsonStorageQueryTestTrait
     private NameCollection $expectedNames;
 
     /**
-     * @var array<int, Owner> The array of Owner instances that is
+     * @var OwnerCollection $expectedOwners
      *                        expected to be returned by the
      *                        JsonStorageQuery being tested's owners()
      *                        method.
      */
-    private array $expectedOwners;
+    private OwnerCollection $expectedOwners;
 
     /**
      * @var array<int, Container> The array of Container instances
@@ -141,14 +142,14 @@ trait JsonStorageQueryTestTrait
     }
 
     /**
-     * Return the array of Owner instances that is expected to be
+     * Return the OwnerCollection instance that is expected to be
      * returned by the JsonStorageQuery instance being tested's
      * owners() method.
      *
-     * @return array<int, Owner>
+     * @return OwnerCollection
      *
      */
-    protected function expectedOwners(): array
+    protected function expectedOwners(): OwnerCollection
     {
         return $this->expectedOwners;
     }
@@ -298,15 +299,15 @@ trait JsonStorageQueryTestTrait
 
 
     /**
-     * Set the array of Owner instances that is expected to be
+     * Set the OwnerCollection instance that is expected to be
      * returned by the JsonStorageQuery instance being tested's
      * owners() method.
      *
-     * @param array<int, Owner> $owners
+     * @param OwnerCollection $owners
      *
      */
     protected function setExpectedOwners(
-        array $owners
+        OwnerCollection $owners
     ): void
     {
         $this->expectedOwners = $owners;
