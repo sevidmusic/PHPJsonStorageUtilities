@@ -2,6 +2,7 @@
 
 namespace Darling\PHPJsonStorageUtilities\classes\filesystem\paths;
 
+use \Darling\PHPJsonStorageUtilities\interfaces\filesystem\paths\JsonStorageDirectoryPath;
 use \Darling\PHPJsonStorageUtilities\interfaces\filesystem\paths\JsonFilePath as JsonFilePathInterface;
 use \Darling\PHPJsonStorageUtilities\interfaces\named\identifiers\Container;
 use \Darling\PHPJsonStorageUtilities\interfaces\named\identifiers\Location;
