@@ -6,6 +6,7 @@ use \Darling\PHPJsonStorageUtilities\classes\filesystem\storage\drivers\JsonFile
 use \Darling\PHPJsonStorageUtilities\tests\PHPJsonStorageUtilitiesTest;
 use \Darling\PHPJsonStorageUtilities\tests\interfaces\filesystem\storage\drivers\JsonFilesystemStorageDriverTestTrait;
 
+use \Darling\PHPJsonStorageUtilities\classes\filesystem\paths\JsonFilePath;
 use \Darling\PHPJsonStorageUtilities\classes\filesystem\paths\JsonStorageDirectoryPath;
 use \Darling\PHPJsonStorageUtilities\classes\named\identifiers\Container;
 use \Darling\PHPJsonStorageUtilities\classes\named\identifiers\Location;
@@ -33,19 +34,34 @@ class JsonFilesystemStorageDriverTest extends PHPJsonStorageUtilitiesTest
 
     public function setUp(): void
     {
-        $this->setExpectedJson(new Json($this->randomChars()));
-        $this->setExpectedJsonFilePath(
-            $this->expectedJson(),
+        $json = new Json($this->randomChars());
+        $this->setExpectedJson($json);
+        $container = new Container(
+            $this->determineType($this->expectedJson())
+        );
+        $jsonFilePath = new JsonFilePath(
             new JsonStorageDirectoryPath(
-                new Name(new Text('JsonStorageDirectory' . ucfirst(substr($this->randomChars(), 0, 3))))
+                $this->prefixedRandomName('JsonStorageDirectory')
             ),
-            new Location(new Name(new Text('Location' . ucfirst(substr($this->randomChars(), 0, 3))))),
-            new Owner(new Name(new Text('Owner' . ucfirst(substr($this->randomChars(), 0, 3))))),
-            new Name(new Text('Name' . ucfirst(substr($this->randomChars(), 0, 3)))),
+            new Location($this->prefixedRandomName('Location')),
+            $container,
+            new Owner($this->prefixedRandomName('Owner')),
+            $this->prefixedRandomName('Name'),
             new Id(),
         );
+        $this->setExpectedJsonFilePath($jsonFilePath);
         $this->setJsonFilesystemStorageDriverTestInstance(
             new JsonFilesystemStorageDriver()
+        );
+    }
+
+    private function prefixedRandomName(string $prefix): Name
+    {
+        return new Name(
+            new Text(
+                $prefix .
+                ucfirst(substr($this->randomChars(), 0, 3))
+            )
         );
     }
 }

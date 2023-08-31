@@ -118,26 +118,13 @@ trait JsonFilesystemStorageDriverTestTrait
      *
      */
     protected function setExpectedJsonFilePath(
-        Json $json,
-        JsonStorageDirectoryPath $jsonStorageDirectoryPath,
-        Location $location,
-        Owner $owner,
-        Name $name,
-        Id $id,
+        JsonFilePath $jsonFilePath
     ): void
     {
-        $container = new ContainerInstance($this->determineType($json));
-        $this->expectedJsonFilePath = new JsonFilePathInstance(
-            $jsonStorageDirectoryPath,
-            $location,
-            $container,
-            $owner,
-            $name,
-            $id,
-        );
+        $this->expectedJsonFilePath = $jsonFilePath;
     }
 
-    private function determineType(Json $json): Type|ClassString
+    protected function determineType(Json $json): Type|ClassString
     {
         $jsonDecoder = new JsonDecoderInstance();
         $data = $jsonDecoder->decode($json);
