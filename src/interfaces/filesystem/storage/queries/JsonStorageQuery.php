@@ -2,88 +2,90 @@
 
 namespace Darling\PHPJsonStorageUtilities\interfaces\filesystem\storage\queries;
 
-use \Darling\PHPJsonStorageUtilities\interfaces\filesystem\paths\JsonStorageDirectoryPath;
+use \Darling\PHPJsonStorageUtilities\interfaces\collections\JsonFilePathCollection;
+use \Darling\PHPJsonStorageUtilities\interfaces\collections\LocationCollection;
+use \Darling\PHPJsonStorageUtilities\interfaces\collections\ContainerCollection;
+use \Darling\PHPJsonStorageUtilities\interfaces\collections\OwnerCollection;
+use \Darling\PHPJsonStorageUtilities\interfaces\collections\IdCollection;
+use \Darling\PHPJsonStorageUtilities\interfaces\collections\JsonStorageDirectoryPathCollection;
+use \Darling\PHPJsonStorageUtilities\interfaces\collections\NameCollection;
 use \Darling\PHPJsonStorageUtilities\interfaces\filesystem\paths\JsonFilePath;
+use \Darling\PHPJsonStorageUtilities\interfaces\filesystem\paths\JsonStorageDirectoryPath;
+use \Darling\PHPJsonStorageUtilities\interfaces\named\identifiers\Container;
 use \Darling\PHPJsonStorageUtilities\interfaces\named\identifiers\Location;
 use \Darling\PHPJsonStorageUtilities\interfaces\named\identifiers\Owner;
-use \Darling\PHPJsonStorageUtilities\interfaces\named\identifiers\Container;
-use \Darling\PHPTextTypes\interfaces\strings\Name;
 use \Darling\PHPTextTypes\interfaces\strings\Id;
+use \Darling\PHPTextTypes\interfaces\strings\Name;
 
 /**
  * Description of this interface.
  *
- * @example
- *
- * ```
- *
- * ```
  */
 interface JsonStorageQuery
 {
-
 
     /**
      * Return an array of JsonStorageDirectoryPath instances that
      * will determine which Json storage directories will be queried.
      *
-     * @return array<int, JsonStorageDirectoryPath>
+     * @return JsonStorageDirectoryPathCollection
      *
      */
-    public function jsonStorageDirectoryPaths(): array;
+    public function jsonStorageDirectoryPaths(): JsonStorageDirectoryPathCollection;
 
     /**
-     * Return an array of JsonFilePath instances that will determine
+     * Return JsonFilePathCollection instance that will determine
      * which JsonFilePaths will be queried.
      *
-     * @return array<int, JsonFilePath>
+     * @return JsonFilePathCollection
      *
      */
-    public function jsonFilePaths(): array;
+    public function jsonFilePaths(): JsonFilePathCollection;
 
     /**
-     * Return an array of Location instances that will determine
-     * which locations will be queried.
+     * Return an LocationCollection instance that will determine which
+     * locations will be queried.
      *
-     * @return array<int, Location>
+     * @return LocationCollection
      *
      */
-    public function locations(): array;
+    public function locations(): LocationCollection;
 
     /**
-     * Return an array of Container instances that will determine
-     * which containers will be queried.
+     * Return ContainerCollection instance that will determine which
+     * containers will be queried.
      *
-     * @return array<int, Container>
+     * @return ContainerCollection
      *
      */
-    public function containers(): array;
+    public function containers(): ContainerCollection;
 
     /**
-     * Return an array of Owner instances that will determine
-     * which owners will be queried.
+     * Return OwnerCollection instance that will determine which
+     * owners will be queried.
      *
-     * @return array<int, Owner>
+     * @return OwnerCollection
      *
      */
-    public function owners(): array;
+    public function owners(): OwnerCollection;
 
     /**
-     * Return an array of Name instances that will determine
-     * which names will be queried.
+     * Return a NameCollection instance that will determine which
+     * names will be queried.
      *
-     * @return array<int, Name>
+     * @return NameCollection
      *
      */
-    public function names(): array;
+    public function names(): NameCollection;
 
     /**
-     * Return an array of Id instances that will determine
-     * which ids will be queried.
+     * Return an IdCollection instance that will determine which ids
+     * will be queried.
      *
-     * @return array<int, Id>
+     * @return IdCollection
      *
      */
-    public function ids(): array;
+    public function ids(): IdCollection;
+
 }
 
