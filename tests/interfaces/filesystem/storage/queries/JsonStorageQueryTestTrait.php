@@ -2,6 +2,7 @@
 
 namespace Darling\PHPJsonStorageUtilities\tests\interfaces\filesystem\storage\queries;
 
+use \Darling\PHPJsonStorageUtilities\interfaces\collections\ContainerCollection;
 use \Darling\PHPJsonStorageUtilities\interfaces\collections\OwnerCollection;
 use \Darling\PHPJsonStorageUtilities\interfaces\collections\IdCollection;
 use \Darling\PHPJsonStorageUtilities\interfaces\collections\JsonStorageDirectoryPathCollection;
@@ -78,12 +79,12 @@ trait JsonStorageQueryTestTrait
     private OwnerCollection $expectedOwners;
 
     /**
-     * @var array<int, Container> The array of Container instances
+     * @var ContainerCollection $expectedContainers
      *                            that is expected to be returned by
      *                            the JsonStorageQuery being tested's
      *                            containers() method.
      */
-    private array $expectedContainers;
+    private ContainerCollection $expectedContainers;
 
     /**
      * @var array<int, Location> The array of Location instances that
@@ -155,14 +156,14 @@ trait JsonStorageQueryTestTrait
     }
 
     /**
-     * Return the array of Container instances that is expected to be
+     * Return the ContainerCollection instance that is expected to be
      * returned by the JsonStorageQuery instance being tested's
      * containers() method.
      *
-     * @return array<int, Container>
+     * @return ContainerCollection
      *
      */
-    protected function expectedContainers(): array
+    protected function expectedContainers(): ContainerCollection
     {
         return $this->expectedContainers;
     }
@@ -315,15 +316,15 @@ trait JsonStorageQueryTestTrait
 
 
     /**
-     * Set the array of Container instances that is expected to be
+     * Set the ContainerCollection instance that is expected to be
      * returned by the JsonStorageQuery instance being tested's
      * containers() method.
      *
-     * @param array<int, Container> $containers
+     * @param ContainerCollection $containers
      *
      */
     protected function setExpectedContainers(
-        array $containers
+        ContainerCollection $containers
     ): void
     {
         $this->expectedContainers = $containers;

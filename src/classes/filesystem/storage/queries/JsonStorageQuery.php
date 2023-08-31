@@ -2,10 +2,12 @@
 
 namespace Darling\PHPJsonStorageUtilities\classes\filesystem\storage\queries;
 
+use \Darling\PHPJsonStorageUtilities\classes\collections\ContainerCollection as ContainerCollectionDefault;
 use \Darling\PHPJsonStorageUtilities\classes\collections\OwnerCollection as OwnerCollectionDefault;
 use \Darling\PHPJsonStorageUtilities\classes\collections\IdCollection as IdCollectionDefault;
 use \Darling\PHPJsonStorageUtilities\classes\collections\JsonStorageDirectoryPathCollection as JsonStorageDirectoryPathCollectionDefault;
 use \Darling\PHPJsonStorageUtilities\classes\collections\NameCollection as NameCollectionDefault;
+use \Darling\PHPJsonStorageUtilities\interfaces\collections\ContainerCollection;
 use \Darling\PHPJsonStorageUtilities\interfaces\collections\OwnerCollection;
 use \Darling\PHPJsonStorageUtilities\interfaces\collections\IdCollection;
 use \Darling\PHPJsonStorageUtilities\interfaces\collections\JsonStorageDirectoryPathCollection;
@@ -28,7 +30,7 @@ class JsonStorageQuery implements JsonStorageQueryInterface
      * @param JsonStorageDirectoryPathCollection|null $jsonStorageDirectoryPaths
      * @param array<int, JsonFilePath>|null $jsonFilePaths
      * @param array<int, Location>|null $locations
-     * @param array<int, Container>|null $containers
+     * @param ContainerCollection|null $containers
      * @param OwnerCollection|null $owners
      * @param NameCollection|null $names
      * @param IdCollection $ids|null
@@ -38,7 +40,7 @@ class JsonStorageQuery implements JsonStorageQueryInterface
         private JsonStorageDirectoryPathCollection|null $jsonStorageDirectoryPaths = null,
         private array|null $jsonFilePaths = null,
         private array|null $locations = null,
-        private array|null $containers = null,
+        private ContainerCollection|null $containers = null,
         private OwnerCollection|null $owners = null,
         private NameCollection|null $names = null,
         private IdCollection|null $ids = null,
@@ -59,9 +61,9 @@ class JsonStorageQuery implements JsonStorageQueryInterface
         return $this->locations ?? [];
     }
 
-    public function containers(): array
+    public function containers(): ContainerCollection
     {
-        return $this->containers ?? [];
+        return $this->containers ?? new ContainerCollectionDefault();
     }
 
     public function owners(): OwnerCollection
