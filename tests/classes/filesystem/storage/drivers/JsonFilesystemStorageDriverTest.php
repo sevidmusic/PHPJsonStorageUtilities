@@ -41,7 +41,7 @@ class JsonFilesystemStorageDriverTest extends PHPJsonStorageUtilitiesTest
         );
         $jsonFilePath = new JsonFilePath(
             new JsonStorageDirectoryPath(
-                $this->prefixedRandomName('JsonStorageDirectory')
+                new Name(new Text('PHPUnitTestData')),
             ),
             new Location($this->prefixedRandomName('Location')),
             $container,
