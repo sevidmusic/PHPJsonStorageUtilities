@@ -2,8 +2,29 @@
 
 namespace Darling\PHPJsonStorageUtilities\tests\interfaces\filesystem\storage\drivers;
 
+use \Darling\PHPJsonStorageUtilities\enumerations\Type;
+use \Darling\PHPJsonStorageUtilities\classes\filesystem\paths\JsonFilePath as JsonFilePathInstance;
+use \Darling\PHPJsonStorageUtilities\classes\filesystem\paths\JsonStorageDirectoryPath as JsonStorageDirectoryPathInstance;
+use \Darling\PHPJsonStorageUtilities\classes\named\identifiers\Container as ContainerInstance;
+use \Darling\PHPJsonStorageUtilities\classes\named\identifiers\Location as LocationInstance;
+use \Darling\PHPJsonStorageUtilities\classes\named\identifiers\Owner as OwnerInstance;
+use \Darling\PHPJsonStorageUtilities\interfaces\filesystem\paths\JsonFilePath;
+use \Darling\PHPJsonStorageUtilities\interfaces\filesystem\paths\JsonStorageDirectoryPath;
 use \Darling\PHPJsonStorageUtilities\interfaces\filesystem\storage\drivers\JsonFilesystemStorageDriver;
+use \Darling\PHPJsonStorageUtilities\interfaces\named\identifiers\Container;
+use \Darling\PHPJsonStorageUtilities\interfaces\named\identifiers\Location;
+use \Darling\PHPJsonStorageUtilities\interfaces\named\identifiers\Owner;
+use \Darling\PHPJsonUtilities\classes\decoders\JsonDecoder as JsonDecoderInstance;
+use \Darling\PHPJsonUtilities\classes\encoded\data\Json as JsonInstance;
 use \Darling\PHPJsonUtilities\interfaces\decoders\JsonDecoder;
+use \Darling\PHPJsonUtilities\interfaces\encoded\data\Json;
+use \Darling\PHPTextTypes\classes\strings\ClassString as ClassStringInstance;
+use \Darling\PHPTextTypes\classes\strings\Id as IdInstance;
+use \Darling\PHPTextTypes\classes\strings\Name as NameInstance;
+use \Darling\PHPTextTypes\classes\strings\Text;
+use \Darling\PHPTextTypes\interfaces\strings\ClassString;
+use \Darling\PHPTextTypes\interfaces\strings\Id;
+use \Darling\PHPTextTypes\interfaces\strings\Name;
 
 /**
  * The JsonFilesystemStorageDriverTestTrait defines common tests for
@@ -22,6 +43,16 @@ trait JsonFilesystemStorageDriverTestTrait
      *                              implementation to test.
      */
     protected JsonFilesystemStorageDriver $jsonFilesystemStorageDriver;
+
+    /**
+     * @var JsonFilePath $expectedJsonFilePath
+     */
+    private $expectedJsonFilePath;
+
+    /**
+     * @var Json $expectedJson
+     */
+    private $expectedJson;
 
     /**
      * Set up an instance of a JsonFilesystemStorageDriver implementation to test.
@@ -80,6 +111,76 @@ trait JsonFilesystemStorageDriverTestTrait
     }
 
     /**
+     * Set the JsonFilePath that the JsonFilesystemStorageDriver
+     * instance being tested's write method is expected to write to.
+     *
+     * @return void
+     *
+     */
+    protected function setExpectedJsonFilePath(
+        Json $json,
+        JsonStorageDirectoryPath $jsonStorageDirectoryPath,
+        Location $location,
+        Owner $owner,
+        Name $name,
+        Id $id,
+    ): void
+    {
+        $container = new ContainerInstance($this->determineType($json));
+        $this->expectedJsonFilePath = new JsonFilePathInstance(
+            $jsonStorageDirectoryPath,
+            $location,
+            $container,
+            $owner,
+            $name,
+            $id,
+        );
+    }
+
+    private function determineType(Json $json): Type|ClassString
+    {
+        $jsonDecoder = new JsonDecoderInstance();
+        $data = $jsonDecoder->decode($json);
+        if(is_object($data)) {
+            return new ClassStringInstance($data);
+        }
+        return match(gettype($data)) {
+            Type::Array->value => Type::Array,
+            Type::Bool->value => Type::Bool,
+            Type::Float->value => Type::Float,
+            Type::Int->value => Type::Int,
+            Type::Null->value => Type::Null,
+            Type::String->value => Type::String,
+            Type::Object->value => Type::Object,
+            Type::Resource->value => Type::Resource,
+            Type::ResourceClosed->value => Type::ResourceClosed,
+            Type::UnknownType->value => Type::UnknownType,
+        };
+    }
+
+    /**
+     * Return the JsonFilePath that the JsonFilesystemStorageDriver
+     * instance being tested's write method is expected to write to.
+     *
+     * @return JsonFilePath
+     *
+     */
+    protected function expectedJsonFilePath(): JsonFilePath
+    {
+        return $this->expectedJsonFilePath;
+    }
+
+    protected function setExpectedJson(Json $json): void
+    {
+        $this->expectedJson = $json;
+    }
+
+    protected function expectedJson(): Json
+    {
+        return $this->expectedJson;
+    }
+
+    /**
      * Test jsonDecoder() returns an instance of a JsonDecoder.
      *
      * @return void
@@ -89,7 +190,8 @@ trait JsonFilesystemStorageDriverTestTrait
     public function test_jsonDecoder_returns_an_instance_of_a_JsonDecoder(): void
     {
         $this->assertTrue(
-            $this->jsonFilesystemStorageDriverTestInstance()->jsonDecoder() instanceof JsonDecoder,
+            $this->jsonFilesystemStorageDriverTestInstance()
+                 ->jsonDecoder() instanceof JsonDecoder,
             $this->testFailedMessage(
                 $this->jsonFilesystemStorageDriverTestInstance(),
                 'jsonDecoder',
@@ -97,5 +199,47 @@ trait JsonFilesystemStorageDriverTestTrait
             ),
         );
     }
+
+    public function test_write_writes_to_the_expected_json_file_path(): void
+    {
+        $this->jsonFilesystemStorageDriverTestInstance()->write(
+            $this->expectedJson(),
+            $this->expectedJsonFilePath()->jsonStorageDirectoryPath(),
+            $this->expectedJsonFilePath->location(),
+            $this->expectedJsonFilePath->owner(),
+            $this->expectedJsonFilePath->name(),
+            $this->expectedJsonFilePath()->id(),
+        );
+        $this->assertTrue(
+            file_exists(
+                $this->expectedJsonFilePath()->__toString()
+            ),
+            $this->testFailedMessage(
+                $this->jsonFilesystemStorageDriverTestInstance(),
+                'write',
+                'write to the expected JsonFilePath:' .
+                PHP_EOL .
+                PHP_EOL .
+                $this->expectedJsonFilePath() .
+                PHP_EOL .
+                PHP_EOL,
+            ),
+        );
+    }
+/*
+    public function test_write_writes_the_expected_json_to_the_expected_json_file_path(): void
+    {
+        $this->assertEquals(
+            file_get_contents($this->expectedJsonFilePath()->__toString()),
+            $this->expectedJson()->__toString(),
+            $this->testFailedMessage(
+                $this->jsonFilesystemStorageDriverTestInstance(),
+                'write',
+                'writes the expected Json to the expected JsonFilePath',
+            ),
+        );
+    }
+ */
+
 }
 
