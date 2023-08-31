@@ -34,7 +34,14 @@ class JsonFilesystemStorageDriverTest extends PHPJsonStorageUtilitiesTest
 
     public function setUp(): void
     {
-        $json = new Json($this->randomChars());
+        $testData = [
+            $this->randomChars(),
+            $this->randomClassStringOrObjectInstance(),
+            $this->randomFloat(),
+            $this->randomObjectInstance(),
+            $this->prefixedRandomName($this->randomChars()),
+        ];
+        $json = new Json($testData[array_rand($testData)]);
         $this->setExpectedJson($json);
         $container = new Container(
             $this->determineType($this->expectedJson())
