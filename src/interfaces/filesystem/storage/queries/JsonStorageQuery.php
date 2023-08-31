@@ -3,6 +3,7 @@
 namespace Darling\PHPJsonStorageUtilities\interfaces\filesystem\storage\queries;
 
 use \Darling\PHPJsonStorageUtilities\interfaces\collections\JsonStorageDirectoryPathCollection;
+use \Darling\PHPJsonStorageUtilities\interfaces\collections\IdCollection;
 use \Darling\PHPJsonStorageUtilities\interfaces\filesystem\paths\JsonFilePath;
 use \Darling\PHPJsonStorageUtilities\interfaces\filesystem\paths\JsonStorageDirectoryPath;
 use \Darling\PHPJsonStorageUtilities\interfaces\named\identifiers\Container;
@@ -14,11 +15,6 @@ use \Darling\PHPTextTypes\interfaces\strings\Name;
 /**
  * Description of this interface.
  *
- * @example
- *
- * ```
- *
- * ```
  */
 interface JsonStorageQuery
 {
@@ -78,12 +74,12 @@ interface JsonStorageQuery
     public function names(): array;
 
     /**
-     * Return an array of Id instances that will determine
-     * which ids will be queried.
+     * Return an IdCollection instance that will determine which ids
+     * will be queried.
      *
-     * @return array<int, Id>
+     * @return IdCollection
      *
      */
-    public function ids(): array;
+    public function ids(): IdCollection;
 }
 

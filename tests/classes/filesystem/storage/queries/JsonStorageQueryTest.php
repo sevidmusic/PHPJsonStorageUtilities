@@ -9,6 +9,7 @@ use \Darling\PHPJsonStorageUtilities\classes\named\identifiers\Container;
 use \Darling\PHPJsonStorageUtilities\classes\named\identifiers\Location;
 use \Darling\PHPJsonStorageUtilities\classes\named\identifiers\Owner;
 use \Darling\PHPJsonStorageUtilities\classes\collections\JsonStorageDirectoryPathCollection;
+use \Darling\PHPJsonStorageUtilities\classes\collections\IdCollection;
 use \Darling\PHPJsonStorageUtilities\tests\PHPJsonStorageUtilitiesTest;
 use \Darling\PHPJsonStorageUtilities\tests\interfaces\filesystem\storage\queries\JsonStorageQueryTestTrait;
 use \Darling\PHPTextTypes\classes\strings\ClassString;
@@ -88,11 +89,11 @@ class JsonStorageQueryTest extends PHPJsonStorageUtilitiesTest
             new Name(new Name(new Text($this->randomChars()))),
         ];
         $this->setExpectedNames($expectedNames);
-        $expectedIds = [
+        $expectedIds = new IdCollection(
             new Id(),
             new Id(),
             new Id(),
-        ];
+        );
         $this->setExpectedIds($expectedIds);
         $this->setJsonStorageQueryTestInstance(
             new JsonStorageQuery(

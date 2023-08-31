@@ -2,6 +2,7 @@
 
 namespace Darling\PHPJsonStorageUtilities\tests\interfaces\filesystem\storage\queries;
 
+use \Darling\PHPJsonStorageUtilities\interfaces\collections\IdCollection;
 use \Darling\PHPJsonStorageUtilities\interfaces\collections\JsonStorageDirectoryPathCollection;
 use \Darling\PHPJsonStorageUtilities\interfaces\filesystem\paths\JsonFilePath;
 use \Darling\PHPJsonStorageUtilities\interfaces\filesystem\paths\JsonStorageDirectoryPath;
@@ -41,7 +42,7 @@ trait JsonStorageQueryTestTrait
     private JsonStorageDirectoryPathCollection $expectedJsonStorageDirectoryPaths;
 
     /**
-     * @var array<int, Id> The array of
+     * @var IdCollection $expectedIds
      *                                           Id
      *                                           instances that is
      *                                           expected to be
@@ -51,7 +52,7 @@ trait JsonStorageQueryTestTrait
      *                                           ids()
      *                                           method.
      */
-    private array $expectedIds;
+    private IdCollection $expectedIds;
 
     /**
      * @var array<int, Name> The array of
@@ -113,14 +114,14 @@ trait JsonStorageQueryTestTrait
     }
 
     /**
-     * Return the array of Id instances that is expected to be
+     * Return the IdCollection instance that is expected to be
      * returned by the JsonStorageQuery instance being tested's
      * ids() method.
      *
-     * @return array<int, Id>
+     * @return IdCollection
      *
      */
-    protected function expectedIds(): array
+    protected function expectedIds(): IdCollection
     {
         return $this->expectedIds;
     }
@@ -265,14 +266,14 @@ trait JsonStorageQueryTestTrait
 
 
     /**
-     * Set the array of Id instances that is expected to be returned
+     * Set the IdCollection instance that is expected to be returned
      * by the JsonStorageQuery instance being tested's ids() method.
      *
-     * @param array<int, Id> $ids
+     * @param IdCollection $ids
      *
      */
     protected function setExpectedIds(
-        array $ids
+        IdCollection $ids
     ): void
     {
         $this->expectedIds = $ids;

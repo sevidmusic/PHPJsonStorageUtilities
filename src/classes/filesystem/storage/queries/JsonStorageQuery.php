@@ -3,7 +3,9 @@
 namespace Darling\PHPJsonStorageUtilities\classes\filesystem\storage\queries;
 
 use \Darling\PHPJsonStorageUtilities\interfaces\collections\JsonStorageDirectoryPathCollection;
+use \Darling\PHPJsonStorageUtilities\interfaces\collections\IdCollection;
 use \Darling\PHPJsonStorageUtilities\classes\collections\JsonStorageDirectoryPathCollection as JsonStorageDirectoryPathCollectionDefault;
+use \Darling\PHPJsonStorageUtilities\classes\collections\IdCollection as IdCollectionDefault;
 use \Darling\PHPJsonStorageUtilities\interfaces\filesystem\paths\JsonFilePath;
 use \Darling\PHPJsonStorageUtilities\interfaces\filesystem\paths\JsonStorageDirectoryPath;
 use \Darling\PHPJsonStorageUtilities\interfaces\filesystem\storage\queries\JsonStorageQuery as JsonStorageQueryInterface;
@@ -25,7 +27,7 @@ class JsonStorageQuery implements JsonStorageQueryInterface
      * @param array<int, Container>|null $containers
      * @param array<int, Owner>|null $owners
      * @param array<int, Name>|null $names
-     * @param array<int, Id>|null $ids
+     * @param IdCollection $ids|null
      *
      */
     public function __construct(
@@ -35,7 +37,7 @@ class JsonStorageQuery implements JsonStorageQueryInterface
         private array|null $containers = null,
         private array|null $owners = null,
         private array|null $names = null,
-        private array|null $ids = null,
+        private IdCollection|null $ids = null,
     ) { }
 
     public function jsonStorageDirectoryPaths(): JsonStorageDirectoryPathCollection
@@ -68,9 +70,9 @@ class JsonStorageQuery implements JsonStorageQueryInterface
         return $this->names ?? [];
     }
 
-    public function ids(): array
+    public function ids(): IdCollection
     {
-        return $this->ids ?? [];
+        return $this->ids ?? new IdCollectionDefault();
     }
 
 }
