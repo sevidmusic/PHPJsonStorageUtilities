@@ -4,6 +4,7 @@ namespace Darling\PHPJsonStorageUtilities\tests\interfaces\filesystem\storage\qu
 
 use \Darling\PHPJsonStorageUtilities\interfaces\collections\IdCollection;
 use \Darling\PHPJsonStorageUtilities\interfaces\collections\JsonStorageDirectoryPathCollection;
+use \Darling\PHPJsonStorageUtilities\interfaces\collections\NameCollection;
 use \Darling\PHPJsonStorageUtilities\interfaces\filesystem\paths\JsonFilePath;
 use \Darling\PHPJsonStorageUtilities\interfaces\filesystem\paths\JsonStorageDirectoryPath;
 use \Darling\PHPJsonStorageUtilities\interfaces\filesystem\storage\queries\JsonStorageQuery;
@@ -55,7 +56,7 @@ trait JsonStorageQueryTestTrait
     private IdCollection $expectedIds;
 
     /**
-     * @var array<int, Name> The array of
+     * @var NameCollection $expectedNames
      *                                           Name
      *                                           instances that is
      *                                           expected to be
@@ -65,7 +66,7 @@ trait JsonStorageQueryTestTrait
      *                                           names()
      *                                           method.
      */
-    private array $expectedNames;
+    private NameCollection $expectedNames;
 
     /**
      * @var array<int, Owner> The array of Owner instances that is
@@ -127,14 +128,14 @@ trait JsonStorageQueryTestTrait
     }
 
     /**
-     * Return the array of Name instances that is expected to be
+     * Return the NameCollection instance that is expected to be
      * returned by the JsonStorageQuery instance being tested's
      * names() method.
      *
-     * @return array<int, Name>
+     * @return NameCollection
      *
      */
-    protected function expectedNames(): array
+    protected function expectedNames(): NameCollection
     {
         return $this->expectedNames;
     }
@@ -281,15 +282,15 @@ trait JsonStorageQueryTestTrait
 
 
     /**
-     * Set the array of Name instances that is expected to be
+     * Set the NameCollection instance that is expected to be
      * returned by the JsonStorageQuery instance being tested's
      * names() method.
      *
-     * @param array<int, Name> $names
+     * @param NameCollection $names
      *
      */
     protected function setExpectedNames(
-        array $names
+        NameCollection $names
     ): void
     {
         $this->expectedNames = $names;
