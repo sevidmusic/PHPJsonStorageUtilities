@@ -2,6 +2,7 @@
 
 namespace Darling\PHPJsonStorageUtilities\tests\interfaces\filesystem\storage\queries;
 
+use \Darling\PHPJsonStorageUtilities\interfaces\collections\JsonStorageDirectoryPathCollection;
 use \Darling\PHPJsonStorageUtilities\interfaces\filesystem\paths\JsonFilePath;
 use \Darling\PHPJsonStorageUtilities\interfaces\filesystem\paths\JsonStorageDirectoryPath;
 use \Darling\PHPJsonStorageUtilities\interfaces\filesystem\storage\queries\JsonStorageQuery;
@@ -30,17 +31,14 @@ trait JsonStorageQueryTestTrait
     protected JsonStorageQuery $jsonStorageQuery;
 
     /**
-     * @var array<int, JsonStorageDirectoryPath> The array of
-     *                                           JsonStorageDirectoryPath
-     *                                           instances that is
-     *                                           expected to be
-     *                                           returned by the
-     *                                           JsonStorageQuery
-     *                                           being tested's
-     *                                           jsonStorageDirectoryPaths()
-     *                                           method.
+     * @var JsonStorageDirectoryPathCollection
+     *                         The JsonStorageDirectoryPathCollection
+     *                         instances that is expected to be
+     *                         returned by the JsonStorageQuery being
+     *                         tested's jsonStorageDirectoryPaths()
+     *                         method.
      */
-    private array $expectedJsonStorageDirectoryPaths;
+    private JsonStorageDirectoryPathCollection $expectedJsonStorageDirectoryPaths;
 
     /**
      * @var array<int, Id> The array of
@@ -102,14 +100,14 @@ trait JsonStorageQueryTestTrait
     private array $expectedJsonFilePaths;
 
     /**
-     * Return the array of JsonStorageDirectoryPath instances
+     * Return the JsonStorageDirectoryPathCollection instance
      * that is expected to be returned by the JsonStorageQuery
      * instance being tested's jsonStorageDirectoryPaths() method.
      *
-     * @return array<int, JsonStorageDirectoryPath>
+     * @return JsonStorageDirectoryPathCollection
      *
      */
-    protected function expectedJsonStorageDirectoryPaths(): array
+    protected function expectedJsonStorageDirectoryPaths(): JsonStorageDirectoryPathCollection
     {
         return $this->expectedJsonStorageDirectoryPaths;
     }
@@ -251,15 +249,15 @@ trait JsonStorageQueryTestTrait
     }
 
     /**
-     * Set the array of JsonStorageDirectoryPath instances
-     * that is expected to be returned by the JsonStorageQuery
-     * instance being tested's jsonStorageDirectoryPaths() method.
+     * Set JsonStorageDirectoryPathCollection instance that is
+     * expected to be returned by the JsonStorageQuery instance
+     * being tested's jsonStorageDirectoryPaths() method.
      *
-     * @param array<int, JsonStorageDirectoryPath> $jsonStorageDirectoryPaths
+     * @param JsonStorageDirectoryPathCollection $jsonStorageDirectoryPaths
      *
      */
     protected function setExpectedJsonStorageDirectoryPaths(
-        array $jsonStorageDirectoryPaths
+        JsonStorageDirectoryPathCollection $jsonStorageDirectoryPaths
     ): void
     {
         $this->expectedJsonStorageDirectoryPaths = $jsonStorageDirectoryPaths;

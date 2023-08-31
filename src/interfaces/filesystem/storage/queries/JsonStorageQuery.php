@@ -2,13 +2,14 @@
 
 namespace Darling\PHPJsonStorageUtilities\interfaces\filesystem\storage\queries;
 
-use \Darling\PHPJsonStorageUtilities\interfaces\filesystem\paths\JsonStorageDirectoryPath;
+use \Darling\PHPJsonStorageUtilities\interfaces\collections\JsonStorageDirectoryPathCollection;
 use \Darling\PHPJsonStorageUtilities\interfaces\filesystem\paths\JsonFilePath;
+use \Darling\PHPJsonStorageUtilities\interfaces\filesystem\paths\JsonStorageDirectoryPath;
+use \Darling\PHPJsonStorageUtilities\interfaces\named\identifiers\Container;
 use \Darling\PHPJsonStorageUtilities\interfaces\named\identifiers\Location;
 use \Darling\PHPJsonStorageUtilities\interfaces\named\identifiers\Owner;
-use \Darling\PHPJsonStorageUtilities\interfaces\named\identifiers\Container;
-use \Darling\PHPTextTypes\interfaces\strings\Name;
 use \Darling\PHPTextTypes\interfaces\strings\Id;
+use \Darling\PHPTextTypes\interfaces\strings\Name;
 
 /**
  * Description of this interface.
@@ -22,15 +23,14 @@ use \Darling\PHPTextTypes\interfaces\strings\Id;
 interface JsonStorageQuery
 {
 
-
     /**
      * Return an array of JsonStorageDirectoryPath instances that
      * will determine which Json storage directories will be queried.
      *
-     * @return array<int, JsonStorageDirectoryPath>
+     * @return JsonStorageDirectoryPathCollection
      *
      */
-    public function jsonStorageDirectoryPaths(): array;
+    public function jsonStorageDirectoryPaths(): JsonStorageDirectoryPathCollection;
 
     /**
      * Return an array of JsonFilePath instances that will determine

@@ -2,18 +2,19 @@
 
 namespace Darling\PHPJsonStorageUtilities\tests\classes\filesystem\storage\queries;
 
-use \Darling\PHPJsonStorageUtilities\classes\filesystem\paths\JsonStorageDirectoryPath;
 use \Darling\PHPJsonStorageUtilities\classes\filesystem\paths\JsonFilePath;
+use \Darling\PHPJsonStorageUtilities\classes\filesystem\paths\JsonStorageDirectoryPath;
 use \Darling\PHPJsonStorageUtilities\classes\filesystem\storage\queries\JsonStorageQuery;
-use \Darling\PHPJsonStorageUtilities\tests\PHPJsonStorageUtilitiesTest;
-use \Darling\PHPJsonStorageUtilities\tests\interfaces\filesystem\storage\queries\JsonStorageQueryTestTrait;
-use \Darling\PHPTextTypes\classes\strings\Name;
-use \Darling\PHPTextTypes\classes\strings\ClassString;
-use \Darling\PHPTextTypes\classes\strings\Text;
-use \Darling\PHPTextTypes\classes\strings\Id;
+use \Darling\PHPJsonStorageUtilities\classes\named\identifiers\Container;
 use \Darling\PHPJsonStorageUtilities\classes\named\identifiers\Location;
 use \Darling\PHPJsonStorageUtilities\classes\named\identifiers\Owner;
-use \Darling\PHPJsonStorageUtilities\classes\named\identifiers\Container;
+use \Darling\PHPJsonStorageUtilities\classes\collections\JsonStorageDirectoryPathCollection;
+use \Darling\PHPJsonStorageUtilities\tests\PHPJsonStorageUtilitiesTest;
+use \Darling\PHPJsonStorageUtilities\tests\interfaces\filesystem\storage\queries\JsonStorageQueryTestTrait;
+use \Darling\PHPTextTypes\classes\strings\ClassString;
+use \Darling\PHPTextTypes\classes\strings\Id;
+use \Darling\PHPTextTypes\classes\strings\Name;
+use \Darling\PHPTextTypes\classes\strings\Text;
 
 class JsonStorageQueryTest extends PHPJsonStorageUtilitiesTest
 {
@@ -31,17 +32,18 @@ class JsonStorageQueryTest extends PHPJsonStorageUtilitiesTest
 
     public function setUp(): void
     {
-        $expectedJsonStorageDirectoryPaths = [
-            new JsonStorageDirectoryPath(
-                new Name(new Text($this->randomChars()))
-            ),
-            new JsonStorageDirectoryPath(
-                new Name(new Text($this->randomChars()))
-            ),
-            new JsonStorageDirectoryPath(
-                new Name(new Text($this->randomChars()))
-            ),
-        ];
+        $expectedJsonStorageDirectoryPaths =
+            new JsonStorageDirectoryPathCollection(
+                new JsonStorageDirectoryPath(
+                    new Name(new Text($this->randomChars()))
+                ),
+                new JsonStorageDirectoryPath(
+                    new Name(new Text($this->randomChars()))
+                ),
+                new JsonStorageDirectoryPath(
+                    new Name(new Text($this->randomChars()))
+                ),
+            );
         $this->setExpectedJsonStorageDirectoryPaths(
             $expectedJsonStorageDirectoryPaths
         );
