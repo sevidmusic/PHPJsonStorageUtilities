@@ -2,6 +2,7 @@
 
 namespace Darling\PHPJsonStorageUtilities\tests\interfaces\filesystem\storage\queries;
 
+use \Darling\PHPJsonStorageUtilities\interfaces\collections\JsonFilePathCollection;
 use \Darling\PHPJsonStorageUtilities\interfaces\collections\LocationCollection;
 use \Darling\PHPJsonStorageUtilities\interfaces\collections\ContainerCollection;
 use \Darling\PHPJsonStorageUtilities\interfaces\collections\OwnerCollection;
@@ -96,13 +97,13 @@ trait JsonStorageQueryTestTrait
     private LocationCollection $expectedLocations;
 
     /**
-     * @var array<int, JsonFilePath> The array of JsonFilePath
+     * @var JsonFilePathCollection $expectedJsonFilePaths
      *                               instances that is expected to be
      *                               returned by the JsonStorageQuery
      *                               being tested's jsonFilePaths()
      *                               method.
      */
-    private array $expectedJsonFilePaths;
+    private JsonFilePathCollection $expectedJsonFilePaths;
 
     /**
      * Return the JsonStorageDirectoryPathCollection instance
@@ -183,14 +184,14 @@ trait JsonStorageQueryTestTrait
     }
 
     /**
-     * Return the array of JsonFilePath instances that is expected to
+     * Return the JsonFilePathCollection instance that is expected to
      * be returned by the JsonStorageQuery instance being tested's
      * jsonFilePaths() method.
      *
-     * @return array<int, JsonFilePath>
+     * @return JsonFilePathCollection
      *
      */
-    protected function expectedJsonFilePaths(): array
+    protected function expectedJsonFilePaths(): JsonFilePathCollection
     {
         return $this->expectedJsonFilePaths;
     }
@@ -349,15 +350,15 @@ trait JsonStorageQueryTestTrait
 
 
     /**
-     * Set the array of JsonFilePath instances that is expected to be
+     * Set the JsonFilePathCollection instance that is expected to be
      * returned by the JsonStorageQuery instance being tested's
      * jsonFilePaths() method.
      *
-     * @param array<int, JsonFilePath> $jsonFilePaths
+     * @param JsonFilePathCollection $jsonFilePaths
      *
      */
     protected function setExpectedJsonFilePaths(
-        array $jsonFilePaths
+        JsonFilePathCollection $jsonFilePaths
     ): void
     {
         $this->expectedJsonFilePaths = $jsonFilePaths;

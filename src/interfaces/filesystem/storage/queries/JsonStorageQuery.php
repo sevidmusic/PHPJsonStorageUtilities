@@ -2,6 +2,7 @@
 
 namespace Darling\PHPJsonStorageUtilities\interfaces\filesystem\storage\queries;
 
+use \Darling\PHPJsonStorageUtilities\interfaces\collections\JsonFilePathCollection;
 use \Darling\PHPJsonStorageUtilities\interfaces\collections\LocationCollection;
 use \Darling\PHPJsonStorageUtilities\interfaces\collections\ContainerCollection;
 use \Darling\PHPJsonStorageUtilities\interfaces\collections\OwnerCollection;
@@ -33,13 +34,13 @@ interface JsonStorageQuery
     public function jsonStorageDirectoryPaths(): JsonStorageDirectoryPathCollection;
 
     /**
-     * Return an array of JsonFilePath instances that will determine
+     * Return JsonFilePathCollection instance that will determine
      * which JsonFilePaths will be queried.
      *
-     * @return array<int, JsonFilePath>
+     * @return JsonFilePathCollection
      *
      */
-    public function jsonFilePaths(): array;
+    public function jsonFilePaths(): JsonFilePathCollection;
 
     /**
      * Return an LocationCollection instance that will determine which

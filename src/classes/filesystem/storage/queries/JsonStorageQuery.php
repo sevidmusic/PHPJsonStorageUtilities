@@ -2,12 +2,14 @@
 
 namespace Darling\PHPJsonStorageUtilities\classes\filesystem\storage\queries;
 
+use \Darling\PHPJsonStorageUtilities\classes\collections\JsonFilePathCollection as JsonFilePathCollectionDefault;
 use \Darling\PHPJsonStorageUtilities\classes\collections\LocationCollection as LocationCollectionDefault;
 use \Darling\PHPJsonStorageUtilities\classes\collections\ContainerCollection as ContainerCollectionDefault;
 use \Darling\PHPJsonStorageUtilities\classes\collections\OwnerCollection as OwnerCollectionDefault;
 use \Darling\PHPJsonStorageUtilities\classes\collections\IdCollection as IdCollectionDefault;
 use \Darling\PHPJsonStorageUtilities\classes\collections\JsonStorageDirectoryPathCollection as JsonStorageDirectoryPathCollectionDefault;
 use \Darling\PHPJsonStorageUtilities\classes\collections\NameCollection as NameCollectionDefault;
+use \Darling\PHPJsonStorageUtilities\interfaces\collections\JsonFilePathCollection;
 use \Darling\PHPJsonStorageUtilities\interfaces\collections\LocationCollection;
 use \Darling\PHPJsonStorageUtilities\interfaces\collections\ContainerCollection;
 use \Darling\PHPJsonStorageUtilities\interfaces\collections\OwnerCollection;
@@ -30,7 +32,7 @@ class JsonStorageQuery implements JsonStorageQueryInterface
      * Instantiate a new JsonStorageQuery instance.
      *
      * @param JsonStorageDirectoryPathCollection|null $jsonStorageDirectoryPaths
-     * @param array<int, JsonFilePath>|null $jsonFilePaths
+     * @param JsonFilePathCollection|null $jsonFilePaths
      * @param LocationCollection|null $locations
      * @param ContainerCollection|null $containers
      * @param OwnerCollection|null $owners
@@ -40,7 +42,7 @@ class JsonStorageQuery implements JsonStorageQueryInterface
      */
     public function __construct(
         private JsonStorageDirectoryPathCollection|null $jsonStorageDirectoryPaths = null,
-        private array|null $jsonFilePaths = null,
+        private JsonFilePathCollection|null $jsonFilePaths = null,
         private LocationCollection|null $locations = null,
         private ContainerCollection|null $containers = null,
         private OwnerCollection|null $owners = null,
@@ -53,9 +55,9 @@ class JsonStorageQuery implements JsonStorageQueryInterface
         return $this->jsonStorageDirectoryPaths ?? new JsonStorageDirectoryPathCollectionDefault();
     }
 
-    public function jsonFilePaths(): array
+    public function jsonFilePaths(): JsonFilePathCollection
     {
-        return $this->jsonFilePaths ?? [];
+        return $this->jsonFilePaths ?? new JsonFilePathCollectionDefault();
     }
 
     public function locations(): LocationCollection
