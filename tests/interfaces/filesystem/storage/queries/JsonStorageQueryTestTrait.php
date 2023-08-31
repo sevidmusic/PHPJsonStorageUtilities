@@ -2,6 +2,7 @@
 
 namespace Darling\PHPJsonStorageUtilities\tests\interfaces\filesystem\storage\queries;
 
+use \Darling\PHPJsonStorageUtilities\interfaces\collections\LocationCollection;
 use \Darling\PHPJsonStorageUtilities\interfaces\collections\ContainerCollection;
 use \Darling\PHPJsonStorageUtilities\interfaces\collections\OwnerCollection;
 use \Darling\PHPJsonStorageUtilities\interfaces\collections\IdCollection;
@@ -87,12 +88,12 @@ trait JsonStorageQueryTestTrait
     private ContainerCollection $expectedContainers;
 
     /**
-     * @var array<int, Location> The array of Location instances that
+     * @var LocationCollection $expectedLocations
      *                           is expected to be returned by the
      *                           JsonStorageQuery being tested's
      *                           locations() method.
      */
-    private array $expectedLocations;
+    private LocationCollection $expectedLocations;
 
     /**
      * @var array<int, JsonFilePath> The array of JsonFilePath
@@ -169,14 +170,14 @@ trait JsonStorageQueryTestTrait
     }
 
     /**
-     * Return the array of Location instances that is expected to be
+     * Return the LocationCollection instance that is expected to be
      * returned by the JsonStorageQuery instance being tested's
      * locations() method.
      *
-     * @return array<int, Location>
+     * @return LocationCollection
      *
      */
-    protected function expectedLocations(): array
+    protected function expectedLocations(): LocationCollection
     {
         return $this->expectedLocations;
     }
@@ -332,15 +333,15 @@ trait JsonStorageQueryTestTrait
 
 
     /**
-     * Set the array of Location instances that is expected to be
+     * Set the LocationCollection instance that is expected to be
      * returned by the JsonStorageQuery instance being tested's
      * locations() method.
      *
-     * @param array<int, Location> $locations
+     * @param LocationCollection $locations
      *
      */
     protected function setExpectedLocations(
-        array $locations
+        LocationCollection $locations
     ): void
     {
         $this->expectedLocations = $locations;
