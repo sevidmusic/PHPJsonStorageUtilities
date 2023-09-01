@@ -17,6 +17,9 @@ use \Darling\PHPTextTypes\classes\strings\ClassString;
 use \Darling\PHPTextTypes\classes\strings\Id;
 use \Darling\PHPTextTypes\classes\strings\Name;
 use \Darling\PHPTextTypes\classes\strings\Text;
+use \RecursiveDirectoryIterator;
+use \RecursiveIteratorIterator;
+use \FilesystemIterator;
 
 class JsonFilesystemStorageDriverTest extends PHPJsonStorageUtilitiesTest
 {
@@ -62,6 +65,11 @@ class JsonFilesystemStorageDriverTest extends PHPJsonStorageUtilitiesTest
         );
     }
 
+    public function tearDown(): void
+    {
+        $this->deleteDarlingDataDirectory($this->expectedJsonFilePath()->jsonStorageDirectoryPath()->__toString());
+    }
+
     private function prefixedRandomName(string $prefix): Name
     {
         return new Name(
@@ -70,6 +78,43 @@ class JsonFilesystemStorageDriverTest extends PHPJsonStorageUtilitiesTest
                 ucfirst(substr($this->randomChars(), 0, 3))
             )
         );
+    }
+
+    private function deleteDarlingDataDirectory(string $path) : void
+    {
+        $path = strval(realpath($path));
+        if(
+            $path !== '/'
+            &&
+            is_dir($path)
+            &&
+            is_writable($path)
+            &&
+            str_contains($path, 'darling' . DIRECTORY_SEPARATOR . 'data')
+        ) {
+            foreach(
+                new RecursiveIteratorIterator(
+                    new RecursiveDirectoryIterator(
+                        $path,
+                        FilesystemIterator::SKIP_DOTS
+                        | FilesystemIterator::UNIX_PATHS
+                    ),
+                    RecursiveIteratorIterator::CHILD_FIRST
+                )
+                as
+                $value
+            ) {
+                /**
+                 * @var \SplFileInfo $value
+                 */
+                if($value->isFile()) {
+                    unlink($value);
+                } else {
+                    rmdir($value);
+                }
+            }
+            rmdir($path);
+        }
     }
 }
 
