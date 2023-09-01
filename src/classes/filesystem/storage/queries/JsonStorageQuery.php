@@ -32,7 +32,7 @@ class JsonStorageQuery implements JsonStorageQueryInterface
      * Instantiate a new JsonStorageQuery instance.
      *
      * @param JsonStorageDirectoryPathCollection|null $jsonStorageDirectoryPaths
-     * @param JsonFilePathCollection|null $jsonFilePaths
+     * @param JsonFilePathCollection|null $jsonFilePath
      * @param LocationCollection|null $locations
      * @param ContainerCollection|null $containers
      * @param OwnerCollection|null $owners
@@ -42,7 +42,7 @@ class JsonStorageQuery implements JsonStorageQueryInterface
      */
     public function __construct(
         private JsonStorageDirectoryPathCollection|null $jsonStorageDirectoryPaths = null,
-        private JsonFilePathCollection|null $jsonFilePaths = null,
+        private JsonFilePathCollection|null $jsonFilePath = null,
         private LocationCollection|null $locations = null,
         private ContainerCollection|null $containers = null,
         private OwnerCollection|null $owners = null,
@@ -55,9 +55,9 @@ class JsonStorageQuery implements JsonStorageQueryInterface
         return $this->jsonStorageDirectoryPaths ?? new JsonStorageDirectoryPathCollectionDefault();
     }
 
-    public function jsonFilePaths(): JsonFilePathCollection
+    public function jsonFilePath(): JsonFilePathCollection
     {
-        return $this->jsonFilePaths ?? new JsonFilePathCollectionDefault();
+        return $this->jsonFilePath ?? new JsonFilePathCollectionDefault();
     }
 
     public function locations(): LocationCollection

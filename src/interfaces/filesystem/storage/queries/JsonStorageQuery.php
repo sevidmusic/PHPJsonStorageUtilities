@@ -40,7 +40,7 @@ interface JsonStorageQuery
      * @return JsonFilePathCollection
      *
      */
-    public function jsonFilePaths(): JsonFilePathCollection;
+    public function jsonFilePath(): JsonFilePathCollection;
 
     /**
      * Return an LocationCollection instance that will determine which

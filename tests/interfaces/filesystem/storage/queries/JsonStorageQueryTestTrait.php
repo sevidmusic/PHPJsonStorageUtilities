@@ -100,7 +100,7 @@ trait JsonStorageQueryTestTrait
      * @var JsonFilePathCollection $expectedJsonFilePath
      *                               instances that is expected to be
      *                               returned by the JsonStorageQuery
-     *                               being tested's jsonFilePaths()
+     *                               being tested's jsonFilePath()
      *                               method.
      */
     private JsonFilePathCollection $expectedJsonFilePath;
@@ -186,7 +186,7 @@ trait JsonStorageQueryTestTrait
     /**
      * Return the JsonFilePathCollection instance that is expected to
      * be returned by the JsonStorageQuery instance being tested's
-     * jsonFilePaths() method.
+     * jsonFilePath() method.
      *
      * @return JsonFilePathCollection
      *
@@ -352,16 +352,16 @@ trait JsonStorageQueryTestTrait
     /**
      * Set the JsonFilePathCollection instance that is expected to be
      * returned by the JsonStorageQuery instance being tested's
-     * jsonFilePaths() method.
+     * jsonFilePath() method.
      *
-     * @param JsonFilePathCollection $jsonFilePaths
+     * @param JsonFilePathCollection $jsonFilePath
      *
      */
     protected function setExpectedJsonFilePaths(
-        JsonFilePathCollection $jsonFilePaths
+        JsonFilePathCollection $jsonFilePath
     ): void
     {
-        $this->expectedJsonFilePath = $jsonFilePaths;
+        $this->expectedJsonFilePath = $jsonFilePath;
     }
 
 
@@ -516,22 +516,22 @@ trait JsonStorageQueryTestTrait
 
 
     /**
-     * Test that the jsonFilePaths() method returns the expected array
+     * Test that the jsonFilePath() method returns the expected array
      * of JsonFilePath instances.
      *
      * @return void
      *
-     * @covers JsonStorageQuery->jsonFilePaths()
+     * @covers JsonStorageQuery->jsonFilePath()
      *
      */
-    public function test_jsonFilePaths_returns_an_array_of_the_expected_JsonFilePath_instances(): void
+    public function test_jsonFilePath_returns_an_array_of_the_expected_JsonFilePath_instances(): void
     {
         $this->assertEquals(
             $this->expectedJsonFilePath(),
-            $this->jsonStorageQueryTestInstance()->jsonFilePaths(),
+            $this->jsonStorageQueryTestInstance()->jsonFilePath(),
             $this->testFailedMessage(
                 $this->jsonStorageQueryTestInstance(),
-                'jsonFilePaths',
+                'jsonFilePath',
                 'return an array of the expected ' .
                 'JsonFilePath instances'
             ),

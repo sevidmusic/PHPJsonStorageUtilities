@@ -103,7 +103,7 @@ class JsonStorageQueryTest extends PHPJsonStorageUtilitiesTest
         $this->setJsonStorageQueryTestInstance(
             new JsonStorageQuery(
                 jsonStorageDirectoryPaths: $expectedJsonStorageDirectoryPath,
-                jsonFilePaths: $expectedJsonFilePath,
+                jsonFilePath: $expectedJsonFilePath,
                 locations: $expectedLocation,
                 containers: $expectedContainer,
                 owners: $expectedOwner,
