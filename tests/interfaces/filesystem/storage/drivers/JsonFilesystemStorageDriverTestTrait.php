@@ -221,9 +221,25 @@ trait JsonFilesystemStorageDriverTestTrait
             ),
         );
     }
-/*
+
+    /**
+     * Test write writes the expected json to the expected json file path.
+     *
+     * @return void
+     *
+     * @covers JsonFilesystemStorageDriver->write()
+     *
+     */
     public function test_write_writes_the_expected_json_to_the_expected_json_file_path(): void
     {
+        $this->jsonFilesystemStorageDriverTestInstance()->write(
+            $this->expectedJson(),
+            $this->expectedJsonFilePath()->jsonStorageDirectoryPath(),
+            $this->expectedJsonFilePath->location(),
+            $this->expectedJsonFilePath->owner(),
+            $this->expectedJsonFilePath->name(),
+            $this->expectedJsonFilePath()->id(),
+        );
         $this->assertEquals(
             file_get_contents($this->expectedJsonFilePath()->__toString()),
             $this->expectedJson()->__toString(),
@@ -234,7 +250,6 @@ trait JsonFilesystemStorageDriverTestTrait
             ),
         );
     }
- */
 
 }
 
