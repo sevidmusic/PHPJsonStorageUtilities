@@ -38,7 +38,7 @@ class JsonStorageQueryTest extends PHPJsonStorageUtilitiesTest
 
     public function setUp(): void
     {
-        $expectedJsonStorageDirectoryPaths =
+        $expectedJsonStorageDirectoryPath =
             new JsonStorageDirectoryPathCollection(
                 new JsonStorageDirectoryPath(
                     new Name(new Text($this->randomChars()))
@@ -51,9 +51,9 @@ class JsonStorageQueryTest extends PHPJsonStorageUtilitiesTest
                 ),
             );
         $this->setExpectedJsonStorageDirectoryPaths(
-            $expectedJsonStorageDirectoryPaths
+            $expectedJsonStorageDirectoryPath
         );
-        $expectedJsonFilePaths = new JsonFilePathCollection(
+        $expectedJsonFilePath = new JsonFilePathCollection(
             new JsonFilePath(
                 new JsonStorageDirectoryPath(
                     new Name(
@@ -69,46 +69,46 @@ class JsonStorageQueryTest extends PHPJsonStorageUtilitiesTest
                 new Id(),
             ),
         );
-        $this->setExpectedJsonFilePaths($expectedJsonFilePaths);
-        $expectedLocations = new LocationCollection(
+        $this->setExpectedJsonFilePaths($expectedJsonFilePath);
+        $expectedLocation = new LocationCollection(
             new Location(new Name(new Text($this->randomChars()))),
             new Location(new Name(new Text($this->randomChars()))),
             new Location(new Name(new Text($this->randomChars()))),
         );
-        $this->setExpectedLocations($expectedLocations);
-        $expectedContainers = new ContainerCollection(
+        $this->setExpectedLocations($expectedLocation);
+        $expectedContainer = new ContainerCollection(
             new Container(new ClassString(Name::class)),
             new Container(new ClassString(Text::class)),
             new Container(new ClassString(Id::class)),
         );
-        $this->setExpectedContainers($expectedContainers);
-        $expectedOwners = new OwnerCollection(
+        $this->setExpectedContainers($expectedContainer);
+        $expectedOwner = new OwnerCollection(
             new Owner(new Name(new Text($this->randomChars()))),
             new Owner(new Name(new Text($this->randomChars()))),
             new Owner(new Name(new Text($this->randomChars()))),
         );
-        $this->setExpectedOwners($expectedOwners);
-        $expectedNames = new NameCollection(
+        $this->setExpectedOwners($expectedOwner);
+        $expectedName = new NameCollection(
             new Name(new Text($this->randomChars())),
             new Name(new Text($this->randomChars())),
             new Name(new Text($this->randomChars())),
         );
-        $this->setExpectedNames($expectedNames);
-        $expectedIds = new IdCollection(
+        $this->setExpectedNames($expectedName);
+        $expectedId = new IdCollection(
             new Id(),
             new Id(),
             new Id(),
         );
-        $this->setExpectedIds($expectedIds);
+        $this->setExpectedIds($expectedId);
         $this->setJsonStorageQueryTestInstance(
             new JsonStorageQuery(
-                jsonStorageDirectoryPaths: $expectedJsonStorageDirectoryPaths,
-                jsonFilePaths: $expectedJsonFilePaths,
-                locations: $expectedLocations,
-                containers: $expectedContainers,
-                owners: $expectedOwners,
-                names: $expectedNames,
-                ids: $expectedIds,
+                jsonStorageDirectoryPaths: $expectedJsonStorageDirectoryPath,
+                jsonFilePaths: $expectedJsonFilePath,
+                locations: $expectedLocation,
+                containers: $expectedContainer,
+                owners: $expectedOwner,
+                names: $expectedName,
+                ids: $expectedId,
             )
         );
     }

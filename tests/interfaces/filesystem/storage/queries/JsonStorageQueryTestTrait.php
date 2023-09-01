@@ -44,10 +44,10 @@ trait JsonStorageQueryTestTrait
      *                         tested's jsonStorageDirectoryPaths()
      *                         method.
      */
-    private JsonStorageDirectoryPathCollection $expectedJsonStorageDirectoryPaths;
+    private JsonStorageDirectoryPathCollection $expectedJsonStorageDirectoryPath;
 
     /**
-     * @var IdCollection $expectedIds
+     * @var IdCollection $expectedId
      *                                           Id
      *                                           instances that is
      *                                           expected to be
@@ -57,10 +57,10 @@ trait JsonStorageQueryTestTrait
      *                                           ids()
      *                                           method.
      */
-    private IdCollection $expectedIds;
+    private IdCollection $expectedId;
 
     /**
-     * @var NameCollection $expectedNames
+     * @var NameCollection $expectedName
      *                                           Name
      *                                           instances that is
      *                                           expected to be
@@ -70,40 +70,40 @@ trait JsonStorageQueryTestTrait
      *                                           names()
      *                                           method.
      */
-    private NameCollection $expectedNames;
+    private NameCollection $expectedName;
 
     /**
-     * @var OwnerCollection $expectedOwners
+     * @var OwnerCollection $expectedOwner
      *                        expected to be returned by the
      *                        JsonStorageQuery being tested's owners()
      *                        method.
      */
-    private OwnerCollection $expectedOwners;
+    private OwnerCollection $expectedOwner;
 
     /**
-     * @var ContainerCollection $expectedContainers
+     * @var ContainerCollection $expectedContainer
      *                            that is expected to be returned by
      *                            the JsonStorageQuery being tested's
      *                            containers() method.
      */
-    private ContainerCollection $expectedContainers;
+    private ContainerCollection $expectedContainer;
 
     /**
-     * @var LocationCollection $expectedLocations
+     * @var LocationCollection $expectedLocation
      *                           is expected to be returned by the
      *                           JsonStorageQuery being tested's
      *                           locations() method.
      */
-    private LocationCollection $expectedLocations;
+    private LocationCollection $expectedLocation;
 
     /**
-     * @var JsonFilePathCollection $expectedJsonFilePaths
+     * @var JsonFilePathCollection $expectedJsonFilePath
      *                               instances that is expected to be
      *                               returned by the JsonStorageQuery
      *                               being tested's jsonFilePaths()
      *                               method.
      */
-    private JsonFilePathCollection $expectedJsonFilePaths;
+    private JsonFilePathCollection $expectedJsonFilePath;
 
     /**
      * Return the JsonStorageDirectoryPathCollection instance
@@ -113,9 +113,9 @@ trait JsonStorageQueryTestTrait
      * @return JsonStorageDirectoryPathCollection
      *
      */
-    protected function expectedJsonStorageDirectoryPaths(): JsonStorageDirectoryPathCollection
+    protected function expectedJsonStorageDirectoryPath(): JsonStorageDirectoryPathCollection
     {
-        return $this->expectedJsonStorageDirectoryPaths;
+        return $this->expectedJsonStorageDirectoryPath;
     }
 
     /**
@@ -126,9 +126,9 @@ trait JsonStorageQueryTestTrait
      * @return IdCollection
      *
      */
-    protected function expectedIds(): IdCollection
+    protected function expectedId(): IdCollection
     {
-        return $this->expectedIds;
+        return $this->expectedId;
     }
 
     /**
@@ -139,9 +139,9 @@ trait JsonStorageQueryTestTrait
      * @return NameCollection
      *
      */
-    protected function expectedNames(): NameCollection
+    protected function expectedName(): NameCollection
     {
-        return $this->expectedNames;
+        return $this->expectedName;
     }
 
     /**
@@ -152,9 +152,9 @@ trait JsonStorageQueryTestTrait
      * @return OwnerCollection
      *
      */
-    protected function expectedOwners(): OwnerCollection
+    protected function expectedOwner(): OwnerCollection
     {
-        return $this->expectedOwners;
+        return $this->expectedOwner;
     }
 
     /**
@@ -165,9 +165,9 @@ trait JsonStorageQueryTestTrait
      * @return ContainerCollection
      *
      */
-    protected function expectedContainers(): ContainerCollection
+    protected function expectedContainer(): ContainerCollection
     {
-        return $this->expectedContainers;
+        return $this->expectedContainer;
     }
 
     /**
@@ -178,9 +178,9 @@ trait JsonStorageQueryTestTrait
      * @return LocationCollection
      *
      */
-    protected function expectedLocations(): LocationCollection
+    protected function expectedLocation(): LocationCollection
     {
-        return $this->expectedLocations;
+        return $this->expectedLocation;
     }
 
     /**
@@ -191,9 +191,9 @@ trait JsonStorageQueryTestTrait
      * @return JsonFilePathCollection
      *
      */
-    protected function expectedJsonFilePaths(): JsonFilePathCollection
+    protected function expectedJsonFilePath(): JsonFilePathCollection
     {
-        return $this->expectedJsonFilePaths;
+        return $this->expectedJsonFilePath;
     }
 
     /**
@@ -266,7 +266,7 @@ trait JsonStorageQueryTestTrait
         JsonStorageDirectoryPathCollection $jsonStorageDirectoryPaths
     ): void
     {
-        $this->expectedJsonStorageDirectoryPaths = $jsonStorageDirectoryPaths;
+        $this->expectedJsonStorageDirectoryPath = $jsonStorageDirectoryPaths;
     }
 
 
@@ -281,7 +281,7 @@ trait JsonStorageQueryTestTrait
         IdCollection $ids
     ): void
     {
-        $this->expectedIds = $ids;
+        $this->expectedId = $ids;
     }
 
 
@@ -297,7 +297,7 @@ trait JsonStorageQueryTestTrait
         NameCollection $names
     ): void
     {
-        $this->expectedNames = $names;
+        $this->expectedName = $names;
     }
 
 
@@ -313,7 +313,7 @@ trait JsonStorageQueryTestTrait
         OwnerCollection $owners
     ): void
     {
-        $this->expectedOwners = $owners;
+        $this->expectedOwner = $owners;
     }
 
 
@@ -329,7 +329,7 @@ trait JsonStorageQueryTestTrait
         ContainerCollection $containers
     ): void
     {
-        $this->expectedContainers = $containers;
+        $this->expectedContainer = $containers;
     }
 
 
@@ -345,7 +345,7 @@ trait JsonStorageQueryTestTrait
         LocationCollection $locations
     ): void
     {
-        $this->expectedLocations = $locations;
+        $this->expectedLocation = $locations;
     }
 
 
@@ -361,7 +361,7 @@ trait JsonStorageQueryTestTrait
         JsonFilePathCollection $jsonFilePaths
     ): void
     {
-        $this->expectedJsonFilePaths = $jsonFilePaths;
+        $this->expectedJsonFilePath = $jsonFilePaths;
     }
 
 
@@ -377,7 +377,7 @@ trait JsonStorageQueryTestTrait
     public function test_jsonStorageDirectoryPaths_returns_an_array_of_the_expected_JsonStorageDirectoryPath_instances(): void
     {
         $this->assertEquals(
-            $this->expectedJsonStorageDirectoryPaths(),
+            $this->expectedJsonStorageDirectoryPath(),
             $this->jsonStorageQueryTestInstance()->jsonStorageDirectoryPaths(),
             $this->testFailedMessage(
                 $this->jsonStorageQueryTestInstance(),
@@ -402,7 +402,7 @@ trait JsonStorageQueryTestTrait
     public function test_ids_returns_an_array_of_the_expected_Id_instances(): void
     {
         $this->assertEquals(
-            $this->expectedIds(),
+            $this->expectedId(),
             $this->jsonStorageQueryTestInstance()->ids(),
             $this->testFailedMessage(
                 $this->jsonStorageQueryTestInstance(),
@@ -427,7 +427,7 @@ trait JsonStorageQueryTestTrait
     public function test_names_returns_an_array_of_the_expected_Name_instances(): void
     {
         $this->assertEquals(
-            $this->expectedNames(),
+            $this->expectedName(),
             $this->jsonStorageQueryTestInstance()->names(),
             $this->testFailedMessage(
                 $this->jsonStorageQueryTestInstance(),
@@ -452,7 +452,7 @@ trait JsonStorageQueryTestTrait
     public function test_owners_returns_an_array_of_the_expected_Owner_instances(): void
     {
         $this->assertEquals(
-            $this->expectedOwners(),
+            $this->expectedOwner(),
             $this->jsonStorageQueryTestInstance()->owners(),
             $this->testFailedMessage(
                 $this->jsonStorageQueryTestInstance(),
@@ -477,7 +477,7 @@ trait JsonStorageQueryTestTrait
     public function test_containers_returns_an_array_of_the_expected_Container_instances(): void
     {
         $this->assertEquals(
-            $this->expectedContainers(),
+            $this->expectedContainer(),
             $this->jsonStorageQueryTestInstance()->containers(),
             $this->testFailedMessage(
                 $this->jsonStorageQueryTestInstance(),
@@ -502,7 +502,7 @@ trait JsonStorageQueryTestTrait
     public function test_locations_returns_an_array_of_the_expected_Location_instances(): void
     {
         $this->assertEquals(
-            $this->expectedLocations(),
+            $this->expectedLocation(),
             $this->jsonStorageQueryTestInstance()->locations(),
             $this->testFailedMessage(
                 $this->jsonStorageQueryTestInstance(),
@@ -527,7 +527,7 @@ trait JsonStorageQueryTestTrait
     public function test_jsonFilePaths_returns_an_array_of_the_expected_JsonFilePath_instances(): void
     {
         $this->assertEquals(
-            $this->expectedJsonFilePaths(),
+            $this->expectedJsonFilePath(),
             $this->jsonStorageQueryTestInstance()->jsonFilePaths(),
             $this->testFailedMessage(
                 $this->jsonStorageQueryTestInstance(),
