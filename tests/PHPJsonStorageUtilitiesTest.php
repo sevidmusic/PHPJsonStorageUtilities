@@ -25,6 +25,9 @@ class PHPJsonStorageUtilitiesTest extends TestCase
     use PHPUnitConfigurationTests;
     use PHPUnitTestMessages;
     use PHPUnitRandomValues;
+
+    protected const TEST_STORAGE_DIRECTORY_NAME = 'PHPJsonStorageUtiltitiesTestData';
+
 }
 
 
