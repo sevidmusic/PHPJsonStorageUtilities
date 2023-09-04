@@ -163,17 +163,19 @@ $jsonFilePath = new JsonFilePath(
         $id
 );
 
-$query = new JsonFilesystemStorageQuery(
-#    jsonFilePath: $jsonFilePath,
-#    jsonStorageDirectoryPath: $jsonStorageDirectoryPath,
-#    location: $location,
-#    container: $container,
-#    owner: $owner,
-#    name: $name,
-    id: $id,
-);
+$queries = [
+    new JsonFilesystemStorageQuery(jsonFilePath: $jsonFilePath),
+    new JsonFilesystemStorageQuery(jsonStorageDirectoryPath: $jsonStorageDirectoryPath),
+    new JsonFilesystemStorageQuery(location: $location),
+    new JsonFilesystemStorageQuery(container: $container),
+    new JsonFilesystemStorageQuery(owner: $owner),
+    new JsonFilesystemStorageQuery(name: $name),
+    new JsonFilesystemStorageQuery(id: $id),
+    new JsonFilesystemStorageQuery(jsonFilePath: $jsonFilePath, jsonStorageDirectoryPath: $jsonStorageDirectoryPath, location: $location, container: $container, owner: $owner, name: $name, id: $id,),
+    new JsonFilesystemStorageQuery(),
+];
 
-$files = mockRead($query);
+$files = mockRead($queries[array_rand($queries)]);
 
 foreach($files as $filePath => $contents) {
     echo 'FILEPATH: ' . $filePath . PHP_EOL . PHP_EOL;
