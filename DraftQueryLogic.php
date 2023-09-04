@@ -25,7 +25,7 @@ use \Darling\PHPTextTypes\classes\strings\Text;
  *
  * @param JsonFilesystemStorageQuery $query
  *
- * @return array<string, Json|string>
+ * @return array<string, Json>
  *
  */
 function mockRead(JsonFilesystemStorageQuery $query) : array
@@ -192,6 +192,11 @@ $queries = [
     new JsonFilesystemStorageQuery(),
 ];
 
-$files = mockRead($queries[array_rand($queries)]);
+$jsonInstancesInStrogeThatMatchedQuery = mockRead($queries[array_rand($queries)]);
 
-var_dump($files);
+foreach($jsonInstancesInStrogeThatMatchedQuery as $json) {
+    echo PHP_EOL . PHP_EOL;
+    var_dump($json);
+    var_dump($jsonDecoder->decode($json));
+    echo PHP_EOL . PHP_EOL;
+}
