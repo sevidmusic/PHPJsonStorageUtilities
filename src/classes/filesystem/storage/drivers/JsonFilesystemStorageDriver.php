@@ -45,7 +45,11 @@ class JsonFilesystemStorageDriver implements JsonFilesystemStorageDriverInterfac
             mkdir($parentDirectoryPath, 0755, true);
         }
         if(is_dir($parentDirectoryPath)) {
-            return file_put_contents($jsonFilePath->__toString(), $json->__toString(), LOCK_EX) > 0;
+            return file_put_contents(
+                $jsonFilePath->__toString(),
+                $json->__toString(),
+                LOCK_EX
+            ) > 0;
         }
         return false;
     }

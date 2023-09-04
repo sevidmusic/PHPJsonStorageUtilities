@@ -10,6 +10,9 @@ use \Darling\PHPJsonStorageUtilities\interfaces\named\identifiers\Location;
 use \Darling\PHPJsonStorageUtilities\interfaces\named\identifiers\Owner;
 use \Darling\PHPTextTypes\interfaces\strings\Id;
 use \Darling\PHPTextTypes\interfaces\strings\Name;
+use \Darling\PHPTextTypes\classes\strings\Name as NameInstance;
+use \Darling\PHPTextTypes\classes\strings\Text;
+use \Darling\PHPJsonStorageUtilities\classes\filesystem\paths\JsonStorageDirectoryPath as JsonStorageDirectoryPathInstance;
 
 /**
  * The JsonFilesystemStorageQueryTestTrait defines common tests for
@@ -223,6 +226,45 @@ trait JsonFilesystemStorageQueryTestTrait
         $this->jsonFilesystemStorageQuery = $jsonFilesystemStorageQueryTestInstance;
     }
 
+    private function expectedQueryString(JsonFilesystemStorageQuery $query): string
+    {
+        $queryString =
+        (
+            is_null($query->jsonStorageDirectoryPath())
+            ? dirname($this->jsonStorageDirectoryPathInstance()) .
+            DIRECTORY_SEPARATOR . '*'
+            : $query->jsonStorageDirectoryPath()
+        ) .
+        DIRECTORY_SEPARATOR .
+        (is_null($query->location()) ? '*' : $query->location()) .
+        DIRECTORY_SEPARATOR .
+        (is_null($query->container()) ? '*' : $query->container()) .
+        DIRECTORY_SEPARATOR .
+        (is_null($query->owner()) ? '*' : $query->owner()) .
+        DIRECTORY_SEPARATOR .
+        (is_null($query->name()) ? '*' : $query->name()) .
+        DIRECTORY_SEPARATOR .
+        (
+            is_null($query->id())
+            ? '*' . DIRECTORY_SEPARATOR . '*'
+            : $this->shardId($query->id()) . '.json'
+        );
+        return $queryString;
+    }
+
+    private function shardId(Id $id): string
+    {
+        $index = 3;
+        $parentDir = substr($id->__toString(), 0, $index);
+        $subDir = substr($id->__toString(), $index);
+        return $parentDir . DIRECTORY_SEPARATOR . $subDir;
+    }
+
+    private function jsonStorageDirectoryPathInstance(): JsonStorageDirectoryPath
+    {
+        return new JsonStorageDirectoryPathInstance(new NameInstance(new Text('DEFAULT')));
+    }
+
     /**
      * Set the JsonFilePath instance that is expected to be returned
      * by the JsonFilesystemStorageQuery being tested's jsonFilePath()
@@ -232,7 +274,7 @@ trait JsonFilesystemStorageQueryTestTrait
      *
      */
     protected function setExpectedJsonFilePath(
-        JsonFilePath $jsonFilePath
+        JsonFilePath|null $jsonFilePath
     ): void
     {
         $this->expectedJsonFilePath = $jsonFilePath;
@@ -247,7 +289,7 @@ trait JsonFilesystemStorageQueryTestTrait
      *
      */
     protected function setExpectedJsonStorageDirectoryPath(
-        JsonStorageDirectoryPath $jsonStorageDirectoryPath
+        JsonStorageDirectoryPath|null $jsonStorageDirectoryPath
     ): void
     {
         $this->expectedJsonStorageDirectoryPath = $jsonStorageDirectoryPath;
@@ -261,7 +303,7 @@ trait JsonFilesystemStorageQueryTestTrait
      * @return void
      *
      */
-    protected function setExpectedLocation(Location $location): void
+    protected function setExpectedLocation(Location|null $location): void
     {
         $this->expectedLocation = $location;
     }
@@ -274,7 +316,7 @@ trait JsonFilesystemStorageQueryTestTrait
      * @return void
      *
      */
-    protected function setExpectedContainer(Container $container): void
+    protected function setExpectedContainer(Container|null $container): void
     {
         $this->expectedContainer = $container;
     }
@@ -287,7 +329,7 @@ trait JsonFilesystemStorageQueryTestTrait
      * @return void
      *
      */
-    protected function setExpectedOwner(Owner $owner): void
+    protected function setExpectedOwner(Owner|null $owner): void
     {
         $this->expectedOwner = $owner;
     }
@@ -300,7 +342,7 @@ trait JsonFilesystemStorageQueryTestTrait
      * @return void
      *
      */
-    protected function setExpectedName(Name $name): void
+    protected function setExpectedName(Name|null $name): void
     {
         $this->expectedName = $name;
     }
@@ -313,7 +355,7 @@ trait JsonFilesystemStorageQueryTestTrait
      * @return void
      *
      */
-    protected function setExpectedId(Id $id): void
+    protected function setExpectedId(Id|null $id): void
     {
         $this->expectedId = $id;
     }
@@ -551,5 +593,25 @@ trait JsonFilesystemStorageQueryTestTrait
         );
     }
 
+    /**
+     * Test __toString() returns the expected query string.
+     *
+     * @return void
+     *
+     * @covers JsonFilesystemStorageQuery->__toString()
+     *
+     */
+    public function test___toString_returns_expected_query_string(): void
+    {
+        $this->assertEquals(
+            $this->expectedQueryString($this->jsonFilesystemStorageQueryTestInstance()),
+            $this->jsonFilesystemStorageQueryTestInstance()->__toString(),
+            $this->testFailedMessage(
+                $this->jsonFilesystemStorageQueryTestInstance(),
+                '__toString',
+                'return the expected query string.'
+            ),
+        );
+    }
 }
 

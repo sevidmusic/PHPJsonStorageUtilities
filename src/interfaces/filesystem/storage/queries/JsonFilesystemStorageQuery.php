@@ -9,6 +9,7 @@ use \Darling\PHPJsonStorageUtilities\interfaces\named\identifiers\Location;
 use \Darling\PHPJsonStorageUtilities\interfaces\named\identifiers\Owner;
 use \Darling\PHPTextTypes\interfaces\strings\Id;
 use \Darling\PHPTextTypes\interfaces\strings\Name;
+use \Stringable;
 
 /**
  * Defines a query that can be passed to a
@@ -17,7 +18,7 @@ use \Darling\PHPTextTypes\interfaces\strings\Name;
  * json files will be read or deleted from storage.
  *
  */
-interface JsonFilesystemStorageQuery
+interface JsonFilesystemStorageQuery extends \Stringable
 {
 
     /**
@@ -82,6 +83,14 @@ interface JsonFilesystemStorageQuery
      *
      */
     public function id(): Id|null;
+
+    /**
+     * Return the query string.
+     *
+     * @return string
+     *
+     */
+    public function __toString(): string;
 
 }
 
