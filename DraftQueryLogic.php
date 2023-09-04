@@ -46,34 +46,11 @@ function mockRead(JsonFilesystemStorageQuery $query) : array
             )
         ];
     }
-    // BEGIN TO MOVE TO JsonFilesystemStorageQuery->__toString()
-    $globString =
-        (
-            is_null($query->jsonStorageDirectoryPath())
-            ? dirname(jsonStorageDirectoryPathInstance()) .
-            DIRECTORY_SEPARATOR . '*'
-            : $query->jsonStorageDirectoryPath()
-        ) .
-        DIRECTORY_SEPARATOR .
-        (is_null($query->location()) ? '*' : $query->location()) .
-        DIRECTORY_SEPARATOR .
-        (is_null($query->container()) ? '*' : $query->container()) .
-        DIRECTORY_SEPARATOR .
-        (is_null($query->owner()) ? '*' : $query->owner()) .
-        DIRECTORY_SEPARATOR .
-        (is_null($query->name()) ? '*' : $query->name()) .
-        DIRECTORY_SEPARATOR .
-        (
-            is_null($query->id())
-            ? '*' . DIRECTORY_SEPARATOR . '*'
-            : shardId($query->id()) . '.json'
-        );
-    // END TO MOVE to JsonFilesystemStorageQuery->__toString()
-    $files = glob($globString);
+    $files = glob($query->__toString());
     $data = [];
     if(is_array($files)) {
         foreach($files as $file) {
-            $data[deriverId($file)] = new Json(
+            $data[deriveId($file)] = new Json(
                 $jsonDecoder->decodeJsonString(
                     strval(file_get_contents($file))
                 )
@@ -83,22 +60,9 @@ function mockRead(JsonFilesystemStorageQuery $query) : array
     return $data;
 }
 
-function deriverId(string $filePath) : string
+function deriveId(string $filePath) : string
 {
     return str_replace([dirname($filePath, 2), DIRECTORY_SEPARATOR, '.json'], '', $filePath);
-}
-
-function jsonStorageDirectoryPathInstance(): JsonStorageDirectoryPath
-{
-    return new JsonStorageDirectoryPath(new Name(new Text('DEFAULT')));
-}
-
-function shardId(IdInterface $id): string
-{
-    $index = 3;
-    $parentDir = substr($id->__toString(), 0, $index);
-    $subDir = substr($id->__toString(), $index);
-    return $parentDir . DIRECTORY_SEPARATOR . $subDir;
 }
 
 $values = [
