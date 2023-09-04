@@ -92,10 +92,10 @@ $jsonFilePath = new JsonFilePath(
 $query = new JsonFilesystemStorageQuery(
     #jsonFilePath: $jsonFilePath,
     jsonStorageDirectoryPath: $jsonStorageDirectoryPath,
-    location: $location,
-    container: $container,
-    owner: $owner,
-    name: $name,
+    #location: $location,
+    #container: $container,
+    #owner: $owner,
+    #name: $name,
     #id: $id,
 );
 
@@ -110,7 +110,8 @@ $globString =
     DIRECTORY_SEPARATOR .
     (is_null($query->name()) ? '*' : $query->name()) .
     DIRECTORY_SEPARATOR .
-    (is_null($query->id()) ? '*' : $query->id());
+    (is_null($query->id()) ? '*' : $query->id()) .
+    DIRECTORY_SEPARATOR . '*';
 
 
 
@@ -119,4 +120,4 @@ echo $globString;
 
 $files = glob($globString);
 
-# var_dump($files);
+var_dump($files);
