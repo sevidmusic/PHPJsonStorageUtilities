@@ -46,6 +46,7 @@ function mockRead(JsonFilesystemStorageQuery $query) : array
             )
         ];
     }
+    // BEGIN TO MOVE TO JsonFilesystemStorageQuery->__toString()
     $globString =
         (
             is_null($query->jsonStorageDirectoryPath())
@@ -67,6 +68,7 @@ function mockRead(JsonFilesystemStorageQuery $query) : array
             ? '*' . DIRECTORY_SEPARATOR . '*'
             : shardId($query->id()) . '.json'
         );
+    // END TO MOVE to JsonFilesystemStorageQuery->__toString()
     $files = glob($globString);
     $data = [];
     if(is_array($files)) {
