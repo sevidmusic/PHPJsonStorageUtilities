@@ -23,12 +23,11 @@ use \Darling\PHPTextTypes\classes\strings\Text;
  * provided $query.
  *
  * @param JsonFilesystemStorageQuery $query
- * @param JsonStorageDirectoryPath $jsonStorageDirectoryPath
  *
  * @return array<string, string>
  *
  */
-function mockRead(JsonFilesystemStorageQuery $query, JsonStorageDirectoryPath $jsonStorageDirectoryPath) : array
+function mockRead(JsonFilesystemStorageQuery $query) : array
 {
     $jsonFilePath = $query->jsonFilePath();
     if($jsonFilePath instanceof JsonFilePath) {
@@ -41,7 +40,7 @@ function mockRead(JsonFilesystemStorageQuery $query, JsonStorageDirectoryPath $j
     $globString =
         (
             is_null($query->jsonStorageDirectoryPath())
-            ? dirname($jsonStorageDirectoryPath) .
+            ? dirname(jsonStorageDirectoryPathInstance()) .
             DIRECTORY_SEPARATOR . '*'
             : $query->jsonStorageDirectoryPath()
         ) .
@@ -65,6 +64,11 @@ function mockRead(JsonFilesystemStorageQuery $query, JsonStorageDirectoryPath $j
         }
     }
     return $data;
+}
+
+function jsonStorageDirectoryPathInstance(): JsonStorageDirectoryPath
+{
+    return new JsonStorageDirectoryPath(new Name(new Text('DEFAULT')));
 }
 
 $values = [
@@ -148,16 +152,16 @@ $jsonFilePath = new JsonFilePath(
 );
 
 $query = new JsonFilesystemStorageQuery(
-    jsonFilePath: $jsonFilePath,
+    #jsonFilePath: $jsonFilePath,
     jsonStorageDirectoryPath: $jsonStorageDirectoryPath,
     location: $location,
     container: $container,
     owner: $owner,
     name: $name,
-    id: $id,
+    #id: $id,
 );
 
-$files = mockRead($query, $jsonStorageDirectoryPath);
+$files = mockRead($query);
 
 foreach($files as $filePath => $contents) {
     echo 'FILEPATH: ' . $filePath . PHP_EOL . PHP_EOL;
