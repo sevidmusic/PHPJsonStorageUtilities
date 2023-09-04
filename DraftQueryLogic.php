@@ -25,17 +25,25 @@ use \Darling\PHPTextTypes\classes\strings\Text;
  *
  * @param JsonFilesystemStorageQuery $query
  *
- * @return array<string, string>
+ * @return array<string, Json|string>
  *
  */
 function mockRead(JsonFilesystemStorageQuery $query) : array
 {
+    // @TODO : Will be replaced by $this->JsonDecoder()
+    $jsonDecoder = new JsonDecoder();
     $jsonFilePath = $query->jsonFilePath();
     if($jsonFilePath instanceof JsonFilePath) {
         return [
-            $jsonFilePath->__toString()
+            $jsonFilePath->id()->__toString()
             =>
-            strval(file_get_contents($jsonFilePath->__toString()))
+            new Json(
+                $jsonDecoder->decodeJsonString(
+                    strval(
+                        file_get_contents($jsonFilePath->__toString())
+                    )
+                )
+            )
         ];
     }
     $globString =
@@ -59,15 +67,24 @@ function mockRead(JsonFilesystemStorageQuery $query) : array
             ? '*' . DIRECTORY_SEPARATOR . '*'
             : shardId($query->id()) . '.json'
         );
-    echo 'GLOB STRING: ' . $globString . PHP_EOL;
+    #echo 'GLOB STRING: ' . $globString . PHP_EOL;
     $files = glob($globString);
     $data = [];
     if(is_array($files)) {
         foreach($files as $file) {
-            $data[$file] = strval(file_get_contents($file));
+            $data[deriverId($file)] = new Json(
+                $jsonDecoder->decodeJsonString(
+                    strval(file_get_contents($file))
+                )
+            );
         }
     }
     return $data;
+}
+
+function deriverId(string $filePath) : string
+{
+    return str_replace([dirname($filePath, 2), DIRECTORY_SEPARATOR, '.json'], '', $filePath);
 }
 
 function jsonStorageDirectoryPathInstance(): JsonStorageDirectoryPath
@@ -177,9 +194,4 @@ $queries = [
 
 $files = mockRead($queries[array_rand($queries)]);
 
-foreach($files as $filePath => $contents) {
-    echo 'FILEPATH: ' . $filePath . PHP_EOL . PHP_EOL;
-    echo 'CONTENTS: ' . PHP_EOL . $contents . PHP_EOL . PHP_EOL;
-}
-
-
+var_dump($files);
