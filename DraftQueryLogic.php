@@ -93,9 +93,9 @@ $query = new JsonFilesystemStorageQuery(
     #jsonFilePath: $jsonFilePath,
     jsonStorageDirectoryPath: $jsonStorageDirectoryPath,
     #location: $location,
-    #container: $container,
+    container: $container,
     #owner: $owner,
-    #name: $name,
+    name: $name,
     #id: $id,
 );
 
@@ -120,4 +120,4 @@ echo $globString;
 
 $files = glob($globString);
 
-var_dump($files);
+var_dump(count($files));
