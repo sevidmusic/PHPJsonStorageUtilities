@@ -45,11 +45,16 @@ class JsonFilesystemStorageQueryTest extends PHPJsonStorageUtilitiesTest
                 new Text($this->randomChars())
             )
         );
-        $location = new Location(new Name(new Text($this->randomChars())));
-        $container = new Container(new ClassString($this->randomClassStringOrObjectInstance()));
-        $owner = new Owner(new Name(new Text($this->randomChars())));
-        $name = new Name(new Text($this->randomChars()));
-        $id = new Id();
+        $locations = [new Location(new Name(new Text($this->randomChars()))), null];
+        $location = $locations[array_rand($locations)];
+        $containers = [new Container(new ClassString($this->randomClassStringOrObjectInstance())), null];
+        $container = $containers[array_rand($containers)];
+        $owners = [new Owner(new Name(new Text($this->randomChars()))), null];
+        $owner = $owners[array_rand($owners)];
+        $names = [new Name(new Text($this->randomChars())), null];
+        $name = $names[array_rand($names)];
+        $ids = [new Id(), null];
+        $id = $ids[array_rand($ids)];
         $this->setExpectedId($id);
         $this->setExpectedName($name);
         $this->setExpectedOwner($owner);
@@ -57,17 +62,16 @@ class JsonFilesystemStorageQueryTest extends PHPJsonStorageUtilitiesTest
         $this->setExpectedJsonStorageDirectoryPath($jsonStorageDirectoryPath);
         $this->setExpectedLocation($location);
         $this->setExpectedJsonFilePath($jsonFilePath);
-        $this->setJsonFilesystemStorageQueryTestInstance(
-            new JsonFilesystemStorageQuery(
-                jsonFilePath: $jsonFilePath,
-                jsonStorageDirectoryPath: $jsonStorageDirectoryPath,
-                location: $location,
-                container: $container,
-                owner: $owner,
-                name: $name,
-                id: $id,
-            )
+        $query = new JsonFilesystemStorageQuery(
+            jsonFilePath: $jsonFilePath,
+            jsonStorageDirectoryPath: $jsonStorageDirectoryPath,
+            location: $location,
+            container: $container,
+            owner: $owner,
+            name: $name,
+            id: $id
         );
+        $this->setJsonFilesystemStorageQueryTestInstance($query);
     }
 }
 
