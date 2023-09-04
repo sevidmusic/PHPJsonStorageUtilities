@@ -67,7 +67,6 @@ function mockRead(JsonFilesystemStorageQuery $query) : array
             ? '*' . DIRECTORY_SEPARATOR . '*'
             : shardId($query->id()) . '.json'
         );
-    #echo 'GLOB STRING: ' . $globString . PHP_EOL;
     $files = glob($globString);
     $data = [];
     if(is_array($files)) {
