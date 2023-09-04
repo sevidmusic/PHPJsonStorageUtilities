@@ -14,6 +14,7 @@ use \Darling\PHPJsonUtilities\classes\decoders\JsonDecoder;
 use \Darling\PHPJsonUtilities\classes\encoded\data\Json;
 use \Darling\PHPTextTypes\classes\strings\ClassString;
 use \Darling\PHPTextTypes\classes\strings\Id;
+use \Darling\PHPTextTypes\interfaces\strings\Id as IdInterface;
 use \Darling\PHPTextTypes\classes\strings\Name;
 use \Darling\PHPTextTypes\classes\strings\Text;
 
@@ -53,8 +54,11 @@ function mockRead(JsonFilesystemStorageQuery $query) : array
         DIRECTORY_SEPARATOR .
         (is_null($query->name()) ? '*' : $query->name()) .
         DIRECTORY_SEPARATOR .
-        (is_null($query->id()) ? '*' : $query->id()) .
-        DIRECTORY_SEPARATOR . '*';
+        (
+            is_null($query->id())
+            ? '*' . DIRECTORY_SEPARATOR . '*'
+            : shardId($query->id()) . '.json'
+        );
     echo 'GLOB STRING: ' . $globString . PHP_EOL;
     $files = glob($globString);
     $data = [];
@@ -69,6 +73,14 @@ function mockRead(JsonFilesystemStorageQuery $query) : array
 function jsonStorageDirectoryPathInstance(): JsonStorageDirectoryPath
 {
     return new JsonStorageDirectoryPath(new Name(new Text('DEFAULT')));
+}
+
+function shardId(IdInterface $id): string
+{
+    $index = 3;
+    $parentDir = substr($id->__toString(), 0, $index);
+    $subDir = substr($id->__toString(), $index);
+    return $parentDir . DIRECTORY_SEPARATOR . $subDir;
 }
 
 $values = [
@@ -152,13 +164,13 @@ $jsonFilePath = new JsonFilePath(
 );
 
 $query = new JsonFilesystemStorageQuery(
-    #jsonFilePath: $jsonFilePath,
-    jsonStorageDirectoryPath: $jsonStorageDirectoryPath,
-    location: $location,
-    container: $container,
-    owner: $owner,
-    name: $name,
-    #id: $id,
+#    jsonFilePath: $jsonFilePath,
+#    jsonStorageDirectoryPath: $jsonStorageDirectoryPath,
+#    location: $location,
+#    container: $container,
+#    owner: $owner,
+#    name: $name,
+    id: $id,
 );
 
 $files = mockRead($query);
