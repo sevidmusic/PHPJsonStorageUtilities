@@ -17,10 +17,34 @@ use \Darling\PHPTextTypes\classes\strings\Id;
 use \Darling\PHPTextTypes\classes\strings\Name;
 use \Darling\PHPTextTypes\classes\strings\Text;
 
-function mockRead(JsonFilesystemStorageQuery $query, JsonStorageDirectoryPath $jsonStorageDirectoryPath) : void
+
+/**
+ * Return an array of Json data read from stroage based on the
+ * provided $query.
+ *
+ * @param JsonFilesystemStorageQuery $query
+ * @param JsonStorageDirectoryPath $jsonStorageDirectoryPath
+ *
+ * @return array<string, string>
+ *
+ */
+function mockRead(JsonFilesystemStorageQuery $query, JsonStorageDirectoryPath $jsonStorageDirectoryPath) : array
 {
+    $jsonFilePath = $query->jsonFilePath();
+    if($jsonFilePath instanceof JsonFilePath) {
+        return [
+            $jsonFilePath->__toString()
+            =>
+            strval(file_get_contents($jsonFilePath->__toString()))
+        ];
+    }
     $globString =
-        (is_null($query->jsonStorageDirectoryPath()) ? dirname($jsonStorageDirectoryPath) . DIRECTORY_SEPARATOR . '*': $query->jsonStorageDirectoryPath()) .
+        (
+            is_null($query->jsonStorageDirectoryPath())
+            ? dirname($jsonStorageDirectoryPath) .
+            DIRECTORY_SEPARATOR . '*'
+            : $query->jsonStorageDirectoryPath()
+        ) .
         DIRECTORY_SEPARATOR .
         (is_null($query->location()) ? '*' : $query->location()) .
         DIRECTORY_SEPARATOR .
@@ -32,20 +56,15 @@ function mockRead(JsonFilesystemStorageQuery $query, JsonStorageDirectoryPath $j
         DIRECTORY_SEPARATOR .
         (is_null($query->id()) ? '*' : $query->id()) .
         DIRECTORY_SEPARATOR . '*';
-
-
-
-
     echo 'GLOB STRING: ' . $globString . PHP_EOL;
-
     $files = glob($globString);
-
+    $data = [];
     if(is_array($files)) {
         foreach($files as $file) {
-            echo 'FILEPATH: ' . $file . PHP_EOL;
-            echo 'CONTENTS: ' . PHP_EOL . strval(file_get_contents($file)) . PHP_EOL;
+            $data[$file] = strval(file_get_contents($file));
         }
     }
+    return $data;
 }
 
 $values = [
@@ -58,7 +77,13 @@ $values = [
     null,
     0,
     function() { return rand(0, 1); },
-    [1, 2, 3],
+        [
+            rand(0, 100),
+            'enabled' => 0,
+            rand(0, 100),
+            'active' => false,
+            rand(0, 100),
+        ],
 ];
 
 $jsonDecoder = new JsonDecoder();
@@ -123,14 +148,20 @@ $jsonFilePath = new JsonFilePath(
 );
 
 $query = new JsonFilesystemStorageQuery(
-    #jsonFilePath: $jsonFilePath,
+    jsonFilePath: $jsonFilePath,
     jsonStorageDirectoryPath: $jsonStorageDirectoryPath,
-    #location: $location,
+    location: $location,
     container: $container,
-    #owner: $owner,
+    owner: $owner,
     name: $name,
-    #id: $id,
+    id: $id,
 );
 
-mockRead($query, $jsonStorageDirectoryPath);
+$files = mockRead($query, $jsonStorageDirectoryPath);
+
+foreach($files as $filePath => $contents) {
+    echo 'FILEPATH: ' . $filePath . PHP_EOL . PHP_EOL;
+    echo 'CONTENTS: ' . PHP_EOL . $contents . PHP_EOL . PHP_EOL;
+}
+
 
