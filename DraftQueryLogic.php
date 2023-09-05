@@ -18,6 +18,11 @@ use \Darling\PHPTextTypes\classes\strings\Name;
 use \Darling\PHPTextTypes\classes\strings\Text;
 
 
+function deriveId(string $filePath) : string
+{
+    return str_replace([dirname($filePath, 2), DIRECTORY_SEPARATOR, '.json'], '', $filePath);
+}
+
 /**
  * Return an array of Json data read from stroage based on the
  * provided $query.
@@ -59,10 +64,6 @@ function mockRead(JsonFilesystemStorageQuery $query) : array
     return $data;
 }
 
-function deriveId(string $filePath) : string
-{
-    return str_replace([dirname($filePath, 2), DIRECTORY_SEPARATOR, '.json'], '', $filePath);
-}
 
 $values = [
     new Id(),
