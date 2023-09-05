@@ -182,7 +182,7 @@ trait JsonFilesystemStorageDriverTestTrait
      */
     public function test_write_writes_to_the_expected_json_file_path(): void
     {
-        $this->jsonFilesystemStorageDriverTestInstance()->write(
+        $status = $this->jsonFilesystemStorageDriverTestInstance()->write(
             $this->expectedJson(),
             $this->expectedJsonFilePath()->jsonStorageDirectoryPath(),
             $this->expectedJsonFilePath->location(),
@@ -205,6 +205,15 @@ trait JsonFilesystemStorageDriverTestTrait
                 PHP_EOL,
             ),
         );
+        $this->assertTrue(
+            $status,
+            $this->testFailedMessage(
+                $this->jsonFilesystemStorageDriverTestInstance(),
+                'write',
+                'write returns true if a file was written to the ' .
+                'expected JsonFilePath',
+            ),
+        );
     }
 
     /**
@@ -217,7 +226,7 @@ trait JsonFilesystemStorageDriverTestTrait
      */
     public function test_write_writes_the_expected_json_to_the_expected_json_file_path(): void
     {
-        $this->jsonFilesystemStorageDriverTestInstance()->write(
+        $status = $this->jsonFilesystemStorageDriverTestInstance()->write(
             $this->expectedJson(),
             $this->expectedJsonFilePath()->jsonStorageDirectoryPath(),
             $this->expectedJsonFilePath->location(),
@@ -232,6 +241,15 @@ trait JsonFilesystemStorageDriverTestTrait
                 $this->jsonFilesystemStorageDriverTestInstance(),
                 'write',
                 'writes the expected Json to the expected JsonFilePath',
+            ),
+        );
+        $this->assertTrue(
+            $status,
+            $this->testFailedMessage(
+                $this->jsonFilesystemStorageDriverTestInstance(),
+                'write',
+                'write returns true if the expected Json was ' .
+                'written to the expected JsonFilePath',
             ),
         );
     }
