@@ -226,8 +226,8 @@ trait JsonFilesystemStorageDriverTestTrait
             $this->expectedJsonFilePath()->id(),
         );
         $this->assertEquals(
-            file_get_contents($this->expectedJsonFilePath()->__toString()),
             $this->expectedJson()->__toString(),
+            file_get_contents($this->expectedJsonFilePath()->__toString()),
             $this->testFailedMessage(
                 $this->jsonFilesystemStorageDriverTestInstance(),
                 'write',

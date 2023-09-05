@@ -14,7 +14,6 @@ use \Darling\PHPJsonUtilities\classes\decoders\JsonDecoder;
 use \Darling\PHPJsonUtilities\classes\encoded\data\Json;
 use \Darling\PHPTextTypes\classes\strings\ClassString;
 use \Darling\PHPTextTypes\classes\strings\Id;
-use \Darling\PHPTextTypes\interfaces\strings\Id as IdInterface;
 use \Darling\PHPTextTypes\classes\strings\Name;
 use \Darling\PHPTextTypes\classes\strings\Text;
 
