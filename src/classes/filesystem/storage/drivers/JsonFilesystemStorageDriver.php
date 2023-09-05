@@ -18,7 +18,7 @@ use \Darling\PHPTextTypes\interfaces\strings\Name;
 class JsonFilesystemStorageDriver implements JsonFilesystemStorageDriverInterface
 {
 
-    public function JsonDecoder(): JsonDecoder
+    public function jsonDecoder(): JsonDecoder
     {
         return new JsonDecoder();
     }

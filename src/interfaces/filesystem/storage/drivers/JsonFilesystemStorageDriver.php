@@ -23,7 +23,7 @@ use \Darling\PHPTextTypes\interfaces\strings\Id;
 interface JsonFilesystemStorageDriver
 {
 
-    public function JsonDecoder(): JsonDecoder;
+    public function jsonDecoder(): JsonDecoder;
 
     public function write(
         Json $json,
