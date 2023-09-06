@@ -2,13 +2,21 @@
 
 namespace Darling\PHPJsonStorageUtilities\tests\interfaces\filesystem\storage\drivers;
 
+use \Darling\PHPJsonStorageUtilities\classes\filesystem\storage\queries\JsonFilesystemStorageQuery;
 use \Darling\PHPJsonStorageUtilities\enumerations\Type;
 use \Darling\PHPJsonStorageUtilities\interfaces\filesystem\paths\JsonFilePath;
+use \Darling\PHPJsonStorageUtilities\classes\named\identifiers\Owner;
+use \Darling\PHPJsonStorageUtilities\classes\named\identifiers\Location;
+use \Darling\PHPJsonStorageUtilities\classes\filesystem\paths\JsonStorageDirectoryPath;
 use \Darling\PHPJsonStorageUtilities\interfaces\filesystem\storage\drivers\JsonFilesystemStorageDriver;
 use \Darling\PHPJsonUtilities\classes\decoders\JsonDecoder as JsonDecoderInstance;
 use \Darling\PHPJsonUtilities\interfaces\decoders\JsonDecoder;
 use \Darling\PHPJsonUtilities\interfaces\encoded\data\Json;
+use \Darling\PHPJsonUtilities\classes\encoded\data\Json as JsonInstance;
 use \Darling\PHPTextTypes\classes\strings\ClassString as ClassStringInstance;
+use \Darling\PHPTextTypes\classes\strings\Id;
+use \Darling\PHPTextTypes\classes\strings\Name;
+use \Darling\PHPTextTypes\classes\strings\Text;
 use \Darling\PHPTextTypes\interfaces\strings\ClassString;
 
 /**
@@ -253,6 +261,149 @@ trait JsonFilesystemStorageDriverTestTrait
             ),
         );
     }
+
+    /**
+     * Test write does not overwrite previously stored data.
+     *
+     * @return void
+     *
+     * @covers JsonFilesystemStorageDriver->write()
+     *
+     */
+    public function test_write_does_not_overwrite_previously_stored_data(): void
+    {
+        /** Clear file status cache @see https://www.php.net/manual/en/function.clearstatcache.php */
+        clearstatcache();
+        $status = $this->jsonFilesystemStorageDriverTestInstance()->write(
+            $this->expectedJson(),
+            $this->expectedJsonFilePath()->jsonStorageDirectoryPath(),
+            $this->expectedJsonFilePath->location(),
+            $this->expectedJsonFilePath->owner(),
+            $this->expectedJsonFilePath->name(),
+            $this->expectedJsonFilePath()->id(),
+        );
+        clearstatcache();
+        /**
+         * Sleep between writes to allow file modification time to
+         * change if original file is overwritten
+         */
+        sleep(1);
+        $initialModificationTime = filemtime($this->expectedJsonFilePath()->__toString());
+        $this->assertTrue(
+            $status,
+            $this->testFailedMessage(
+                $this->jsonFilesystemStorageDriverTestInstance(),
+                'write',
+                'return true if the expected Json was ' .
+                'written to the expected JsonFilePath',
+            ),
+        );
+        $status = $this->jsonFilesystemStorageDriverTestInstance()->write(
+            $this->expectedJson(),
+            $this->expectedJsonFilePath()->jsonStorageDirectoryPath(),
+            $this->expectedJsonFilePath->location(),
+            $this->expectedJsonFilePath->owner(),
+            $this->expectedJsonFilePath->name(),
+            $this->expectedJsonFilePath()->id(),
+        );
+        clearstatcache();
+        $lastModificationTime = filemtime($this->expectedJsonFilePath()->__toString());
+        $this->assertEquals(
+            $initialModificationTime,
+            $lastModificationTime,
+            $this->testFailedMessage(
+                $this->jsonFilesystemStorageDriverTestInstance(),
+                'write',
+                'must not overwrite previsouly stored Json'
+            ),
+        );
+        $this->assertFalse(
+            $status,
+            $this->testFailedMessage(
+                $this->jsonFilesystemStorageDriverTestInstance(),
+                'write',
+                'return false if the expected Json was not ' .
+                'written to the expected JsonFilePath',
+            ),
+        );
+    }
+
+    /**
+     * Test read returns an empty array if query does not produce
+     * any matches.
+     *
+     * @return void
+     *
+     * @covers JsonFilesystemStorageDriver->read()
+     *
+     */
+    public function test_read_returns_an_empty_array_if_query_does_not_produce_any_matches(): void
+    {
+        $jsonFilesystemStorageQuery = new JsonFilesystemStorageQuery(
+            id: new Id(),
+            name: new Name(new Text($this->randomChars())),
+            owner: new Owner(new Name(new Text($this->randomChars()))),
+        );
+        $this->assertEquals(
+            [],
+            $this->jsonFilesystemStorageDriverTestInstance()->read($jsonFilesystemStorageQuery),
+            $this->testFailedMessage(
+                $this->jsonFilesystemStorageDriverTestInstance(),
+                'read',
+                'returns an empty array if query does not produce ' .
+                'any matches',
+            ),
+        );
+    }
+
+    /**
+     * Test read returns an an array of Json instances for all stored
+     * json indexed by storage id, if query is empty.
+     *
+     * @return void
+     *
+     * @covers JsonFilesystemStorageDriver->read()
+     *
+     */
+    /*
+    public function test_read_returns_an_an_array_of_Json_instances_for_all_stored_json_indexed_by_storage_id_if_query_is_empty(): void
+    {
+        $status = $this->jsonFilesystemStorageDriverTestInstance()->write(
+            $this->expectedJson(),
+            $this->expectedJsonFilePath()->jsonStorageDirectoryPath(),
+            $this->expectedJsonFilePath->location(),
+            $this->expectedJsonFilePath->owner(),
+            $this->expectedJsonFilePath->name(),
+            $this->expectedJsonFilePath()->id(),
+        );
+        $status = $this->jsonFilesystemStorageDriverTestInstance()->write(
+            new JsonInstance($this->randomChars()),
+            new JsonStorageDirectoryPath(new Name(new Text($this->randomChars()))),
+            new Location(new Name(new Text($this->randomChars()))),
+            new Owner(new Name(new Text($this->randomChars()))),
+            new Name(new Text($this->randomChars())),
+            new Id(),
+        );
+        $jsonFilesystemStorageQuery = new JsonFilesystemStorageQuery();
+        $this->assertEquals(
+            [$this->expectedJsonFilePath()->id()->__toString() => $this->expectedJson()],
+            $this->jsonFilesystemStorageDriverTestInstance()->read($jsonFilesystemStorageQuery),
+            $this->testFailedMessage(
+                $this->jsonFilesystemStorageDriverTestInstance(),
+                'read',
+                'reads the expected Json to the expected JsonFilePath',
+            ),
+        );
+    }
+    */
+
+    // @todo PHP Darling Dev Tools Library should define these
+    // abstract methods as part of the TestTrait.php template so they are always present, maybe???
+    abstract protected function randomChars(): string;
+    abstract protected static function assertTrue(bool $condition, string $message = ''): void;
+    abstract protected static function assertFalse(bool $condition, string $message = ''): void;
+    abstract protected static function assertEquals(mixed $expected, mixed $actual, string $message = ''): void;
+    abstract protected function testFailedMessage(object $object, string $method, string $message): string;
 
 }
 

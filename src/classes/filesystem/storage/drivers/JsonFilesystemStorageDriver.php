@@ -7,6 +7,7 @@ use \Darling\PHPJsonStorageUtilities\classes\named\identifiers\Container;
 use \Darling\PHPJsonStorageUtilities\enumerations\Type;
 use \Darling\PHPJsonStorageUtilities\interfaces\filesystem\paths\JsonStorageDirectoryPath;
 use \Darling\PHPJsonStorageUtilities\interfaces\filesystem\storage\drivers\JsonFilesystemStorageDriver as JsonFilesystemStorageDriverInterface;
+use \Darling\PHPJsonStorageUtilities\interfaces\filesystem\storage\queries\JsonFilesystemStorageQuery;
 use \Darling\PHPJsonStorageUtilities\interfaces\named\identifiers\Location;
 use \Darling\PHPJsonStorageUtilities\interfaces\named\identifiers\Owner;
 use \Darling\PHPJsonUtilities\classes\decoders\JsonDecoder;
@@ -40,6 +41,9 @@ class JsonFilesystemStorageDriver implements JsonFilesystemStorageDriverInterfac
             $name,
             $id,
         );
+        if(file_exists($jsonFilePath->__toString())) {
+            return false;
+        }
         $parentDirectoryPath = dirname($jsonFilePath->__toString());
         if(!is_dir($parentDirectoryPath)) {
             mkdir($parentDirectoryPath, 0755, true);
@@ -52,6 +56,10 @@ class JsonFilesystemStorageDriver implements JsonFilesystemStorageDriverInterfac
             ) > 0;
         }
         return false;
+    }
+
+    public function read(JsonFilesystemStorageQuery $jsonFilesystemStorageQuery): array {
+        return [];
     }
 
     /**
