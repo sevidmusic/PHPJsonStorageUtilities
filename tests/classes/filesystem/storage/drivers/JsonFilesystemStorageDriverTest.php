@@ -71,7 +71,7 @@ class JsonFilesystemStorageDriverTest extends PHPJsonStorageUtilitiesTest
                 $userInfo['dir']
             );
         }
-        $testStorageDirectoryParentDirectoryPath = dirname($this->expectedJsonFilePath()->jsonStorageDirectoryPath()->__toString());
+        $testStorageDirectoryParentDirectoryPath = $this->expectedJsonFilePath()->jsonStorageDirectoryPath()->__toString();
         if(
             $testStorageDirectoryParentDirectoryPath !== '/'
             &&
@@ -131,16 +131,6 @@ class JsonFilesystemStorageDriverTest extends PHPJsonStorageUtilitiesTest
         ) {
             $this->deleteDarlingDataDirectory($testStorageDirectoryParentDirectoryPath);
         }
-    }
-
-    private function prefixedRandomName(string $prefix): Name
-    {
-        return new Name(
-            new Text(
-                $prefix .
-                ucfirst(substr($this->randomChars(), 0, 3))
-            )
-        );
     }
 
     private function deleteDarlingDataDirectory(string $path) : void
