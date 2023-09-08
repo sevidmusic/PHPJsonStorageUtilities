@@ -65,7 +65,72 @@ class JsonFilesystemStorageDriverTest extends PHPJsonStorageUtilitiesTest
 
     public function tearDown(): void
     {
-        $this->deleteDarlingDataDirectory($this->expectedJsonFilePath()->jsonStorageDirectoryPath()->__toString());
+        $userInfo = posix_getpwuid(posix_geteuid());
+        if(is_array($userInfo) && isset($userInfo['dir'])) {
+            $usersHomeDirectoryPath = realpath(
+                $userInfo['dir']
+            );
+        }
+        $testStorageDirectoryParentDirectoryPath = dirname($this->expectedJsonFilePath()->jsonStorageDirectoryPath()->__toString());
+        if(
+            $testStorageDirectoryParentDirectoryPath !== '/'
+            &&
+            $testStorageDirectoryParentDirectoryPath !== DIRECTORY_SEPARATOR
+            &&
+            isset($usersHomeDirectoryPath)
+            &&
+            $testStorageDirectoryParentDirectoryPath !== $usersHomeDirectoryPath
+            &&
+            $testStorageDirectoryParentDirectoryPath !== DIRECTORY_SEPARATOR . 'bin'
+            &&
+            $testStorageDirectoryParentDirectoryPath !== DIRECTORY_SEPARATOR . 'boot'
+            &&
+            $testStorageDirectoryParentDirectoryPath !== DIRECTORY_SEPARATOR . 'dev'
+            &&
+            $testStorageDirectoryParentDirectoryPath !== DIRECTORY_SEPARATOR . 'etc'
+            &&
+            $testStorageDirectoryParentDirectoryPath !== DIRECTORY_SEPARATOR . 'home'
+            &&
+            $testStorageDirectoryParentDirectoryPath !== DIRECTORY_SEPARATOR . 'lib'
+            &&
+            $testStorageDirectoryParentDirectoryPath !== DIRECTORY_SEPARATOR . 'lib32'
+            &&
+            $testStorageDirectoryParentDirectoryPath !== DIRECTORY_SEPARATOR . 'lib64'
+            &&
+            $testStorageDirectoryParentDirectoryPath !== DIRECTORY_SEPARATOR . 'libx32'
+            &&
+            $testStorageDirectoryParentDirectoryPath !== DIRECTORY_SEPARATOR . 'lost+found'
+            &&
+            $testStorageDirectoryParentDirectoryPath !== DIRECTORY_SEPARATOR . 'media'
+            &&
+            $testStorageDirectoryParentDirectoryPath !== DIRECTORY_SEPARATOR . 'mnt'
+            &&
+            $testStorageDirectoryParentDirectoryPath !== DIRECTORY_SEPARATOR . 'opt'
+            &&
+            $testStorageDirectoryParentDirectoryPath !== DIRECTORY_SEPARATOR . 'proc'
+            &&
+            $testStorageDirectoryParentDirectoryPath !== DIRECTORY_SEPARATOR . 'recovery'
+            &&
+            $testStorageDirectoryParentDirectoryPath !== DIRECTORY_SEPARATOR . 'root'
+            &&
+            $testStorageDirectoryParentDirectoryPath !== DIRECTORY_SEPARATOR . 'run'
+            &&
+            $testStorageDirectoryParentDirectoryPath !== DIRECTORY_SEPARATOR . 'sbin'
+            &&
+            $testStorageDirectoryParentDirectoryPath !== DIRECTORY_SEPARATOR . 'snap'
+            &&
+            $testStorageDirectoryParentDirectoryPath !== DIRECTORY_SEPARATOR . 'srv'
+            &&
+            $testStorageDirectoryParentDirectoryPath !== DIRECTORY_SEPARATOR . 'sys'
+            &&
+            $testStorageDirectoryParentDirectoryPath !== DIRECTORY_SEPARATOR . 'tmp'
+            &&
+            $testStorageDirectoryParentDirectoryPath !== DIRECTORY_SEPARATOR . 'usr'
+            &&
+            $testStorageDirectoryParentDirectoryPath !== DIRECTORY_SEPARATOR . 'var'
+        ) {
+            $this->deleteDarlingDataDirectory($testStorageDirectoryParentDirectoryPath);
+        }
     }
 
     private function prefixedRandomName(string $prefix): Name

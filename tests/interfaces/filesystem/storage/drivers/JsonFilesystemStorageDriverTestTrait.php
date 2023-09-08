@@ -450,8 +450,8 @@ trait JsonFilesystemStorageDriverTestTrait
         $randomJsonData2Id = new Id();
         $status = $this->jsonFilesystemStorageDriverTestInstance()->write(
             $randomJsonData2,
-            $this->expectedJsonFilePath()->jsonStorageDirectoryPath(),
-            $this->expectedJsonFilePath->location(),
+            new JsonStorageDirectoryPath(new Name(new Text($this->randomChars()))),
+            new Location(new Name(new Text($this->randomChars()))),
             $this->expectedJsonFilePath->owner(),
             new Name(new Text('HardcodedTestName')),
             $randomJsonData2Id,
@@ -472,8 +472,6 @@ trait JsonFilesystemStorageDriverTestTrait
         );
     }
 
-    // @todo PHP Darling Dev Tools Library should define these
-    // abstract methods as part of the TestTrait.php template so they are always present, maybe???
     abstract protected function randomChars(): string;
     abstract protected static function assertTrue(bool $condition, string $message = ''): void;
     abstract protected static function assertFalse(bool $condition, string $message = ''): void;
