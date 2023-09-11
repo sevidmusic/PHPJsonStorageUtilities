@@ -2,6 +2,8 @@
 
 namespace Darling\PHPJsonStorageUtilities\classes\filesystem\storage\drivers;
 
+use Darling\PHPJsonStorageUtilities\interfaces\collections\JsonCollection;
+use Darling\PHPJsonStorageUtilities\classes\collections\JsonCollection as JsonCollectionInstance;
 use \Darling\PHPJsonStorageUtilities\classes\filesystem\paths\JsonFilePath;
 use \Darling\PHPJsonStorageUtilities\classes\named\identifiers\Container;
 use \Darling\PHPJsonStorageUtilities\enumerations\Type;
@@ -58,8 +60,8 @@ class JsonFilesystemStorageDriver implements JsonFilesystemStorageDriverInterfac
         return false;
     }
 
-    public function read(JsonFilesystemStorageQuery $jsonFilesystemStorageQuery): array {
-        return [];
+    public function read(JsonFilesystemStorageQuery $jsonFilesystemStorageQuery): JsonCollection {
+        return new JsonCollectionInstance();
     }
 
     /**

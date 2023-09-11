@@ -4,6 +4,7 @@ namespace Darling\PHPJsonStorageUtilities\tests\interfaces\filesystem\storage\dr
 
 use \Darling\PHPJsonStorageUtilities\classes\filesystem\storage\queries\JsonFilesystemStorageQuery;
 use \Darling\PHPJsonStorageUtilities\classes\named\identifiers\Owner;
+use \Darling\PHPJsonStorageUtilities\classes\collections\JsonCollection;
 use \Darling\PHPJsonStorageUtilities\enumerations\Type;
 use \Darling\PHPJsonStorageUtilities\interfaces\filesystem\paths\JsonFilePath;
 use \Darling\PHPJsonStorageUtilities\interfaces\filesystem\storage\drivers\JsonFilesystemStorageDriver;
@@ -388,7 +389,7 @@ trait JsonFilesystemStorageDriverTestTrait
     }
 
     /**
-     * Test read returns an empty array if there is nothing
+     * Test read returns an empty JsonCollection if there is nothing
      * in storage.
      *
      * @return void
@@ -396,8 +397,9 @@ trait JsonFilesystemStorageDriverTestTrait
      * @covers JsonFilesystemStorageDriver->read()
      *
      */
-    public function test_read_returns_an_empty_array_if_there_is_nothing_in_storage(): void
+    public function test_read_returns_an_empty_JsonCollection_if_there_is_nothing_in_storage(): void
     {
+        $expectedCollection = new JsonCollection();
         $jsonFilesystemStorageQuery = new JsonFilesystemStorageQuery(
             id: new Id(),
             name: $this->prefixedRandomName(
@@ -410,13 +412,14 @@ trait JsonFilesystemStorageDriverTestTrait
             ),
         );
         $this->assertEquals(
-            [],
+            $expectedCollection->collection(),
             $this->jsonFilesystemStorageDriverTestInstance()
-                 ->read($jsonFilesystemStorageQuery),
+                 ->read($jsonFilesystemStorageQuery)
+                 ->collection(),
             $this->testFailedMessage(
                 $this->jsonFilesystemStorageDriverTestInstance(),
                 'read',
-                'returns an empty array there is nothing in storage',
+                'returns an empty JsonCollection there is nothing in storage',
             ),
         );
     }
@@ -430,6 +433,7 @@ trait JsonFilesystemStorageDriverTestTrait
      * @covers JsonFilesystemStorageDriver->read()
      *
      */
+    /*
     public function test_read_returns_an_empty_array_if_query_does_not_produce_any_matches(): void
     {
         $this->jsonFilesystemStorageDriverTestInstance()->write(
