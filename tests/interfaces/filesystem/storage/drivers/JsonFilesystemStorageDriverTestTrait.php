@@ -2,7 +2,6 @@
 
 namespace Darling\PHPJsonStorageUtilities\tests\interfaces\filesystem\storage\drivers;
 
-use \Darling\PHPJsonStorageUtilities\interfaces\collections\JsonCollection;
 use \Darling\PHPJsonStorageUtilities\classes\filesystem\storage\queries\JsonFilesystemStorageQuery;
 use \Darling\PHPJsonStorageUtilities\classes\named\identifiers\Owner;
 use \Darling\PHPJsonStorageUtilities\classes\collections\JsonCollection as JsonCollectionInstance;
@@ -230,15 +229,7 @@ trait JsonFilesystemStorageDriverTestTrait
         );
     }
 
-    private function deriveId(string $filePath) : string
-    {
-        return str_replace([dirname($filePath, 2), DIRECTORY_SEPARATOR, '.json'], '', $filePath);
-    }
-
-    /**
-     * @return JsonCollectionInstance
-     */
-    protected function expectedQueryResults(
+    private function expectedJsonFilesystemStorageQueryResults(
         JsonFilesystemStorageQuery $query
     ): JsonCollectionInstance
     {
@@ -262,7 +253,7 @@ trait JsonFilesystemStorageDriverTestTrait
         $data = [];
         if(is_array($files)) {
             foreach($files as $file) {
-                $data[$this->deriveId($file)] = new JsonInstance(
+                $data[] = new JsonInstance(
                     $jsonDecoder->decodeJsonString(
                         strval(file_get_contents($file))
                     )
@@ -499,7 +490,7 @@ trait JsonFilesystemStorageDriverTestTrait
             ),
         );
         $this->assertEquals(
-            $this->expectedQueryResults($jsonFilesystemStorageQuery),
+            $this->expectedJsonFilesystemStorageQueryResults($jsonFilesystemStorageQuery),
             $this->jsonFilesystemStorageDriverTestInstance()
                  ->read($jsonFilesystemStorageQuery),
             $this->testFailedMessage(
@@ -512,16 +503,13 @@ trait JsonFilesystemStorageDriverTestTrait
     }
 
     /**
-     * Test read returns an array of Json instances for all stored
-     * Json indexed by storage id, if query is empty.
      *
      * @return void
      *
      * @covers JsonFilesystemStorageDriver->read()
      *
      */
-    /*
-    public function test_read_returns_an_an_array_of_Json_instances_for_all_stored_json_indexed_by_storage_id_if_query_is_empty(): void
+    public function test_read_returns_a_JsonCollection_that_matches_the_expected_JsonFilesystemStorageQuery_results(): void
     {
         $status = $this->jsonFilesystemStorageDriverTestInstance()->write(
             $this->expectedJson(),
@@ -555,11 +543,7 @@ trait JsonFilesystemStorageDriverTestTrait
         );
         $jsonFilesystemStorageQuery = new JsonFilesystemStorageQuery();
         $this->assertEquals(
-            [
-                $this->expectedJsonFilePath()->id()->__toString() => $this->expectedJson(),
-                $randomJsonData1Id->__toString() => $randomJsonData1,
-                $randomJsonData2Id->__toString() => $randomJsonData2,
-            ],
+            $this->expectedJsonFilesystemStorageQueryResults($jsonFilesystemStorageQuery),
             $this->jsonFilesystemStorageDriverTestInstance()->read($jsonFilesystemStorageQuery),
             $this->testFailedMessage(
                 $this->jsonFilesystemStorageDriverTestInstance(),
@@ -568,7 +552,6 @@ trait JsonFilesystemStorageDriverTestTrait
             ),
         );
     }
-    */
 
     abstract protected function randomChars(): string;
     abstract protected static function assertTrue(bool $condition, string $message = ''): void;

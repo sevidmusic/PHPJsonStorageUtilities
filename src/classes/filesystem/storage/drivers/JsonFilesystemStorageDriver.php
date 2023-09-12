@@ -14,6 +14,7 @@ use \Darling\PHPJsonStorageUtilities\interfaces\named\identifiers\Location;
 use \Darling\PHPJsonStorageUtilities\interfaces\named\identifiers\Owner;
 use \Darling\PHPJsonUtilities\classes\decoders\JsonDecoder;
 use \Darling\PHPJsonUtilities\interfaces\encoded\data\Json;
+use \Darling\PHPJsonUtilities\classes\encoded\data\Json as JsonInstance;
 use \Darling\PHPTextTypes\classes\strings\ClassString;
 use \Darling\PHPTextTypes\interfaces\strings\Id;
 use \Darling\PHPTextTypes\interfaces\strings\Name;
@@ -61,7 +62,32 @@ class JsonFilesystemStorageDriver implements JsonFilesystemStorageDriverInterfac
     }
 
     public function read(JsonFilesystemStorageQuery $jsonFilesystemStorageQuery): JsonCollection {
-        return new JsonCollectionInstance();
+        $jsonFilePath = $jsonFilesystemStorageQuery->jsonFilePath();
+        if($jsonFilePath instanceof JsonFilePath) {
+            return new JsonCollectionInstance(
+                new JsonInstance(
+                    $this->jsonDecoder()->decodeJsonString(
+                        strval(
+                            file_get_contents(
+                                $jsonFilePath->__toString()
+                            )
+                        )
+                    )
+                )
+            );
+        }
+        $files = glob($jsonFilesystemStorageQuery->__toString());
+        $data = [];
+        if(is_array($files)) {
+            foreach($files as $file) {
+                $data[] = new JsonInstance(
+                    $this->jsonDecoder()->decodeJsonString(
+                        strval(file_get_contents($file))
+                    )
+                );
+            }
+        }
+        return new JsonCollectionInstance(...$data);
     }
 
     /**
