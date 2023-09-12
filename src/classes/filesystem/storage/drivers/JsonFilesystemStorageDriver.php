@@ -22,9 +22,14 @@ use \Darling\PHPTextTypes\interfaces\strings\Name;
 class JsonFilesystemStorageDriver implements JsonFilesystemStorageDriverInterface
 {
 
+    private JsonDecoder $jsonDecoder;
+
     public function jsonDecoder(): JsonDecoder
     {
-        return new JsonDecoder();
+        if(!isset($this->jsonDecoder)) {
+            $this->jsonDecoder = new JsonDecoder();
+        }
+        return $this->jsonDecoder;
     }
 
     public function write(
