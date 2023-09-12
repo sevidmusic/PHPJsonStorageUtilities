@@ -2,6 +2,7 @@
 
 namespace Darling\PHPJsonStorageUtilities\tests\interfaces\filesystem\storage\drivers;
 
+use Darling\PHPJsonStorageUtilities\classes\named\identifiers\Location;
 use \Darling\PHPJsonStorageUtilities\classes\filesystem\storage\queries\JsonFilesystemStorageQuery;
 use \Darling\PHPJsonStorageUtilities\classes\named\identifiers\Owner;
 use \Darling\PHPJsonStorageUtilities\classes\collections\JsonCollection as JsonCollectionInstance;
@@ -509,50 +510,65 @@ trait JsonFilesystemStorageDriverTestTrait
      * @covers JsonFilesystemStorageDriver->read()
      *
      */
-    public function test_read_returns_a_JsonCollection_that_matches_the_expected_JsonFilesystemStorageQuery_results(): void
+    public function test_read_returns_a_JsonCollection_that_contains_all_of_the_Json_in_storage_if_the_JsonFilesystemStorageQuery_is_empty(): void
     {
-        $status = $this->jsonFilesystemStorageDriverTestInstance()->write(
-            $this->expectedJson(),
-            $this->expectedJsonFilePath()->jsonStorageDirectoryPath(),
-            $this->expectedJsonFilePath->location(),
-            $this->expectedJsonFilePath->owner(),
-            $this->expectedJsonFilePath->name(),
-            $this->expectedJsonFilePath()->id(),
-        );
-        $randomJsonData1 = new JsonInstance($this->randomChars());
-        $randomJsonData1Id = new Id();
-        $status = $this->jsonFilesystemStorageDriverTestInstance()->write(
-            $randomJsonData1,
-            $this->expectedJsonFilePath()->jsonStorageDirectoryPath(),
-            $this->expectedJsonFilePath->location(),
-            $this->expectedJsonFilePath->owner(),
-            $this->expectedJsonFilePath->name(),
-            $randomJsonData1Id,
-        );
-        $randomJsonData2 = new JsonInstance($this->randomChars());
-        $randomJsonData2Id = new Id();
-        $status = $this->jsonFilesystemStorageDriverTestInstance()->write(
-            $randomJsonData2,
-            $this->expectedJsonFilePath->jsonStorageDirectoryPath(),
-            $this->expectedJsonFilePath->location(),
-            $this->expectedJsonFilePath->owner(),
-            $this->prefixedRandomName(
-                'ReadReturnsArrayOfAllStoredJsonIfQueryIsEmpty'
-            ),
-            $randomJsonData2Id,
-        );
+        $randomData = [
+            $this->randomClassStringOrObjectInstance(),
+            $this->randomChars(),
+            rand(PHP_INT_MIN, PHP_INT_MAX),
+            floatval(strval(rand(0, 100)) . strval(rand(0, 100))),
+        ];
+        $expectedJson = [];
+        for(
+            $numberOfJsonInstancesWrittenToStorage = 0;
+            $numberOfJsonInstancesWrittenToStorage < rand(10, 20);
+            $numberOfJsonInstancesWrittenToStorage++
+        ) {
+            $expectedJson[$numberOfJsonInstancesWrittenToStorage] =
+                new JsonInstance($randomData[array_rand($randomData)]);
+            $this->jsonFilesystemStorageDriverTestInstance()->write(
+                $expectedJson[$numberOfJsonInstancesWrittenToStorage],
+                $this->expectedJsonFilePath->jsonStorageDirectoryPath(),
+                new Location(new Name(new Text($this->randomChars()))),
+                new Owner(new Name(new Text($this->randomChars()))),
+                $this->prefixedRandomName(
+                    'ReadReturnsJsonCollectionContaingAllStoredJsonIfQueryIsEmpty'
+                ),
+                new Id(),
+            );
+        }
         $jsonFilesystemStorageQuery = new JsonFilesystemStorageQuery();
+        $actualQueryResults = $this->jsonFilesystemStorageDriverTestInstance()
+                             ->read($jsonFilesystemStorageQuery);
         $this->assertEquals(
-            $this->expectedJsonFilesystemStorageQueryResults($jsonFilesystemStorageQuery),
-            $this->jsonFilesystemStorageDriverTestInstance()->read($jsonFilesystemStorageQuery),
+            $this->expectedJsonFilesystemStorageQueryResults(
+                $jsonFilesystemStorageQuery
+            ),
+            $actualQueryResults,
             $this->testFailedMessage(
                 $this->jsonFilesystemStorageDriverTestInstance(),
                 'read',
                 'return all stored Json if query is empty',
             ),
         );
+        $this->assertEquals(
+            $numberOfJsonInstancesWrittenToStorage,
+            count($actualQueryResults->collection()),
+            $this->testFailedMessage(
+                $this->jsonFilesystemStorageDriverTestInstance(),
+                'read',
+                'return all stored Json if query is empty.' .
+                'Expected ' .
+                $numberOfJsonInstancesWrittenToStorage .
+                ' items in the returned JsonCollection ' .
+                'but there are only' .
+                count($actualQueryResults->collection()) . ' items in the ' .
+                'returned JsonCollection',
+            ),
+        );
     }
 
+    abstract protected function randomClassStringOrObjectInstance(): string|object;
     abstract protected function randomChars(): string;
     abstract protected static function assertTrue(bool $condition, string $message = ''): void;
     abstract protected static function assertFalse(bool $condition, string $message = ''): void;
