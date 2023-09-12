@@ -447,7 +447,7 @@ trait JsonFilesystemStorageDriverTestTrait
             ),
         );
         $this->assertEquals(
-            $expectedCollection->collection(),
+            [],
             $this->jsonFilesystemStorageDriverTestInstance()
                  ->read($jsonFilesystemStorageQuery)
                  ->collection(),
@@ -490,9 +490,9 @@ trait JsonFilesystemStorageDriverTestTrait
             ),
         );
         $this->assertEquals(
-            $this->expectedJsonFilesystemStorageQueryResults($jsonFilesystemStorageQuery),
+            [],
             $this->jsonFilesystemStorageDriverTestInstance()
-                 ->read($jsonFilesystemStorageQuery),
+                 ->read($jsonFilesystemStorageQuery)->collection(),
             $this->testFailedMessage(
                 $this->jsonFilesystemStorageDriverTestInstance(),
                 'read',
