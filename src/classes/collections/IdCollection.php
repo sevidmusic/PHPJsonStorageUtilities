@@ -5,7 +5,7 @@ namespace Darling\PHPJsonStorageUtilities\classes\collections;
 use \Darling\PHPJsonStorageUtilities\interfaces\collections\IdCollection as IdCollectionInterface;
 use \Darling\PHPTextTypes\interfaces\strings\Id;
 
-class IdCollection implements IdCollectionInterface
+final class IdCollection implements IdCollectionInterface
 {
 
 

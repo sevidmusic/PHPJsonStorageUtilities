@@ -5,7 +5,7 @@ namespace Darling\PHPJsonStorageUtilities\classes\collections;
 use \Darling\PHPJsonStorageUtilities\interfaces\collections\JsonCollection as JsonCollectionInterface;
 use \Darling\PHPJsonUtilities\interfaces\encoded\data\Json;
 
-class JsonCollection implements JsonCollectionInterface
+final class JsonCollection implements JsonCollectionInterface
 {
 
     /**

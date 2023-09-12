@@ -5,7 +5,7 @@ namespace Darling\PHPJsonStorageUtilities\classes\collections;
 use \Darling\PHPJsonStorageUtilities\interfaces\collections\JsonStorageDirectoryPathCollection as JsonStorageDirectoryPathCollectionInterface;
 use \Darling\PHPJsonStorageUtilities\interfaces\filesystem\paths\JsonStorageDirectoryPath;
 
-class JsonStorageDirectoryPathCollection implements JsonStorageDirectoryPathCollectionInterface
+final class JsonStorageDirectoryPathCollection implements JsonStorageDirectoryPathCollectionInterface
 {
 
 

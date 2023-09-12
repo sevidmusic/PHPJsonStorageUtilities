@@ -2,15 +2,17 @@
 
 namespace Darling\PHPJsonStorageUtilities\tests\interfaces\filesystem\storage\drivers;
 
+use \Darling\PHPJsonStorageUtilities\interfaces\collections\JsonCollection;
 use \Darling\PHPJsonStorageUtilities\classes\filesystem\storage\queries\JsonFilesystemStorageQuery;
 use \Darling\PHPJsonStorageUtilities\classes\named\identifiers\Owner;
-use \Darling\PHPJsonStorageUtilities\classes\collections\JsonCollection;
+use \Darling\PHPJsonStorageUtilities\classes\collections\JsonCollection as JsonCollectionInstance;
 use \Darling\PHPJsonStorageUtilities\enumerations\Type;
 use \Darling\PHPJsonStorageUtilities\interfaces\filesystem\paths\JsonFilePath;
 use \Darling\PHPJsonStorageUtilities\interfaces\filesystem\storage\drivers\JsonFilesystemStorageDriver;
 use \Darling\PHPJsonUtilities\classes\decoders\JsonDecoder as JsonDecoderInstance;
 use \Darling\PHPJsonUtilities\interfaces\decoders\JsonDecoder;
 use \Darling\PHPJsonUtilities\interfaces\encoded\data\Json;
+use \Darling\PHPJsonUtilities\classes\encoded\data\Json as JsonInstance;
 use \Darling\PHPTextTypes\classes\strings\ClassString as ClassStringInstance;
 use \Darling\PHPTextTypes\classes\strings\Id;
 use \Darling\PHPTextTypes\classes\strings\Name;
@@ -228,6 +230,48 @@ trait JsonFilesystemStorageDriverTestTrait
         );
     }
 
+    private function deriveId(string $filePath) : string
+    {
+        return str_replace([dirname($filePath, 2), DIRECTORY_SEPARATOR, '.json'], '', $filePath);
+    }
+
+    /**
+     * @return JsonCollectionInstance
+     */
+    protected function expectedQueryResults(
+        JsonFilesystemStorageQuery $query
+    ): JsonCollectionInstance
+    {
+        $jsonDecoder = $this->jsonFilesystemStorageDriverTestInstance()
+                            ->jsonDecoder();
+        $jsonFilePath = $query->jsonFilePath();
+        if($jsonFilePath instanceof JsonFilePath) {
+            return new JsonCollectionInstance(
+                new JsonInstance(
+                    $jsonDecoder->decodeJsonString(
+                        strval(
+                            file_get_contents(
+                                $jsonFilePath->__toString()
+                            )
+                        )
+                    )
+                )
+            );
+        }
+        $files = glob($query->__toString());
+        $data = [];
+        if(is_array($files)) {
+            foreach($files as $file) {
+                $data[$this->deriveId($file)] = new JsonInstance(
+                    $jsonDecoder->decodeJsonString(
+                        strval(file_get_contents($file))
+                    )
+                );
+            }
+        }
+        return new JsonCollectionInstance(...$data);
+    }
+
     /**
      * Test jsonDecoder() returns an instance of a JsonDecoder.
      *
@@ -399,15 +443,15 @@ trait JsonFilesystemStorageDriverTestTrait
      */
     public function test_read_returns_an_empty_JsonCollection_if_there_is_nothing_in_storage(): void
     {
-        $expectedCollection = new JsonCollection();
+        $expectedCollection = new JsonCollectionInstance();
         $jsonFilesystemStorageQuery = new JsonFilesystemStorageQuery(
             id: new Id(),
             name: $this->prefixedRandomName(
-                'NameForTestReadReturnsEmptyArrayIfThereIsNothingInStorage'
+                'NameForTestReadReturnsEmptyJsonCollectionIfThereIsNothingInStorage'
             ),
             owner: new Owner(
                 $this->prefixedRandomName(
-                    'OwnerForTestReadReturnsEmptyArrayIfThereIsNothingInStorage'
+                    'OwnerForTestReadReturnsEmptyJsonCollectionIfThereIsNothingInStorage'
                 )
             ),
         );
@@ -433,8 +477,7 @@ trait JsonFilesystemStorageDriverTestTrait
      * @covers JsonFilesystemStorageDriver->read()
      *
      */
-    /*
-    public function test_read_returns_an_empty_array_if_query_does_not_produce_any_matches(): void
+    public function test_read_returns_an_empty_JsonCollection_if_query_does_not_produce_any_matches(): void
     {
         $this->jsonFilesystemStorageDriverTestInstance()->write(
             $this->expectedJson(),
@@ -447,23 +490,23 @@ trait JsonFilesystemStorageDriverTestTrait
         $jsonFilesystemStorageQuery = new JsonFilesystemStorageQuery(
             id: new Id(),
             name: $this->prefixedRandomName(
-                'NameForTestReadReturnsEmptyArrayIfQueryDoesNotMatch'
+                'NameForTestReadReturnsEmptyJsonCollectionIfQueryDoesNotMatch'
             ),
             owner: new Owner(
                 $this->prefixedRandomName(
-                    'OwnerForTestReadReturnsEmptyArrayIfQueryDoesNotMatch'
+                    'OwnerForTestReadReturnsEmptyJsonCollectionIfQueryDoesNotMatch'
                 )
             ),
         );
         $this->assertEquals(
-            [],
+            $this->expectedQueryResults($jsonFilesystemStorageQuery),
             $this->jsonFilesystemStorageDriverTestInstance()
                  ->read($jsonFilesystemStorageQuery),
             $this->testFailedMessage(
                 $this->jsonFilesystemStorageDriverTestInstance(),
                 'read',
-                'returns an empty array if query does not produce ' .
-                'any matches',
+                'returns an empty JsonCollection if query does not ' .
+                'produce any matches',
             ),
         );
     }
