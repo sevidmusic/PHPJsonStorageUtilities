@@ -25,15 +25,13 @@ trait JsonFilePathCollectionTestTrait
     protected JsonFilePathCollection $jsonFilePathCollection;
 
     /**
-     * @var array<int, JsonFilePath> The array of
-     *                                           JsonFilePath
-     *                                           instances that is
-     *                                           expected to be
-     *                                           returned by the
-     *                                           JsonFilePathCollection
-     *                                           instance being
-     *                                           tested's collection()
-     *                                           method.
+     * @var array<int, JsonFilePath> $expectedCollection
+     *                               The array of JsonFilePath
+     *                               instances that is expected
+     *                               to be returned by the
+     *                               JsonFilePathCollection
+     *                               instance being tested's
+     *                               collection() method.
      */
     private array $expectedCollection = [];
 
@@ -173,6 +171,10 @@ trait JsonFilePathCollectionTestTrait
             ),
         );
     }
+
+    abstract protected function randomChars(): string;
+    abstract protected static function assertEquals(mixed $expected, mixed $actual, string $message = ''): void;
+    abstract protected function testFailedMessage(object $object, string $method, string $message): string;
 
 }
 

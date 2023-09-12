@@ -5,7 +5,7 @@ namespace Darling\PHPJsonStorageUtilities\classes\collections;
 use \Darling\PHPJsonStorageUtilities\interfaces\collections\OwnerCollection as OwnerCollectionInterface;
 use \Darling\PHPJsonStorageUtilities\interfaces\named\identifiers\Owner;
 
-class OwnerCollection implements OwnerCollectionInterface
+final class OwnerCollection implements OwnerCollectionInterface
 {
 
 

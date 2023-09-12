@@ -5,7 +5,7 @@ namespace Darling\PHPJsonStorageUtilities\classes\collections;
 use \Darling\PHPJsonStorageUtilities\interfaces\collections\NameCollection as NameCollectionInterface;
 use \Darling\PHPTextTypes\classes\strings\Name;
 
-class NameCollection implements NameCollectionInterface
+final class NameCollection implements NameCollectionInterface
 {
 
     /**

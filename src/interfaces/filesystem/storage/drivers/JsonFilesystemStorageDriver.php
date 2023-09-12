@@ -2,8 +2,9 @@
 
 namespace Darling\PHPJsonStorageUtilities\interfaces\filesystem\storage\drivers;
 
+use \Darling\PHPJsonStorageUtilities\interfaces\collections\JsonCollection;
 use \Darling\PHPJsonUtilities\interfaces\decoders\JsonDecoder;
-
+use \Darling\PHPJsonStorageUtilities\interfaces\filesystem\storage\queries\JsonFilesystemStorageQuery;
 use \Darling\PHPJsonStorageUtilities\interfaces\filesystem\paths\JsonStorageDirectoryPath;
 use \Darling\PHPJsonStorageUtilities\interfaces\named\identifiers\Location;
 use \Darling\PHPJsonStorageUtilities\interfaces\named\identifiers\Owner;
@@ -23,7 +24,7 @@ use \Darling\PHPTextTypes\interfaces\strings\Id;
 interface JsonFilesystemStorageDriver
 {
 
-    public function JsonDecoder(): JsonDecoder;
+    public function jsonDecoder(): JsonDecoder;
 
     public function write(
         Json $json,
@@ -33,6 +34,11 @@ interface JsonFilesystemStorageDriver
         Name $name,
         Id $id,
     ): bool;
+
+    /**
+     * @return JsonCollection
+     */
+    public function read(JsonFilesystemStorageQuery $jsonFilesystemStorageQuery): JsonCollection;
 
 }
 

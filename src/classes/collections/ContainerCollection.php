@@ -5,7 +5,7 @@ namespace Darling\PHPJsonStorageUtilities\classes\collections;
 use \Darling\PHPJsonStorageUtilities\interfaces\collections\ContainerCollection as ContainerCollectionInterface;
 use \Darling\PHPJsonStorageUtilities\interfaces\named\identifiers\Container;
 
-class ContainerCollection implements ContainerCollectionInterface
+final class ContainerCollection implements ContainerCollectionInterface
 {
 
     /**

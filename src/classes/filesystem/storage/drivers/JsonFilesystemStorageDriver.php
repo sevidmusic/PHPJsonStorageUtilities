@@ -2,15 +2,19 @@
 
 namespace Darling\PHPJsonStorageUtilities\classes\filesystem\storage\drivers;
 
+use Darling\PHPJsonStorageUtilities\interfaces\collections\JsonCollection;
+use Darling\PHPJsonStorageUtilities\classes\collections\JsonCollection as JsonCollectionInstance;
 use \Darling\PHPJsonStorageUtilities\classes\filesystem\paths\JsonFilePath;
 use \Darling\PHPJsonStorageUtilities\classes\named\identifiers\Container;
 use \Darling\PHPJsonStorageUtilities\enumerations\Type;
 use \Darling\PHPJsonStorageUtilities\interfaces\filesystem\paths\JsonStorageDirectoryPath;
 use \Darling\PHPJsonStorageUtilities\interfaces\filesystem\storage\drivers\JsonFilesystemStorageDriver as JsonFilesystemStorageDriverInterface;
+use \Darling\PHPJsonStorageUtilities\interfaces\filesystem\storage\queries\JsonFilesystemStorageQuery;
 use \Darling\PHPJsonStorageUtilities\interfaces\named\identifiers\Location;
 use \Darling\PHPJsonStorageUtilities\interfaces\named\identifiers\Owner;
 use \Darling\PHPJsonUtilities\classes\decoders\JsonDecoder;
 use \Darling\PHPJsonUtilities\interfaces\encoded\data\Json;
+use \Darling\PHPJsonUtilities\classes\encoded\data\Json as JsonInstance;
 use \Darling\PHPTextTypes\classes\strings\ClassString;
 use \Darling\PHPTextTypes\interfaces\strings\Id;
 use \Darling\PHPTextTypes\interfaces\strings\Name;
@@ -18,7 +22,7 @@ use \Darling\PHPTextTypes\interfaces\strings\Name;
 class JsonFilesystemStorageDriver implements JsonFilesystemStorageDriverInterface
 {
 
-    public function JsonDecoder(): JsonDecoder
+    public function jsonDecoder(): JsonDecoder
     {
         return new JsonDecoder();
     }
@@ -40,6 +44,9 @@ class JsonFilesystemStorageDriver implements JsonFilesystemStorageDriverInterfac
             $name,
             $id,
         );
+        if(file_exists($jsonFilePath->__toString())) {
+            return false;
+        }
         $parentDirectoryPath = dirname($jsonFilePath->__toString());
         if(!is_dir($parentDirectoryPath)) {
             mkdir($parentDirectoryPath, 0755, true);
@@ -52,6 +59,35 @@ class JsonFilesystemStorageDriver implements JsonFilesystemStorageDriverInterfac
             ) > 0;
         }
         return false;
+    }
+
+    public function read(JsonFilesystemStorageQuery $jsonFilesystemStorageQuery): JsonCollection {
+        $jsonFilePath = $jsonFilesystemStorageQuery->jsonFilePath();
+        if($jsonFilePath instanceof JsonFilePath) {
+            return new JsonCollectionInstance(
+                new JsonInstance(
+                    $this->jsonDecoder()->decodeJsonString(
+                        strval(
+                            file_get_contents(
+                                $jsonFilePath->__toString()
+                            )
+                        )
+                    )
+                )
+            );
+        }
+        $files = glob($jsonFilesystemStorageQuery->__toString());
+        $data = [];
+        if(is_array($files)) {
+            foreach($files as $file) {
+                $data[] = new JsonInstance(
+                    $this->jsonDecoder()->decodeJsonString(
+                        strval(file_get_contents($file))
+                    )
+                );
+            }
+        }
+        return new JsonCollectionInstance(...$data);
     }
 
     /**

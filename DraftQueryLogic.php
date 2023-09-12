@@ -14,10 +14,14 @@ use \Darling\PHPJsonUtilities\classes\decoders\JsonDecoder;
 use \Darling\PHPJsonUtilities\classes\encoded\data\Json;
 use \Darling\PHPTextTypes\classes\strings\ClassString;
 use \Darling\PHPTextTypes\classes\strings\Id;
-use \Darling\PHPTextTypes\interfaces\strings\Id as IdInterface;
 use \Darling\PHPTextTypes\classes\strings\Name;
 use \Darling\PHPTextTypes\classes\strings\Text;
 
+
+function deriveId(string $filePath) : string
+{
+    return str_replace([dirname($filePath, 2), DIRECTORY_SEPARATOR, '.json'], '', $filePath);
+}
 
 /**
  * Return an array of Json data read from stroage based on the
@@ -60,10 +64,6 @@ function mockRead(JsonFilesystemStorageQuery $query) : array
     return $data;
 }
 
-function deriveId(string $filePath) : string
-{
-    return str_replace([dirname($filePath, 2), DIRECTORY_SEPARATOR, '.json'], '', $filePath);
-}
 
 $values = [
     new Id(),

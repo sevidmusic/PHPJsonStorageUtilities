@@ -5,7 +5,7 @@ namespace Darling\PHPJsonStorageUtilities\classes\collections;
 use \Darling\PHPJsonStorageUtilities\interfaces\collections\LocationCollection as LocationCollectionInterface;
 use \Darling\PHPJsonStorageUtilities\interfaces\named\identifiers\Location;
 
-class LocationCollection implements LocationCollectionInterface
+final class LocationCollection implements LocationCollectionInterface
 {
 
 
