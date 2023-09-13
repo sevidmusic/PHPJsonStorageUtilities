@@ -228,6 +228,9 @@ trait JsonFilesystemStorageQueryTestTrait
 
     private function expectedQueryString(JsonFilesystemStorageQuery $query): string
     {
+        if($query->jsonFilePath() instanceof JsonFilePath) {
+            return $query->jsonFilePath()->__toString();
+        }
         $queryString =
         (
             is_null($query->jsonStorageDirectoryPath())
