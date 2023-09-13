@@ -473,14 +473,28 @@ trait JsonFilesystemStorageDriverTestTrait
      */
     public function test_read_returns_an_empty_JsonCollection_if_query_does_not_produce_any_matches(): void
     {
-        $this->jsonFilesystemStorageDriverTestInstance()->write(
-            $this->expectedJson(),
-            $this->expectedJsonFilePath()->jsonStorageDirectoryPath(),
-            $this->expectedJsonFilePath->location(),
-            $this->expectedJsonFilePath->owner(),
-            $this->expectedJsonFilePath->name(),
-            $this->expectedJsonFilePath()->id(),
-        );
+        $randomData = [
+            $this->randomClassStringOrObjectInstance(),
+            $this->randomChars(),
+            rand(PHP_INT_MIN, PHP_INT_MAX),
+            floatval(strval(rand(0, 100)) . strval(rand(0, 100))),
+        ];
+        for(
+            $numberOfJsonInstancesWrittenToStorage = 0;
+            $numberOfJsonInstancesWrittenToStorage < rand(10, 20);
+            $numberOfJsonInstancesWrittenToStorage++
+        ) {
+            $this->jsonFilesystemStorageDriverTestInstance()->write(
+                new JsonInstance($randomData[array_rand($randomData)]),
+                $this->expectedJsonFilePath->jsonStorageDirectoryPath(),
+                new Location(new Name(new Text($this->randomChars()))),
+                new Owner(new Name(new Text($this->randomChars()))),
+                $this->prefixedRandomName(
+                    'ReadReturnsEmptyJsonCollectionIfQueryDoesNotMatch'
+                ),
+                new Id(),
+            );
+        }
         $jsonFilesystemStorageQuery = new JsonFilesystemStorageQuery(
             id: new Id(),
             name: $this->prefixedRandomName(
