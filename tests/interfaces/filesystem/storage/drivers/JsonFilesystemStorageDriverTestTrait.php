@@ -2,7 +2,7 @@
 
 namespace Darling\PHPJsonStorageUtilities\tests\interfaces\filesystem\storage\drivers;
 
-use Darling\PHPJsonStorageUtilities\classes\filesystem\paths\JsonFilePath as DarlingJsonFilePath;
+use Darling\PHPJsonStorageUtilities\classes\filesystem\paths\JsonFilePath as JsonFilePathInstance;
 use Darling\PHPJsonStorageUtilities\classes\named\identifiers\Container;
 use Darling\PHPJsonStorageUtilities\classes\named\identifiers\Location;
 use \Darling\PHPJsonStorageUtilities\classes\filesystem\storage\queries\JsonFilesystemStorageQuery;
@@ -618,7 +618,7 @@ trait JsonFilesystemStorageDriverTestTrait
                 $name,
                 $id,
             );
-            $jsonFilePaths[] = new DarlingJsonFilePath(
+            $jsonFilePaths[] = new JsonFilePathInstance(
                 $jsonFilesystemStorageDirectoryPath,
                 $location,
                 $container,
@@ -628,11 +628,135 @@ trait JsonFilesystemStorageDriverTestTrait
             );
         }
         $jsonFilesystemStorageQuery = new JsonFilesystemStorageQuery(jsonFilePath: $jsonFilePaths[array_rand($jsonFilePaths)]);
+        #var_dump($jsonFilesystemStorageQuery->__toString());
         $expectedQueryResults = $this->expectedJsonFilesystemStorageQueryResults(
             $jsonFilesystemStorageQuery
         );
         $actualQueryResults = $this->jsonFilesystemStorageDriverTestInstance()
                              ->read($jsonFilesystemStorageQuery);
+        $this->assertEquals(
+            $expectedQueryResults,
+            $actualQueryResults,
+            $this->testFailedMessage(
+                $this->jsonFilesystemStorageDriverTestInstance(),
+                'read',
+                'return only the Json stored at the specified ' .
+                'JsonFilePath if the query is specifies a ' .
+                'JsonFilePath',
+            ),
+        );
+    }
+
+    /**
+     *
+     * @return void
+     *
+     * @covers JsonFilesystemStorageDriver->read()
+     *
+     */
+    public function test_read_returns_a_JsonCollection_that_contains_the_expected_Json_intances_based_on_a_JsonFilesystemStorageQuery(): void
+    {
+        $randomData = [
+            $this->randomClassStringOrObjectInstance(),
+            $this->randomChars(),
+            rand(PHP_INT_MIN, PHP_INT_MAX),
+            floatval(strval(rand(0, 100)) . strval(rand(0, 100))),
+        ];
+        /** @var array<int, JsonFilesystemStorageQuery> $completeQueries */
+        $completeQueries = [];
+        /** @var array<int, JsonFilesystemStorageQuery> $incompleteQueries  */
+        $incompleteQueries = [];
+        /** @var array<int, JsonFilesystemStorageQuery> $jsonFilePathQueries */
+        $jsonFilePathQueries = [];
+        for(
+            $numberOfJsonInstancesWrittenToStorage = 0;
+            $numberOfJsonInstancesWrittenToStorage < rand(10, 20);
+            $numberOfJsonInstancesWrittenToStorage++
+        ) {
+            $jsonInstance = new JsonInstance($randomData[array_rand($randomData)]);
+            $jsonFilesystemStorageDirectoryPath = $this->expectedJsonFilePath->jsonStorageDirectoryPath();
+            $location = new Location(new Name(new Text($this->randomChars())));
+            $container = new Container($this->determineType($jsonInstance));
+            $owner = new Owner(new Name(new Text($this->randomChars())));
+            $name = $this->prefixedRandomName('ReadOnlyReturnsTheJsoneReadFromSpecifiedJsonFilePathIfJsonFilePathIsQueried');
+            $id = new Id();
+            $this->jsonFilesystemStorageDriverTestInstance()->write(
+                $jsonInstance,
+                $jsonFilesystemStorageDirectoryPath,
+                $location,
+                $owner,
+                $name,
+                $id,
+            );
+            $completeQueries[] = new JsonFilesystemStorageQuery(
+                jsonStorageDirectoryPath: $jsonFilesystemStorageDirectoryPath,
+                location: $location,
+                container: $container,
+                owner: $owner,
+                name: $name,
+                id: $id,
+            );
+            $incompleteQueries[] = new JsonFilesystemStorageQuery(
+                jsonStorageDirectoryPath: (rand(0, 1) === 0 ? $jsonFilesystemStorageDirectoryPath : null),
+                location: (rand(0, 1) === 0 ? $location : null),
+                container: (rand(0, 1) === 0 ? $container : null),
+                owner: (rand(0, 1) === 0 ? $owner : null),
+                name: (rand(0, 1) === 0 ? $name : null),
+                id: (rand(0, 1) === 0 ? $id : null),
+            );
+            $jsonFilePath = new JsonFilePathInstance(
+                $jsonFilesystemStorageDirectoryPath,
+                $location,
+                $container,
+                $owner,
+                $name,
+                $id
+            );
+            $jsonFilePathQueries[] = new JsonFilesystemStorageQuery(
+                jsonFilePath: $jsonFilePath,
+            );
+        }
+        $completeJsonFilesystemStorageQuery = $completeQueries[array_rand($completeQueries)];
+        $expectedQueryResults = $this->expectedJsonFilesystemStorageQueryResults(
+            $completeJsonFilesystemStorageQuery
+        );
+        $actualQueryResults = $this->jsonFilesystemStorageDriverTestInstance()
+                             ->read($completeJsonFilesystemStorageQuery);
+        $this->assertEquals(
+            $expectedQueryResults,
+            $actualQueryResults,
+            $this->testFailedMessage(
+                $this->jsonFilesystemStorageDriverTestInstance(),
+                'read',
+                'return only the Json stored at the specified ' .
+                'JsonFilePath if the query is specifies a ' .
+                'JsonFilePath',
+            ),
+        );
+        $incompleteJsonFilesystemStorageQuery = $incompleteQueries[array_rand($incompleteQueries)];
+        $expectedQueryResults = $this->expectedJsonFilesystemStorageQueryResults(
+            $incompleteJsonFilesystemStorageQuery
+        );
+        $actualQueryResults = $this->jsonFilesystemStorageDriverTestInstance()
+                             ->read($incompleteJsonFilesystemStorageQuery);
+        $this->assertEquals(
+            $expectedQueryResults,
+            $actualQueryResults,
+            $this->testFailedMessage(
+                $this->jsonFilesystemStorageDriverTestInstance(),
+                'read',
+                'return only the Json stored at the specified ' .
+                'JsonFilePath if the query is specifies a ' .
+                'JsonFilePath',
+            ),
+        );
+        $jsonFilePathJsonFilesystemStorageQuery = $jsonFilePathQueries[array_rand($jsonFilePathQueries)];
+        #var_dump($jsonFilePathJsonFilesystemStorageQuery->__toString());
+        $expectedQueryResults = $this->expectedJsonFilesystemStorageQueryResults(
+            $jsonFilePathJsonFilesystemStorageQuery
+        );
+        $actualQueryResults = $this->jsonFilesystemStorageDriverTestInstance()
+                             ->read($jsonFilePathJsonFilesystemStorageQuery);
         $this->assertEquals(
             $expectedQueryResults,
             $actualQueryResults,
