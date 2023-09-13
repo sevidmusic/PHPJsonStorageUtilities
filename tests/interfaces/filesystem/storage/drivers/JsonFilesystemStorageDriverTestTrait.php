@@ -628,7 +628,6 @@ trait JsonFilesystemStorageDriverTestTrait
             );
         }
         $jsonFilesystemStorageQuery = new JsonFilesystemStorageQuery(jsonFilePath: $jsonFilePaths[array_rand($jsonFilePaths)]);
-        #var_dump($jsonFilesystemStorageQuery->__toString());
         $expectedQueryResults = $this->expectedJsonFilesystemStorageQueryResults(
             $jsonFilesystemStorageQuery
         );
@@ -751,7 +750,6 @@ trait JsonFilesystemStorageDriverTestTrait
             ),
         );
         $jsonFilePathJsonFilesystemStorageQuery = $jsonFilePathQueries[array_rand($jsonFilePathQueries)];
-        #var_dump($jsonFilePathJsonFilesystemStorageQuery->__toString());
         $expectedQueryResults = $this->expectedJsonFilesystemStorageQueryResults(
             $jsonFilePathJsonFilesystemStorageQuery
         );
