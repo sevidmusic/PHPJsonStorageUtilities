@@ -2,8 +2,10 @@
 
 include(dirname(__DIR__, 2) . DIRECTORY_SEPARATOR . 'vendor' . DIRECTORY_SEPARATOR . 'autoload.php');
 
-use Darling\PHPJsonStorageUtilities\classes\filesystem\paths\JsonFilePath;
-use Darling\PHPJsonUtilities\classes\decoders\JsonDecoder;
+use \Darling\PHPTextTypes\classes\strings\Text;
+use \Darling\PHPJsonStorageUtilities\classes\named\identifiers\Container;
+use \Darling\PHPJsonStorageUtilities\classes\filesystem\paths\JsonFilePath;
+use \Darling\PHPJsonUtilities\classes\decoders\JsonDecoder;
 use \Darling\PHPTextTypes\classes\strings\Id;
 use \Darling\PHPTextTypes\classes\strings\Name;
 use \Darling\PHPTextTypes\classes\strings\ClassString;
@@ -13,9 +15,8 @@ use \Darling\PHPJsonStorageUtilities\classes\filesystem\paths\JsonStorageDirecto
 use \Darling\PHPJsonStorageUtilities\enumerations\Type;
 use \Darling\PHPJsonUtilities\classes\encoded\data\Json;
 
-function determineType(Json $json): Type|ClassString
+function determineType(Json $json, JsonDecoder $jsonDecoder): Type|ClassString
 {
-    $jsonDecoder = new JsonDecoder();
     $data = $jsonDecoder->decode($json);
     if(is_object($data)) {
         return new ClassString($data);
@@ -35,6 +36,7 @@ function determineType(Json $json): Type|ClassString
 }
 
 $jfsd = new \Darling\PHPJsonStorageUtilities\classes\filesystem\storage\drivers\JsonFilesystemStorageDriver();
+$jsonDecoder = new JsonDecoder();
 $data = [
     new \Darling\PHPTextTypes\classes\strings\Id(),
     'Foo',
@@ -57,13 +59,28 @@ $jsonFilePaths = [];
 for($jsonWrites = 0; $jsonWrites < rand(10, 20); $jsonWrites++) {
 
     $json = new Json($data[array_rand($data)]);
-    $jsonStorageDirectoryPath = new JsonStorageDirectoryPath(new Name(new \Darling\PHPTextTypes\classes\strings\Text('Data' . strval(rand(1, 3)))));
-    $location = new Location(new Name(new \Darling\PHPTextTypes\classes\strings\Text('Location' . strval(rand(1, 3)))));
-    $container = new \Darling\PHPJsonStorageUtilities\classes\named\identifiers\Container(determineType($json));
-    $owner = new Owner(new Name(new \Darling\PHPTextTypes\classes\strings\Text('Owner' . strval(rand(1, 3)))));
-    $name = new Name(new \Darling\PHPTextTypes\classes\strings\Text('Name' . strval(rand(1, 3))));
+    $jsonStorageDirectoryPath = new JsonStorageDirectoryPath(
+        new Name(
+            new Text('Data' . strval(rand(1, 3)))
+        )
+    );
+    $location = new Location(
+        new Name(
+            new Text('Location' . strval(rand(1, 3)))
+        )
+    );
+    $container = new Container(determineType($json, $jsonDecoder));
+    $owner = new Owner(new Name(new Text('Owner' . strval(rand(1, 3)))));
+    $name = new Name(new Text('Name' . strval(rand(1, 3))));
     $id = new Id();
-    $jsonFilePath = new JsonFilePath($jsonStorageDirectoryPath, $location, $container, $owner, $name, $id);
+    $jsonFilePath = new JsonFilePath(
+        $jsonStorageDirectoryPath,
+        $location,
+        $container,
+        $owner,
+        $name,
+        $id
+    );
     $jsons[] = $json;
     $jsonStorageDirectoryPaths[] = $jsonStorageDirectoryPath;
     $locations[] = $location;
@@ -72,7 +89,12 @@ for($jsonWrites = 0; $jsonWrites < rand(10, 20); $jsonWrites++) {
     $names[] = $name;
     $ids[] = $id;
     $jsonFilePaths[] = $jsonFilePath;
-    var_dump($jfsd->write($json, $jsonStorageDirectoryPath, $location, $owner, $name, $id));
+    echo PHP_EOL .
+        'Writing to the following path: ' .
+        $jsonFilePath->__toString() .
+        ($jfsd->write($json, $jsonStorageDirectoryPath, $location, $owner, $name, $id) ? 'file was written' : 'failed to write file') .
+        PHP_EOL;
+    ;
 }
 
 $jfsq = new \Darling\PHPJsonStorageUtilities\classes\filesystem\storage\queries\JsonFilesystemStorageQuery(
@@ -85,6 +107,11 @@ $jfsq = new \Darling\PHPJsonStorageUtilities\classes\filesystem\storage\queries\
     jsonFilePath: (rand(0, 1) === 0 ? null : $jsonFilePath),
 );
 
-echo PHP_EOL . PHP_EOL . 'Query: ' . $jfsq->__toString() . PHP_EOL . PHP_EOL;
-var_dump($jfsd->read($jfsq));
+echo PHP_EOL . PHP_EOL . 'Reading based on the following JsonFilesystemStorageQuery: ' .PHP_EOL . PHP_EOL . '    ' . $jfsq->__toString() . PHP_EOL . PHP_EOL;
+$jsonCollection = $jfsd->read($jfsq);
+foreach($jsonCollection->collection() as $json) {
+    echo PHP_EOL . 'Json read: ' . $json->__toString();
+    echo PHP_EOL . 'Decoded value: ' . PHP_EOL;
+    var_dump($jsonDecoder->decode($json));
+}
 
