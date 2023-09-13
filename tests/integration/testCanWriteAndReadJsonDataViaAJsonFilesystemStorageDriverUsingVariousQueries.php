@@ -15,6 +15,10 @@ use \Darling\PHPJsonStorageUtilities\classes\filesystem\paths\JsonStorageDirecto
 use \Darling\PHPJsonStorageUtilities\enumerations\Type;
 use \Darling\PHPJsonUtilities\classes\encoded\data\Json;
 
+function applyCliColor(string $string, int $colorCode): string {
+    return "\033[0m\033[48;5;" . strval($colorCode) . "m\033[38;5;0m " . $string . " \033[0m";
+}
+
 function determineType(Json $json, JsonDecoder $jsonDecoder): Type|ClassString
 {
     $data = $jsonDecoder->decode($json);
@@ -91,7 +95,7 @@ for($jsonWrites = 0; $jsonWrites < rand(10, 20); $jsonWrites++) {
     $jsonFilePaths[] = $jsonFilePath;
     echo PHP_EOL .
         'Writing to the following path: ' .
-        $jsonFilePath->__toString() .
+        applyCliColor($jsonFilePath->__toString(), 1) .
         ($jfsd->write($json, $jsonStorageDirectoryPath, $location, $owner, $name, $id) ? 'file was written' : 'failed to write file') .
         PHP_EOL;
     ;
@@ -107,10 +111,11 @@ $jfsq = new \Darling\PHPJsonStorageUtilities\classes\filesystem\storage\queries\
     jsonFilePath: (rand(0, 1) === 0 ? null : $jsonFilePath),
 );
 
-echo PHP_EOL . PHP_EOL . 'Reading based on the following JsonFilesystemStorageQuery: ' .PHP_EOL . PHP_EOL . '    ' . $jfsq->__toString() . PHP_EOL . PHP_EOL;
+echo PHP_EOL . PHP_EOL . 'Reading based on the following JsonFilesystemStorageQuery: ' .PHP_EOL . PHP_EOL . '    ' . applyCliColor($jfsq->__toString(), 5) . PHP_EOL . PHP_EOL;
 $jsonCollection = $jfsd->read($jfsq);
+echo PHP_EOL . PHP_EOL . 'Number of items read from storage: ' . applyCliColor(strval(count($jsonCollection->collection())), 165);
 foreach($jsonCollection->collection() as $json) {
-    echo PHP_EOL . 'Json read: ' . $json->__toString();
+    echo PHP_EOL . 'Json read: ' . applyCliColor($json->__toString(), 6);
     echo PHP_EOL . 'Decoded value: ' . PHP_EOL;
     var_dump($jsonDecoder->decode($json));
 }
