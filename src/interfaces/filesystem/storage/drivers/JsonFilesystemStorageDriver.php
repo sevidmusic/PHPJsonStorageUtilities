@@ -2,6 +2,7 @@
 
 namespace Darling\PHPJsonStorageUtilities\interfaces\filesystem\storage\drivers;
 
+use Darling\PHPJsonStorageUtilities\interfaces\collections\JsonFilePathCollection;
 use \Darling\PHPJsonStorageUtilities\interfaces\collections\JsonCollection;
 use \Darling\PHPJsonUtilities\interfaces\decoders\JsonDecoder;
 use \Darling\PHPJsonStorageUtilities\interfaces\filesystem\storage\queries\JsonFilesystemStorageQuery;
@@ -39,6 +40,11 @@ interface JsonFilesystemStorageDriver
      * @return JsonCollection
      */
     public function read(JsonFilesystemStorageQuery $jsonFilesystemStorageQuery): JsonCollection;
+
+    /**
+     * @return JsonFilePathCollection
+     */
+    public function storedJsonFilePaths(JsonFilesystemStorageQuery $jsonFilesystemStorageQuery): JsonFilePathCollection;
 
 }
 

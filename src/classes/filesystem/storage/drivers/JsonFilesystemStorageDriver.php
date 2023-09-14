@@ -4,6 +4,8 @@ namespace Darling\PHPJsonStorageUtilities\classes\filesystem\storage\drivers;
 
 use Darling\PHPJsonStorageUtilities\interfaces\collections\JsonCollection;
 use Darling\PHPJsonStorageUtilities\classes\collections\JsonCollection as JsonCollectionInstance;
+use Darling\PHPJsonStorageUtilities\interfaces\collections\JsonFilePathCollection;
+use Darling\PHPJsonStorageUtilities\classes\collections\JsonFilePathCollection as JsonFilePathCollectionInstance;
 use \Darling\PHPJsonStorageUtilities\classes\filesystem\paths\JsonFilePath;
 use \Darling\PHPJsonStorageUtilities\classes\named\identifiers\Container;
 use \Darling\PHPJsonStorageUtilities\enumerations\Type;
@@ -95,6 +97,11 @@ class JsonFilesystemStorageDriver implements JsonFilesystemStorageDriverInterfac
         return new JsonCollectionInstance(...$data);
     }
 
+    public function storedJsonFilePaths(JsonFilesystemStorageQuery $jsonFilesystemStorageQuery): JsonFilePathCollection
+    {
+        return new JsonFilePathCollectionInstance();
+    }
+
     /**
      * Return an appropriate JsonFilePath.
      *
@@ -140,5 +147,6 @@ class JsonFilesystemStorageDriver implements JsonFilesystemStorageDriverInterfac
             Type::UnknownType->value => Type::UnknownType,
         };
     }
+
 }
 

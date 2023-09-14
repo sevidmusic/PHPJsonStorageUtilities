@@ -768,6 +768,40 @@ trait JsonFilesystemStorageDriverTestTrait
         );
     }
 
+    /**
+     * Test storedJsonFilePaths returns an empty
+     * JsonFilePathCollection if there is nothing in storage.
+     *
+     * @return void
+     *
+     * @covers JsonFilesystemStorageDriver->storedJsonFilePaths()
+     *
+     */
+    public function test_storedJsonFilePaths_returns_an_empty_JsonCollection_if_there_is_nothing_in_storage(): void
+    {
+        $jsonFilesystemStorageQuery = new JsonFilesystemStorageQuery(
+            id: new Id(),
+            name: $this->prefixedRandomName(
+                'NameForTeststoredJsonFilePathsReturnsEmptyJsonCollectionIfThereIsNothingInStorage'
+            ),
+            owner: new Owner(
+                $this->prefixedRandomName(
+                    'OwnerForTeststoredJsonFilePathsReturnsEmptyJsonCollectionIfThereIsNothingInStorage'
+                )
+            ),
+        );
+        $this->assertEquals(
+            [],
+            $this->jsonFilesystemStorageDriverTestInstance()
+                 ->storedJsonFilePaths($jsonFilesystemStorageQuery)
+                 ->collection(),
+            $this->testFailedMessage(
+                $this->jsonFilesystemStorageDriverTestInstance(),
+                'storedJsonFilePaths',
+                'returns an empty JsonFilePathCollection there is nothing in storage',
+            ),
+        );
+    }
     abstract protected function randomClassStringOrObjectInstance(): string|object;
     abstract protected function randomChars(): string;
     abstract protected static function assertTrue(bool $condition, string $message = ''): void;
