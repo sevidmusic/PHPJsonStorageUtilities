@@ -61,9 +61,10 @@ class JsonFilesystemStorageDriverTest extends PHPJsonStorageUtilitiesTest
         $this->setJsonFilesystemStorageDriverTestInstance(
             new JsonFilesystemStorageDriver()
         );
+        $this->deleteDarlingDataDirectory($this->expectedJsonFilePath()->jsonStorageDirectoryPath()->__toString());
     }
 
-    public function tearDown(): void
+    protected function usersHomeDirectoryPathOrNull(): string|null
     {
         $userInfo = posix_getpwuid(posix_geteuid());
         if(is_array($userInfo) && isset($userInfo['dir'])) {
@@ -71,66 +72,18 @@ class JsonFilesystemStorageDriverTest extends PHPJsonStorageUtilitiesTest
                 $userInfo['dir']
             );
         }
-        $testStorageDirectoryParentDirectoryPath = $this->expectedJsonFilePath()->jsonStorageDirectoryPath()->__toString();
-        if(
-            $testStorageDirectoryParentDirectoryPath !== '/'
-            &&
-            $testStorageDirectoryParentDirectoryPath !== DIRECTORY_SEPARATOR
-            &&
+        return (
             isset($usersHomeDirectoryPath)
             &&
-            $testStorageDirectoryParentDirectoryPath !== $usersHomeDirectoryPath
-            &&
-            $testStorageDirectoryParentDirectoryPath !== DIRECTORY_SEPARATOR . 'bin'
-            &&
-            $testStorageDirectoryParentDirectoryPath !== DIRECTORY_SEPARATOR . 'boot'
-            &&
-            $testStorageDirectoryParentDirectoryPath !== DIRECTORY_SEPARATOR . 'dev'
-            &&
-            $testStorageDirectoryParentDirectoryPath !== DIRECTORY_SEPARATOR . 'etc'
-            &&
-            $testStorageDirectoryParentDirectoryPath !== DIRECTORY_SEPARATOR . 'home'
-            &&
-            $testStorageDirectoryParentDirectoryPath !== DIRECTORY_SEPARATOR . 'lib'
-            &&
-            $testStorageDirectoryParentDirectoryPath !== DIRECTORY_SEPARATOR . 'lib32'
-            &&
-            $testStorageDirectoryParentDirectoryPath !== DIRECTORY_SEPARATOR . 'lib64'
-            &&
-            $testStorageDirectoryParentDirectoryPath !== DIRECTORY_SEPARATOR . 'libx32'
-            &&
-            $testStorageDirectoryParentDirectoryPath !== DIRECTORY_SEPARATOR . 'lost+found'
-            &&
-            $testStorageDirectoryParentDirectoryPath !== DIRECTORY_SEPARATOR . 'media'
-            &&
-            $testStorageDirectoryParentDirectoryPath !== DIRECTORY_SEPARATOR . 'mnt'
-            &&
-            $testStorageDirectoryParentDirectoryPath !== DIRECTORY_SEPARATOR . 'opt'
-            &&
-            $testStorageDirectoryParentDirectoryPath !== DIRECTORY_SEPARATOR . 'proc'
-            &&
-            $testStorageDirectoryParentDirectoryPath !== DIRECTORY_SEPARATOR . 'recovery'
-            &&
-            $testStorageDirectoryParentDirectoryPath !== DIRECTORY_SEPARATOR . 'root'
-            &&
-            $testStorageDirectoryParentDirectoryPath !== DIRECTORY_SEPARATOR . 'run'
-            &&
-            $testStorageDirectoryParentDirectoryPath !== DIRECTORY_SEPARATOR . 'sbin'
-            &&
-            $testStorageDirectoryParentDirectoryPath !== DIRECTORY_SEPARATOR . 'snap'
-            &&
-            $testStorageDirectoryParentDirectoryPath !== DIRECTORY_SEPARATOR . 'srv'
-            &&
-            $testStorageDirectoryParentDirectoryPath !== DIRECTORY_SEPARATOR . 'sys'
-            &&
-            $testStorageDirectoryParentDirectoryPath !== DIRECTORY_SEPARATOR . 'tmp'
-            &&
-            $testStorageDirectoryParentDirectoryPath !== DIRECTORY_SEPARATOR . 'usr'
-            &&
-            $testStorageDirectoryParentDirectoryPath !== DIRECTORY_SEPARATOR . 'var'
-        ) {
-            $this->deleteDarlingDataDirectory($testStorageDirectoryParentDirectoryPath);
-        }
+            $usersHomeDirectoryPath !== false
+            ? $usersHomeDirectoryPath
+            : null
+        );
+    }
+
+    public function tearDown(): void
+    {
+        $this->deleteDarlingDataDirectory($this->expectedJsonFilePath()->jsonStorageDirectoryPath()->__toString());
     }
 
     private function deleteDarlingDataDirectory(string $path) : void
@@ -138,6 +91,60 @@ class JsonFilesystemStorageDriverTest extends PHPJsonStorageUtilitiesTest
         $path = strval(realpath($path));
         if(
             $path !== '/'
+            &&
+            $path !== DIRECTORY_SEPARATOR
+            &&
+            $this->usersHomeDirectoryPathOrNull() !== null
+            &&
+            $path !== $this->usersHomeDirectoryPathOrNull()
+            &&
+            $path !== DIRECTORY_SEPARATOR . 'bin'
+            &&
+            $path !== DIRECTORY_SEPARATOR . 'boot'
+            &&
+            $path !== DIRECTORY_SEPARATOR . 'dev'
+            &&
+            $path !== DIRECTORY_SEPARATOR . 'etc'
+            &&
+            $path !== DIRECTORY_SEPARATOR . 'home'
+            &&
+            $path !== DIRECTORY_SEPARATOR . 'lib'
+            &&
+            $path !== DIRECTORY_SEPARATOR . 'lib32'
+            &&
+            $path !== DIRECTORY_SEPARATOR . 'lib64'
+            &&
+            $path !== DIRECTORY_SEPARATOR . 'libx32'
+            &&
+            $path !== DIRECTORY_SEPARATOR . 'lost+found'
+            &&
+            $path !== DIRECTORY_SEPARATOR . 'media'
+            &&
+            $path !== DIRECTORY_SEPARATOR . 'mnt'
+            &&
+            $path !== DIRECTORY_SEPARATOR . 'opt'
+            &&
+            $path !== DIRECTORY_SEPARATOR . 'proc'
+            &&
+            $path !== DIRECTORY_SEPARATOR . 'recovery'
+            &&
+            $path !== DIRECTORY_SEPARATOR . 'root'
+            &&
+            $path !== DIRECTORY_SEPARATOR . 'run'
+            &&
+            $path !== DIRECTORY_SEPARATOR . 'sbin'
+            &&
+            $path !== DIRECTORY_SEPARATOR . 'snap'
+            &&
+            $path !== DIRECTORY_SEPARATOR . 'srv'
+            &&
+            $path !== DIRECTORY_SEPARATOR . 'sys'
+            &&
+            $path !== DIRECTORY_SEPARATOR . 'tmp'
+            &&
+            $path !== DIRECTORY_SEPARATOR . 'usr'
+            &&
+            $path !== DIRECTORY_SEPARATOR . 'var'
             &&
             is_dir($path)
             &&
