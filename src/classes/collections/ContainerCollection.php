@@ -11,7 +11,7 @@ final class ContainerCollection implements ContainerCollectionInterface
     /**
      * @var array<int, Container> $containers
      */
-    private array $containers;
+    private array $containers = [];
 
     public function __construct(
         Container ...$containers

@@ -12,7 +12,7 @@ final class OwnerCollection implements OwnerCollectionInterface
     /**
      * @var array<int, Owner> $owners
      */
-    private array $owners;
+    private array $owners = [];
 
     public function __construct(
         Owner ...$owners

@@ -12,7 +12,7 @@ final class LocationCollection implements LocationCollectionInterface
     /**
      * @var array<int, Location> $locations
      */
-    private array $locations;
+    private array $locations = [];
 
     public function __construct(
         Location ...$locations
