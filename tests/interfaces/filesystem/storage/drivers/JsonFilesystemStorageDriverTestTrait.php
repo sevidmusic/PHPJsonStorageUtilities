@@ -2,10 +2,11 @@
 
 namespace Darling\PHPJsonStorageUtilities\tests\interfaces\filesystem\storage\drivers;
 
-use Darling\PHPJsonStorageUtilities\classes\filesystem\paths\JsonFilePath as JsonFilePathInstance;
-use Darling\PHPJsonStorageUtilities\classes\filesystem\paths\JsonStorageDirectoryPath;
-use Darling\PHPJsonStorageUtilities\classes\named\identifiers\Container;
-use Darling\PHPJsonStorageUtilities\classes\named\identifiers\Location;
+use \Darling\PHPJsonStorageUtilities\classes\filesystem\paths\JsonFilePath as JsonFilePathInstance;
+use \Darling\PHPJsonStorageUtilities\classes\filesystem\paths\JsonStorageDirectoryPath;
+use \Darling\PHPJsonStorageUtilities\classes\named\identifiers\Container;
+use \Darling\PHPJsonStorageUtilities\classes\named\identifiers\Location;
+use \Darling\PHPTextTypes\classes\strings\AlphanumericText;
 use \Darling\PHPJsonStorageUtilities\classes\filesystem\storage\queries\JsonFilesystemStorageQuery;
 use \Darling\PHPJsonStorageUtilities\classes\named\identifiers\Owner;
 use \Darling\PHPJsonStorageUtilities\classes\collections\JsonCollection as JsonCollectionInstance;
@@ -22,6 +23,8 @@ use \Darling\PHPTextTypes\classes\strings\Id;
 use \Darling\PHPTextTypes\classes\strings\Name;
 use \Darling\PHPTextTypes\classes\strings\Text;
 use \Darling\PHPTextTypes\interfaces\strings\ClassString;
+use \ReflectionObject;
+
 
 /**
  * The JsonFilesystemStorageDriverTestTrait defines common tests for
@@ -279,12 +282,14 @@ trait JsonFilesystemStorageDriverTestTrait
             return new JsonFilePathCollectionInstance($jsonFilePath);
         }
         $files = glob($query->__toString());
+        /** @var array<int, JsonFilePath> $data */
         $data = [];
         if(is_array($files)) {
             foreach($files as $file) {
+                $pathParts = explode(DIRECTORY_SEPARATOR, $file);
                 $data[] = new JsonFilePathInstance(
-                    new JsonStorageDirectoryPath(new Name(new Text(''))),
-                    new Location(new Name(new Text(''))),
+                    new JsonStorageDirectoryPath(new Name(new Text($pathParts[7] ?? ''))),
+                    new Location(new Name(new Text($pathParts[8] ?? ''))),
                     new Container(
                         $this->determineType(
                             new JsonInstance(
@@ -294,13 +299,64 @@ trait JsonFilesystemStorageDriverTestTrait
                             )
                         )
                     ),
-                    new Owner(new Name(new Text(''))),
-                    new Name(new Text('')),
-                    new Id(),
+                    new Owner(new Name(new Text($pathParts[10] ?? ''))),
+                    new Name(new Text($pathParts[11] ?? '')),
+                    $this->determineIdFromFilePath($file),
                 );
             }
         }
         return new JsonFilePathCollectionInstance(...$data);
+    }
+
+    private function determineIdFromFilePath(string $filePath) : Id
+    {
+        $pathParts = explode(DIRECTORY_SEPARATOR, $filePath);
+        $id = new \Darling\PHPTextTypes\classes\strings\Id();
+        $reflectionClass = new ReflectionObject($id);
+        if(
+            $reflectionClass !== false
+            &&
+            isset($pathParts[12])
+            &&
+            isset($pathParts[13])
+        ) {
+            $reflectionClass = $reflectionClass->getParentClass();
+            if($reflectionClass !== false) {
+                $reflectionClass = $reflectionClass->getParentClass();
+                if($reflectionClass !== false) {
+                    $reconstructedId = str_replace(
+                        '.json',
+                        '',
+                        $pathParts[12] . $pathParts[13]
+                    );
+                    $property =
+                        $reflectionClass->getProperty(
+                            'text'
+                        );
+                    $property->setAccessible(true);
+                    $property->setValue(
+                        $id,
+                        new AlphanumericText(
+                            new Text($reconstructedId)
+                        )
+                    );
+                    $reflectionClass = $reflectionClass->getParentClass();
+                    if($reflectionClass !== false) {
+                        $property =
+                            $reflectionClass->getProperty(
+                                'string'
+                            );
+                        $property->setAccessible(true);
+                        $property->setValue(
+                            $id,
+                            $reconstructedId
+                        );
+                        return $id;
+                    }
+                }
+            }
+        }
+        return new Id();
     }
 
     /**
@@ -814,7 +870,7 @@ trait JsonFilesystemStorageDriverTestTrait
      * @covers JsonFilesystemStorageDriver->storedJsonFilePaths()
      *
      */
-    public function test_storedJsonFilePaths_returns_an_empty_JsonCollection_if_there_is_nothing_in_storage(): void
+    public function test_storedJsonFilePaths_returns_an_empty_JsonFilePathCollection_if_there_is_nothing_in_storage(): void
     {
         $jsonFilesystemStorageQuery = new JsonFilesystemStorageQuery(
             id: new Id(),
@@ -963,6 +1019,72 @@ trait JsonFilesystemStorageDriverTestTrait
         );
     }
 
+    /**
+     *
+     * @return void
+     *
+     * @covers JsonFilesystemStorageDriver->storedJsonFilePaths()
+     *
+     */
+    public function test_storedJsonFilePaths_returns_a_JsonCollection_that_contains_all_of_the_Json_in_storage_if_the_JsonFilesystemStorageQuery_is_empty(): void
+    {
+        $randomData = [
+            $this->randomClassStringOrObjectInstance(),
+            $this->randomChars(),
+            rand(PHP_INT_MIN, PHP_INT_MAX),
+            floatval(strval(rand(0, 100)) . strval(rand(0, 100))),
+        ];
+        for(
+            $numberOfJsonInstancesWrittenToStorage = 0;
+            $numberOfJsonInstancesWrittenToStorage < rand(10, 20);
+            $numberOfJsonInstancesWrittenToStorage++
+        ) {
+            $this->jsonFilesystemStorageDriverTestInstance()->write(
+                new JsonInstance($randomData[array_rand($randomData)]),
+                $this->expectedJsonFilePath->jsonStorageDirectoryPath(),
+                new Location(new Name(new Text($this->randomChars()))),
+                new Owner(new Name(new Text($this->randomChars()))),
+                $this->prefixedRandomName(
+                    'storedJsonFilePathsReturnsJsonCollectionContaingAllStoredJsonIfQueryIsEmpty'
+                ),
+                new Id(),
+            );
+        }
+        $jsonFilesystemStorageQuery = new JsonFilesystemStorageQuery();
+        $actualQueryResults = $this->jsonFilesystemStorageDriverTestInstance()
+                             ->storedJsonFilePaths($jsonFilesystemStorageQuery);
+        $this->assertEquals(
+            $this->expectedStoredJsonFilePathQueryResults(
+                $jsonFilesystemStorageQuery
+            ),
+            $actualQueryResults,
+            $this->testFailedMessage(
+                $this->jsonFilesystemStorageDriverTestInstance(),
+                'storedJsonFilePaths',
+                'return a JsonFilePathCollection that contains all ' .
+                'of the JsonFilePaths that exist in storage if ' .
+                'query is empty.',
+            ),
+        );
+        $this->assertEquals(
+            $numberOfJsonInstancesWrittenToStorage,
+            count($actualQueryResults->collection()),
+            $this->testFailedMessage(
+                $this->jsonFilesystemStorageDriverTestInstance(),
+                'storedJsonFilePaths',
+                'return a JsonFilePathCollection that contains all ' .
+                'of the JsonFilePaths that exist in storage if ' .
+                'query is empty.' .
+                'Expected ' .
+                $numberOfJsonInstancesWrittenToStorage .
+                ' items in the returned JsonCollection ' .
+                'but there are only' .
+                count($actualQueryResults->collection()) . ' items in the ' .
+                'returned JsonCollection',
+            ),
+        );
+    }
+
     abstract protected function randomClassStringOrObjectInstance(): string|object;
     abstract protected function randomChars(): string;
     abstract protected static function assertTrue(bool $condition, string $message = ''): void;
@@ -972,3 +1094,15 @@ trait JsonFilesystemStorageDriverTestTrait
 
 }
 
+        /* foreach(
+            $this->expectedStoredJsonFilePathQueryResults(
+                $jsonFilesystemStorageQuery
+            )->collection() as $q
+        )
+        {
+            var_dump($q->__toString());
+        } */
+
+        #foreach($data as $jsf) {
+            #echo PHP_EOL . "\033[0m\033[48;5;1m\033[38;5;0m" . $jsf->__toString() . "\033[0m" . PHP_EOL;
+        #}

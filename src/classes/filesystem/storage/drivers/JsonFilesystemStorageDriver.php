@@ -26,6 +26,8 @@ use \Darling\PHPTextTypes\interfaces\strings\Name;
 use \Darling\PHPTextTypes\classes\strings\Name as NameInstance;
 use \Darling\PHPTextTypes\classes\strings\Text;
 use \Darling\PHPTextTypes\classes\strings\Id as IdInstance;
+use \ReflectionObject;
+use \Darling\PHPTextTypes\classes\strings\AlphanumericText;
 
 class JsonFilesystemStorageDriver implements JsonFilesystemStorageDriverInterface
 {
@@ -110,24 +112,26 @@ class JsonFilesystemStorageDriver implements JsonFilesystemStorageDriverInterfac
             return new JsonFilePathCollectionInstance($jsonFilePath);
         }
         $files = glob($jsonFilesystemStorageQuery->__toString());
+        /** @var array<int, JsonFilePath> $data */
         $data = [];
         if(is_array($files)) {
             foreach($files as $file) {
+                $pathParts = explode(DIRECTORY_SEPARATOR, $file);
                 $data[] = new JsonFilePath(
-                    new JsonStorageDirectoryPathInstance(new NameInstance(new Text(''))),
-                    new LocationInstance(new NameInstance(new Text(''))),
+                    new JsonStorageDirectoryPathInstance(new NameInstance(new Text($pathParts[7] ?? ''))),
+                    new LocationInstance(new NameInstance(new Text($pathParts[8] ?? ''))),
                     new Container(
                         $this->determineType(
                             new JsonInstance(
-                                $this->jsonDecoder()->decodeJsonString(
+                                $this->jsonDecoder->decodeJsonString(
                                     strval(file_get_contents($file))
                                 )
                             )
                         )
                     ),
-                    new OwnerInstance(new NameInstance(new Text(''))),
-                    new NameInstance(new Text('')),
-                    new IdInstance(),
+                    new OwnerInstance(new NameInstance(new Text($pathParts[10] ?? ''))),
+                    new NameInstance(new Text($pathParts[11] ?? '')),
+                    $this->determineIdFromFilePath($file),
                 );
             }
         }
@@ -178,6 +182,57 @@ class JsonFilesystemStorageDriver implements JsonFilesystemStorageDriverInterfac
             Type::ResourceClosed->value => Type::ResourceClosed,
             Type::UnknownType->value => Type::UnknownType,
         };
+    }
+
+    private function determineIdFromFilePath(string $filePath) : Id
+    {
+        $pathParts = explode(DIRECTORY_SEPARATOR, $filePath);
+        $id = new \Darling\PHPTextTypes\classes\strings\Id();
+        $reflectionClass = new ReflectionObject($id);
+        if(
+            $reflectionClass !== false
+            &&
+            isset($pathParts[12])
+            &&
+            isset($pathParts[13])
+        ) {
+            $reflectionClass = $reflectionClass->getParentClass();
+            if($reflectionClass !== false) {
+                $reflectionClass = $reflectionClass->getParentClass();
+                if($reflectionClass !== false) {
+                    $reconstructedId = str_replace(
+                        '.json',
+                        '',
+                        $pathParts[12] . $pathParts[13]
+                    );
+                    $property =
+                        $reflectionClass->getProperty(
+                            'text'
+                        );
+                    $property->setAccessible(true);
+                    $property->setValue(
+                        $id,
+                        new AlphanumericText(
+                            new Text($reconstructedId)
+                        )
+                    );
+                    $reflectionClass = $reflectionClass->getParentClass();
+                    if($reflectionClass !== false) {
+                        $property =
+                            $reflectionClass->getProperty(
+                                'string'
+                            );
+                        $property->setAccessible(true);
+                        $property->setValue(
+                            $id,
+                            $reconstructedId
+                        );
+                        return $id;
+                    }
+                }
+            }
+        }
+        return new IdInstance();
     }
 
 }
