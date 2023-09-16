@@ -531,17 +531,7 @@ trait JsonFilesystemStorageDriverTestTrait
     public function test_read_returns_an_empty_JsonCollection_if_there_is_nothing_in_storage(): void
     {
         $expectedCollection = new JsonCollectionInstance();
-        $jsonFilesystemStorageQuery = new JsonFilesystemStorageQuery(
-            id: new Id(),
-            name: $this->prefixedRandomName(
-                'NameForTestReadReturnsEmptyJsonCollectionIfThereIsNothingInStorage'
-            ),
-            owner: new Owner(
-                $this->prefixedRandomName(
-                    'OwnerForTestReadReturnsEmptyJsonCollectionIfThereIsNothingInStorage'
-                )
-            ),
-        );
+        $jsonFilesystemStorageQuery = new JsonFilesystemStorageQuery();
         $this->assertEquals(
             [],
             $this->jsonFilesystemStorageDriverTestInstance()
@@ -1206,6 +1196,7 @@ trait JsonFilesystemStorageDriverTestTrait
             ),
         );
     }
+
     abstract protected function randomClassStringOrObjectInstance(): string|object;
     abstract protected function randomChars(): string;
     abstract protected static function assertTrue(bool $condition, string $message = ''): void;
