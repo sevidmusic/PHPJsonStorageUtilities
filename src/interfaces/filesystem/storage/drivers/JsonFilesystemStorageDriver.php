@@ -46,5 +46,7 @@ interface JsonFilesystemStorageDriver
      */
     public function storedJsonFilePaths(JsonFilesystemStorageQuery $jsonFilesystemStorageQuery): JsonFilePathCollection;
 
+    public function delete(JsonFilesystemStorageQuery $jsonFilesystemStorageQuery): bool;
+
 }
 

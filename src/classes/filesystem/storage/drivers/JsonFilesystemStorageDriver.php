@@ -235,5 +235,10 @@ class JsonFilesystemStorageDriver implements JsonFilesystemStorageDriverInterfac
         return new IdInstance();
     }
 
+    public function delete(JsonFilesystemStorageQuery $jsonFilesystemStorageQuery): bool
+    {
+        return false;
+    }
+
 }
 

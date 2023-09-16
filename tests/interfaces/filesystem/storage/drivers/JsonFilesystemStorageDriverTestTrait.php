@@ -1197,6 +1197,29 @@ trait JsonFilesystemStorageDriverTestTrait
         );
     }
 
+    /**
+     * Test delete returns an empty
+     * JsonFilePathCollection if there is nothing in storage.
+     *
+     * @return void
+     *
+     * @covers JsonFilesystemStorageDriver->delete()
+     *
+     */
+    public function test_delete_returns_false_if_there_is_nothing_in_storage(): void
+    {
+        $jsonFilesystemStorageQuery = new JsonFilesystemStorageQuery();
+        $this->assertFalse(
+            $this->jsonFilesystemStorageDriverTestInstance()
+                 ->delete($jsonFilesystemStorageQuery),
+            $this->testFailedMessage(
+                $this->jsonFilesystemStorageDriverTestInstance(),
+                'delete',
+                'returns false if there is nothing in storage',
+            ),
+        );
+    }
+
     abstract protected function randomClassStringOrObjectInstance(): string|object;
     abstract protected function randomChars(): string;
     abstract protected static function assertTrue(bool $condition, string $message = ''): void;
