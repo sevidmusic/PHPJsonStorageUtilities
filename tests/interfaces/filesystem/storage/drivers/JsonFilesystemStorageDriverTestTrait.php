@@ -244,7 +244,7 @@ trait JsonFilesystemStorageDriverTestTrait
         $jsonDecoder = $this->jsonFilesystemStorageDriverTestInstance()
                             ->jsonDecoder();
         $jsonFilePath = $jsonFilesystemStorageQuery->jsonFilePath();
-        if($jsonFilePath instanceof JsonFilePath) {
+        if($jsonFilePath instanceof JsonFilePath && file_exists($jsonFilePath->__toString())) {
             return new JsonCollectionInstance(
                 new JsonInstance(
                     $jsonDecoder->decodeJsonString(
@@ -261,11 +261,13 @@ trait JsonFilesystemStorageDriverTestTrait
         $data = [];
         if(is_array($files)) {
             foreach($files as $file) {
-                $data[] = new JsonInstance(
-                    $jsonDecoder->decodeJsonString(
-                        strval(file_get_contents($file))
-                    )
-                );
+                if(file_exists($file)) {
+                    $data[] = new JsonInstance(
+                        $jsonDecoder->decodeJsonString(
+                            strval(file_get_contents($file))
+                        )
+                    );
+                }
             }
         }
         return new JsonCollectionInstance(...$data);
@@ -1279,8 +1281,88 @@ trait JsonFilesystemStorageDriverTestTrait
         );
     }
 
+    /**
+     * test delete only deletes a the json file at the specified
+     * JsonFilePath if the specified JsonFilesystemStorageQuery
+     * specifies a JsonFilePath.
+     *
+     * @return void
+     *
+     * @covers JsonFilesystemStorageDriver->delete()
+     *
+     */
+    public function test_delete_only_deletes_a_the_json_file_at_the_specified_JsonFilePath_if_the_specified_JsonFilesystemStorageQuery_specifies_a_JsonFilePath(): void
+    {
+        $randomData = [
+            $this->randomClassStringOrObjectInstance(),
+            $this->randomChars(),
+            rand(PHP_INT_MIN, PHP_INT_MAX),
+            floatval(strval(rand(0, 100)) . strval(rand(0, 100))),
+        ];
+        /** @var array<int, JsonFilePath> $jsonFilePaths */
+        $jsonFilePaths = [];
+        for(
+            $numberOfJsonInstancesWrittenToStorage = 0;
+            $numberOfJsonInstancesWrittenToStorage < rand(10, 20);
+            $numberOfJsonInstancesWrittenToStorage++
+        ) {
+            $jsonInstance = new JsonInstance($randomData[array_rand($randomData)]);
+            $jsonFilesystemStorageDirectoryPath = $this->expectedJsonFilePath->jsonStorageDirectoryPath();
+            $location = new Location(new Name(new Text($this->randomChars())));
+            $container = new Container($this->determineType($jsonInstance));
+            $owner = new Owner(new Name(new Text($this->randomChars())));
+            $name = $this->prefixedRandomName('deleteOnlyReturnsTheJsonedeleteFromSpecifiedJsonFilePathIfJsonFilePathIsQueried');
+            $id = new Id();
+            $this->jsonFilesystemStorageDriverTestInstance()->write(
+                $jsonInstance,
+                $jsonFilesystemStorageDirectoryPath,
+                $location,
+                $owner,
+                $name,
+                $id,
+            );
+            $jsonFilePaths[] = new JsonFilePathInstance(
+                $jsonFilesystemStorageDirectoryPath,
+                $location,
+                $container,
+                $owner,
+                $name,
+                $id
+            );
+        }
+        $jsonFilePath = $jsonFilePaths[array_rand($jsonFilePaths)];
+        $jsonFilesystemStorageQuery = new JsonFilesystemStorageQuery(jsonFilePath: $jsonFilePath);
+        $resultsBeforeDelete = count($this->jsonFilesystemStorageDriverTestInstance()->read($jsonFilesystemStorageQuery)->collection());
+        $deleteStatus = $this->jsonFilesystemStorageDriverTestInstance()
+                             ->delete($jsonFilesystemStorageQuery);
+        sleep(1);
+        $resultsAfterDelete = count($this->jsonFilesystemStorageDriverTestInstance()->read($jsonFilesystemStorageQuery)->collection());
+        $this->assertLessThan(
+            $resultsBeforeDelete,
+            $resultsAfterDelete,
+            $this->testFailedMessage(
+                $this->jsonFilesystemStorageDriverTestInstance(),
+                'delete',
+                'test delete only deletes a the json file at ' .
+                'the specified JsonFilePath if the specified ' .
+                'JsonFilesystemStorageQuery specifies a JsonFilePath',
+            ),
+        );
+        $this->assertTrue(
+            $deleteStatus,
+            $this->testFailedMessage(
+                $this->jsonFilesystemStorageDriverTestInstance(),
+                'delete',
+                'test delete only deletes a the json file at ' .
+                'the specified JsonFilePath if the specified ' .
+                'JsonFilesystemStorageQuery specifies a JsonFilePath',
+            ),
+        );
+    }
+
     abstract protected function randomClassStringOrObjectInstance(): string|object;
     abstract protected function randomChars(): string;
+    abstract protected static function assertLessThan(int $expected, int $actual, string $message = ''): void;
     abstract protected static function assertTrue(bool $condition, string $message = ''): void;
     abstract protected static function assertFalse(bool $condition, string $message = ''): void;
     abstract protected static function assertEquals(mixed $expected, mixed $actual, string $message = ''): void;

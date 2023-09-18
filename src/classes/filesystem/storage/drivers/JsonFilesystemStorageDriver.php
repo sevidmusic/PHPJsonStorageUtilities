@@ -78,7 +78,7 @@ class JsonFilesystemStorageDriver implements JsonFilesystemStorageDriverInterfac
 
     public function read(JsonFilesystemStorageQuery $jsonFilesystemStorageQuery): JsonCollection {
         $jsonFilePath = $jsonFilesystemStorageQuery->jsonFilePath();
-        if($jsonFilePath instanceof JsonFilePath) {
+        if($jsonFilePath instanceof JsonFilePath && file_exists($jsonFilePath->__toString())) {
             return new JsonCollectionInstance(
                 new JsonInstance(
                     $this->jsonDecoder()->decodeJsonString(
@@ -96,8 +96,8 @@ class JsonFilesystemStorageDriver implements JsonFilesystemStorageDriverInterfac
         if(is_array($files)) {
             foreach($files as $file) {
                 $data[] = new JsonInstance(
-                    $this->jsonDecoder()->decodeJsonString(
-                        strval(file_get_contents($file))
+                    $this->jsonDecoder->decodeJsonString(
+                    strval(file_get_contents($file))
                     )
                 );
             }
@@ -237,7 +237,18 @@ class JsonFilesystemStorageDriver implements JsonFilesystemStorageDriverInterfac
 
     public function delete(JsonFilesystemStorageQuery $jsonFilesystemStorageQuery): bool
     {
-        return false;
+        $status = [];
+        foreach($this->storedJsonFilePaths($jsonFilesystemStorageQuery)->collection() as $jsonFilePath)
+        {
+            $status[] = (
+                file_exists(
+                    $jsonFilePath->__toString()
+                )
+                ? unlink($jsonFilePath->__toString())
+                : false
+            );
+        }
+        return !empty($status) && !in_array(false, $status);
     }
 
 }
