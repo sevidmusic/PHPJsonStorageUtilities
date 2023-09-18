@@ -4,27 +4,42 @@ namespace Darling\PHPJsonStorageUtilities\classes\filesystem\storage\drivers;
 
 use Darling\PHPJsonStorageUtilities\interfaces\collections\JsonCollection;
 use Darling\PHPJsonStorageUtilities\classes\collections\JsonCollection as JsonCollectionInstance;
+use Darling\PHPJsonStorageUtilities\interfaces\collections\JsonFilePathCollection;
+use Darling\PHPJsonStorageUtilities\classes\collections\JsonFilePathCollection as JsonFilePathCollectionInstance;
 use \Darling\PHPJsonStorageUtilities\classes\filesystem\paths\JsonFilePath;
 use \Darling\PHPJsonStorageUtilities\classes\named\identifiers\Container;
 use \Darling\PHPJsonStorageUtilities\enumerations\Type;
 use \Darling\PHPJsonStorageUtilities\interfaces\filesystem\paths\JsonStorageDirectoryPath;
+use \Darling\PHPJsonStorageUtilities\classes\filesystem\paths\JsonStorageDirectoryPath as JsonStorageDirectoryPathInstance;
 use \Darling\PHPJsonStorageUtilities\interfaces\filesystem\storage\drivers\JsonFilesystemStorageDriver as JsonFilesystemStorageDriverInterface;
 use \Darling\PHPJsonStorageUtilities\interfaces\filesystem\storage\queries\JsonFilesystemStorageQuery;
 use \Darling\PHPJsonStorageUtilities\interfaces\named\identifiers\Location;
+use \Darling\PHPJsonStorageUtilities\classes\named\identifiers\Location as LocationInstance;
 use \Darling\PHPJsonStorageUtilities\interfaces\named\identifiers\Owner;
+use \Darling\PHPJsonStorageUtilities\classes\named\identifiers\Owner as OwnerInstance;
 use \Darling\PHPJsonUtilities\classes\decoders\JsonDecoder;
 use \Darling\PHPJsonUtilities\interfaces\encoded\data\Json;
 use \Darling\PHPJsonUtilities\classes\encoded\data\Json as JsonInstance;
 use \Darling\PHPTextTypes\classes\strings\ClassString;
 use \Darling\PHPTextTypes\interfaces\strings\Id;
 use \Darling\PHPTextTypes\interfaces\strings\Name;
+use \Darling\PHPTextTypes\classes\strings\Name as NameInstance;
+use \Darling\PHPTextTypes\classes\strings\Text;
+use \Darling\PHPTextTypes\classes\strings\Id as IdInstance;
+use \ReflectionObject;
+use \Darling\PHPTextTypes\classes\strings\AlphanumericText;
 
 class JsonFilesystemStorageDriver implements JsonFilesystemStorageDriverInterface
 {
 
+    private JsonDecoder $jsonDecoder;
+
     public function jsonDecoder(): JsonDecoder
     {
-        return new JsonDecoder();
+        if(!isset($this->jsonDecoder)) {
+            $this->jsonDecoder = new JsonDecoder();
+        }
+        return $this->jsonDecoder;
     }
 
     public function write(
@@ -63,7 +78,7 @@ class JsonFilesystemStorageDriver implements JsonFilesystemStorageDriverInterfac
 
     public function read(JsonFilesystemStorageQuery $jsonFilesystemStorageQuery): JsonCollection {
         $jsonFilePath = $jsonFilesystemStorageQuery->jsonFilePath();
-        if($jsonFilePath instanceof JsonFilePath) {
+        if($jsonFilePath instanceof JsonFilePath && file_exists($jsonFilePath->__toString())) {
             return new JsonCollectionInstance(
                 new JsonInstance(
                     $this->jsonDecoder()->decodeJsonString(
@@ -81,13 +96,46 @@ class JsonFilesystemStorageDriver implements JsonFilesystemStorageDriverInterfac
         if(is_array($files)) {
             foreach($files as $file) {
                 $data[] = new JsonInstance(
-                    $this->jsonDecoder()->decodeJsonString(
-                        strval(file_get_contents($file))
+                    $this->jsonDecoder->decodeJsonString(
+                    strval(file_get_contents($file))
                     )
                 );
             }
         }
         return new JsonCollectionInstance(...$data);
+    }
+
+    public function storedJsonFilePaths(JsonFilesystemStorageQuery $jsonFilesystemStorageQuery): JsonFilePathCollection
+    {
+        $jsonFilePath = $jsonFilesystemStorageQuery->jsonFilePath();
+        if($jsonFilePath instanceof JsonFilePath) {
+            return new JsonFilePathCollectionInstance($jsonFilePath);
+        }
+        $files = glob($jsonFilesystemStorageQuery->__toString());
+        /** @var array<int, JsonFilePath> $data */
+        $data = [];
+        if(is_array($files)) {
+            foreach($files as $file) {
+                $pathParts = explode(DIRECTORY_SEPARATOR, $file);
+                $data[] = new JsonFilePath(
+                    new JsonStorageDirectoryPathInstance(new NameInstance(new Text($pathParts[7] ?? ''))),
+                    new LocationInstance(new NameInstance(new Text($pathParts[8] ?? ''))),
+                    new Container(
+                        $this->determineType(
+                            new JsonInstance(
+                                $this->jsonDecoder->decodeJsonString(
+                                    strval(file_get_contents($file))
+                                )
+                            )
+                        )
+                    ),
+                    new OwnerInstance(new NameInstance(new Text($pathParts[10] ?? ''))),
+                    new NameInstance(new Text($pathParts[11] ?? '')),
+                    $this->determineIdFromFilePath($file),
+                );
+            }
+        }
+        return new JsonFilePathCollectionInstance(...$data);
     }
 
     /**
@@ -135,5 +183,73 @@ class JsonFilesystemStorageDriver implements JsonFilesystemStorageDriverInterfac
             Type::UnknownType->value => Type::UnknownType,
         };
     }
+
+    private function determineIdFromFilePath(string $filePath) : Id
+    {
+        $pathParts = explode(DIRECTORY_SEPARATOR, $filePath);
+        $id = new \Darling\PHPTextTypes\classes\strings\Id();
+        $reflectionClass = new ReflectionObject($id);
+        if(
+            $reflectionClass !== false
+            &&
+            isset($pathParts[12])
+            &&
+            isset($pathParts[13])
+        ) {
+            $reflectionClass = $reflectionClass->getParentClass();
+            if($reflectionClass !== false) {
+                $reflectionClass = $reflectionClass->getParentClass();
+                if($reflectionClass !== false) {
+                    $reconstructedId = str_replace(
+                        '.json',
+                        '',
+                        $pathParts[12] . $pathParts[13]
+                    );
+                    $property =
+                        $reflectionClass->getProperty(
+                            'text'
+                        );
+                    $property->setAccessible(true);
+                    $property->setValue(
+                        $id,
+                        new AlphanumericText(
+                            new Text($reconstructedId)
+                        )
+                    );
+                    $reflectionClass = $reflectionClass->getParentClass();
+                    if($reflectionClass !== false) {
+                        $property =
+                            $reflectionClass->getProperty(
+                                'string'
+                            );
+                        $property->setAccessible(true);
+                        $property->setValue(
+                            $id,
+                            $reconstructedId
+                        );
+                        return $id;
+                    }
+                }
+            }
+        }
+        return new IdInstance();
+    }
+
+    public function delete(JsonFilesystemStorageQuery $jsonFilesystemStorageQuery): bool
+    {
+        $status = [];
+        foreach($this->storedJsonFilePaths($jsonFilesystemStorageQuery)->collection() as $jsonFilePath)
+        {
+            $status[] = (
+                file_exists(
+                    $jsonFilePath->__toString()
+                )
+                ? unlink($jsonFilePath->__toString())
+                : false
+            );
+        }
+        return !empty($status) && !in_array(false, $status);
+    }
+
 }
 

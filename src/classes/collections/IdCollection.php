@@ -12,7 +12,7 @@ final class IdCollection implements IdCollectionInterface
     /**
      * @var array<int, Id> $ids
      */
-    private array $ids;
+    private array $ids = [];
 
     public function __construct(
         Id ...$ids

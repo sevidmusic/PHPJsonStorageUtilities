@@ -11,7 +11,7 @@ final class NameCollection implements NameCollectionInterface
     /**
      * @var array<int, Name> $names
      */
-    private array $names;
+    private array $names = [];
 
     public function __construct(
         Name ...$names

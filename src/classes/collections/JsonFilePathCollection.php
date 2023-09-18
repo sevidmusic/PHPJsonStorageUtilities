@@ -8,11 +8,10 @@ use \Darling\PHPJsonStorageUtilities\interfaces\filesystem\paths\JsonFilePath;
 final class JsonFilePathCollection implements JsonFilePathCollectionInterface
 {
 
-
     /**
      * @var array<int, JsonFilePath> $jsonFilePaths
      */
-    private array $jsonFilePaths;
+    private array $jsonFilePaths = [];
 
     public function __construct(
         JsonFilePath ...$jsonFilePaths

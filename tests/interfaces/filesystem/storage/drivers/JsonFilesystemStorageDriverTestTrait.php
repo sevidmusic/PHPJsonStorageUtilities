@@ -2,9 +2,15 @@
 
 namespace Darling\PHPJsonStorageUtilities\tests\interfaces\filesystem\storage\drivers;
 
+use \Darling\PHPJsonStorageUtilities\classes\filesystem\paths\JsonFilePath as JsonFilePathInstance;
+use \Darling\PHPJsonStorageUtilities\classes\filesystem\paths\JsonStorageDirectoryPath;
+use \Darling\PHPJsonStorageUtilities\classes\named\identifiers\Container;
+use \Darling\PHPJsonStorageUtilities\classes\named\identifiers\Location;
+use \Darling\PHPTextTypes\classes\strings\AlphanumericText;
 use \Darling\PHPJsonStorageUtilities\classes\filesystem\storage\queries\JsonFilesystemStorageQuery;
 use \Darling\PHPJsonStorageUtilities\classes\named\identifiers\Owner;
 use \Darling\PHPJsonStorageUtilities\classes\collections\JsonCollection as JsonCollectionInstance;
+use \Darling\PHPJsonStorageUtilities\classes\collections\JsonFilePathCollection as JsonFilePathCollectionInstance;
 use \Darling\PHPJsonStorageUtilities\enumerations\Type;
 use \Darling\PHPJsonStorageUtilities\interfaces\filesystem\paths\JsonFilePath;
 use \Darling\PHPJsonStorageUtilities\interfaces\filesystem\storage\drivers\JsonFilesystemStorageDriver;
@@ -17,6 +23,8 @@ use \Darling\PHPTextTypes\classes\strings\Id;
 use \Darling\PHPTextTypes\classes\strings\Name;
 use \Darling\PHPTextTypes\classes\strings\Text;
 use \Darling\PHPTextTypes\interfaces\strings\ClassString;
+use \ReflectionObject;
+
 
 /**
  * The JsonFilesystemStorageDriverTestTrait defines common tests for
@@ -230,13 +238,13 @@ trait JsonFilesystemStorageDriverTestTrait
     }
 
     private function expectedJsonFilesystemStorageQueryResults(
-        JsonFilesystemStorageQuery $query
+        JsonFilesystemStorageQuery $jsonFilesystemStorageQuery
     ): JsonCollectionInstance
     {
         $jsonDecoder = $this->jsonFilesystemStorageDriverTestInstance()
                             ->jsonDecoder();
-        $jsonFilePath = $query->jsonFilePath();
-        if($jsonFilePath instanceof JsonFilePath) {
+        $jsonFilePath = $jsonFilesystemStorageQuery->jsonFilePath();
+        if($jsonFilePath instanceof JsonFilePath && file_exists($jsonFilePath->__toString())) {
             return new JsonCollectionInstance(
                 new JsonInstance(
                     $jsonDecoder->decodeJsonString(
@@ -249,18 +257,108 @@ trait JsonFilesystemStorageDriverTestTrait
                 )
             );
         }
-        $files = glob($query->__toString());
+        $files = glob($jsonFilesystemStorageQuery->__toString());
         $data = [];
         if(is_array($files)) {
             foreach($files as $file) {
-                $data[] = new JsonInstance(
-                    $jsonDecoder->decodeJsonString(
-                        strval(file_get_contents($file))
-                    )
-                );
+                if(file_exists($file)) {
+                    $data[] = new JsonInstance(
+                        $jsonDecoder->decodeJsonString(
+                            strval(file_get_contents($file))
+                        )
+                    );
+                }
             }
         }
         return new JsonCollectionInstance(...$data);
+    }
+
+    private function expectedStoredJsonFilePathQueryResults(
+        JsonFilesystemStorageQuery $jsonFilesystemStorageQuery
+    ): JsonFilePathCollectionInstance
+    {
+        $jsonDecoder = $this->jsonFilesystemStorageDriverTestInstance()
+                            ->jsonDecoder();
+        $jsonFilePath = $jsonFilesystemStorageQuery->jsonFilePath();
+        if($jsonFilePath instanceof JsonFilePath) {
+            return new JsonFilePathCollectionInstance($jsonFilePath);
+        }
+        $files = glob($jsonFilesystemStorageQuery->__toString());
+        /** @var array<int, JsonFilePath> $data */
+        $data = [];
+        if(is_array($files)) {
+            foreach($files as $file) {
+                $pathParts = explode(DIRECTORY_SEPARATOR, $file);
+                $data[] = new JsonFilePathInstance(
+                    new JsonStorageDirectoryPath(new Name(new Text($pathParts[7] ?? ''))),
+                    new Location(new Name(new Text($pathParts[8] ?? ''))),
+                    new Container(
+                        $this->determineType(
+                            new JsonInstance(
+                                $jsonDecoder->decodeJsonString(
+                                    strval(file_get_contents($file))
+                                )
+                            )
+                        )
+                    ),
+                    new Owner(new Name(new Text($pathParts[10] ?? ''))),
+                    new Name(new Text($pathParts[11] ?? '')),
+                    $this->determineIdFromFilePath($file),
+                );
+            }
+        }
+        return new JsonFilePathCollectionInstance(...$data);
+    }
+
+    private function determineIdFromFilePath(string $filePath) : Id
+    {
+        $pathParts = explode(DIRECTORY_SEPARATOR, $filePath);
+        $id = new \Darling\PHPTextTypes\classes\strings\Id();
+        $reflectionClass = new ReflectionObject($id);
+        if(
+            $reflectionClass !== false
+            &&
+            isset($pathParts[12])
+            &&
+            isset($pathParts[13])
+        ) {
+            $reflectionClass = $reflectionClass->getParentClass();
+            if($reflectionClass !== false) {
+                $reflectionClass = $reflectionClass->getParentClass();
+                if($reflectionClass !== false) {
+                    $reconstructedId = str_replace(
+                        '.json',
+                        '',
+                        $pathParts[12] . $pathParts[13]
+                    );
+                    $property =
+                        $reflectionClass->getProperty(
+                            'text'
+                        );
+                    $property->setAccessible(true);
+                    $property->setValue(
+                        $id,
+                        new AlphanumericText(
+                            new Text($reconstructedId)
+                        )
+                    );
+                    $reflectionClass = $reflectionClass->getParentClass();
+                    if($reflectionClass !== false) {
+                        $property =
+                            $reflectionClass->getProperty(
+                                'string'
+                            );
+                        $property->setAccessible(true);
+                        $property->setValue(
+                            $id,
+                            $reconstructedId
+                        );
+                        return $id;
+                    }
+                }
+            }
+        }
+        return new Id();
     }
 
     /**
@@ -435,19 +533,9 @@ trait JsonFilesystemStorageDriverTestTrait
     public function test_read_returns_an_empty_JsonCollection_if_there_is_nothing_in_storage(): void
     {
         $expectedCollection = new JsonCollectionInstance();
-        $jsonFilesystemStorageQuery = new JsonFilesystemStorageQuery(
-            id: new Id(),
-            name: $this->prefixedRandomName(
-                'NameForTestReadReturnsEmptyJsonCollectionIfThereIsNothingInStorage'
-            ),
-            owner: new Owner(
-                $this->prefixedRandomName(
-                    'OwnerForTestReadReturnsEmptyJsonCollectionIfThereIsNothingInStorage'
-                )
-            ),
-        );
+        $jsonFilesystemStorageQuery = new JsonFilesystemStorageQuery();
         $this->assertEquals(
-            $expectedCollection->collection(),
+            [],
             $this->jsonFilesystemStorageDriverTestInstance()
                  ->read($jsonFilesystemStorageQuery)
                  ->collection(),
@@ -460,7 +548,7 @@ trait JsonFilesystemStorageDriverTestTrait
     }
 
     /**
-     * Test read returns an empty array if query does not produce
+     * Test read returns an empty array if JsonFilesystemStorageQuery does not produce
      * any matches.
      *
      * @return void
@@ -468,16 +556,30 @@ trait JsonFilesystemStorageDriverTestTrait
      * @covers JsonFilesystemStorageDriver->read()
      *
      */
-    public function test_read_returns_an_empty_JsonCollection_if_query_does_not_produce_any_matches(): void
+    public function test_read_returns_an_empty_JsonCollection_if_JsonFilesystemStorageQuery_does_not_produce_any_matches(): void
     {
-        $this->jsonFilesystemStorageDriverTestInstance()->write(
-            $this->expectedJson(),
-            $this->expectedJsonFilePath()->jsonStorageDirectoryPath(),
-            $this->expectedJsonFilePath->location(),
-            $this->expectedJsonFilePath->owner(),
-            $this->expectedJsonFilePath->name(),
-            $this->expectedJsonFilePath()->id(),
-        );
+        $randomData = [
+            $this->randomClassStringOrObjectInstance(),
+            $this->randomChars(),
+            rand(PHP_INT_MIN, PHP_INT_MAX),
+            floatval(strval(rand(0, 100)) . strval(rand(0, 100))),
+        ];
+        for(
+            $numberOfJsonInstancesWrittenToStorage = 0;
+            $numberOfJsonInstancesWrittenToStorage < rand(10, 20);
+            $numberOfJsonInstancesWrittenToStorage++
+        ) {
+            $this->jsonFilesystemStorageDriverTestInstance()->write(
+                new JsonInstance($randomData[array_rand($randomData)]),
+                $this->expectedJsonFilePath->jsonStorageDirectoryPath(),
+                new Location(new Name(new Text($this->randomChars()))),
+                new Owner(new Name(new Text($this->randomChars()))),
+                $this->prefixedRandomName(
+                    'ReadReturnsEmptyJsonCollectionIfQueryDoesNotMatch'
+                ),
+                new Id(),
+            );
+        }
         $jsonFilesystemStorageQuery = new JsonFilesystemStorageQuery(
             id: new Id(),
             name: $this->prefixedRandomName(
@@ -490,13 +592,13 @@ trait JsonFilesystemStorageDriverTestTrait
             ),
         );
         $this->assertEquals(
-            $this->expectedJsonFilesystemStorageQueryResults($jsonFilesystemStorageQuery),
+            [],
             $this->jsonFilesystemStorageDriverTestInstance()
-                 ->read($jsonFilesystemStorageQuery),
+                 ->read($jsonFilesystemStorageQuery)->collection(),
             $this->testFailedMessage(
                 $this->jsonFilesystemStorageDriverTestInstance(),
                 'read',
-                'returns an empty JsonCollection if query does not ' .
+                'returns an empty JsonCollection if JsonFilesystemStorageQuery does not ' .
                 'produce any matches',
             ),
         );
@@ -509,55 +611,939 @@ trait JsonFilesystemStorageDriverTestTrait
      * @covers JsonFilesystemStorageDriver->read()
      *
      */
-    public function test_read_returns_a_JsonCollection_that_matches_the_expected_JsonFilesystemStorageQuery_results(): void
+    public function test_read_returns_a_JsonCollection_that_contains_all_of_the_Json_in_storage_if_the_JsonFilesystemStorageQuery_is_empty(): void
     {
-        $status = $this->jsonFilesystemStorageDriverTestInstance()->write(
-            $this->expectedJson(),
-            $this->expectedJsonFilePath()->jsonStorageDirectoryPath(),
-            $this->expectedJsonFilePath->location(),
-            $this->expectedJsonFilePath->owner(),
-            $this->expectedJsonFilePath->name(),
-            $this->expectedJsonFilePath()->id(),
-        );
-        $randomJsonData1 = new JsonInstance($this->randomChars());
-        $randomJsonData1Id = new Id();
-        $status = $this->jsonFilesystemStorageDriverTestInstance()->write(
-            $randomJsonData1,
-            $this->expectedJsonFilePath()->jsonStorageDirectoryPath(),
-            $this->expectedJsonFilePath->location(),
-            $this->expectedJsonFilePath->owner(),
-            $this->expectedJsonFilePath->name(),
-            $randomJsonData1Id,
-        );
-        $randomJsonData2 = new JsonInstance($this->randomChars());
-        $randomJsonData2Id = new Id();
-        $status = $this->jsonFilesystemStorageDriverTestInstance()->write(
-            $randomJsonData2,
-            $this->expectedJsonFilePath->jsonStorageDirectoryPath(),
-            $this->expectedJsonFilePath->location(),
-            $this->expectedJsonFilePath->owner(),
-            $this->prefixedRandomName(
-                'ReadReturnsArrayOfAllStoredJsonIfQueryIsEmpty'
-            ),
-            $randomJsonData2Id,
-        );
+        $randomData = [
+            $this->randomClassStringOrObjectInstance(),
+            $this->randomChars(),
+            rand(PHP_INT_MIN, PHP_INT_MAX),
+            floatval(strval(rand(0, 100)) . strval(rand(0, 100))),
+        ];
+        for(
+            $numberOfJsonInstancesWrittenToStorage = 0;
+            $numberOfJsonInstancesWrittenToStorage < rand(10, 20);
+            $numberOfJsonInstancesWrittenToStorage++
+        ) {
+            $this->jsonFilesystemStorageDriverTestInstance()->write(
+                new JsonInstance($randomData[array_rand($randomData)]),
+                $this->expectedJsonFilePath->jsonStorageDirectoryPath(),
+                new Location(new Name(new Text($this->randomChars()))),
+                new Owner(new Name(new Text($this->randomChars()))),
+                $this->prefixedRandomName(
+                    'ReadReturnsJsonCollectionContaingAllStoredJsonIfQueryIsEmpty'
+                ),
+                new Id(),
+            );
+        }
         $jsonFilesystemStorageQuery = new JsonFilesystemStorageQuery();
+        $actualQueryResults = $this->jsonFilesystemStorageDriverTestInstance()
+                             ->read($jsonFilesystemStorageQuery);
         $this->assertEquals(
-            $this->expectedJsonFilesystemStorageQueryResults($jsonFilesystemStorageQuery),
-            $this->jsonFilesystemStorageDriverTestInstance()->read($jsonFilesystemStorageQuery),
+            $this->expectedJsonFilesystemStorageQueryResults(
+                $jsonFilesystemStorageQuery
+            ),
+            $actualQueryResults,
             $this->testFailedMessage(
                 $this->jsonFilesystemStorageDriverTestInstance(),
                 'read',
-                'return all stored Json if query is empty',
+                'return all stored Json if JsonFilesystemStorageQuery is empty',
+            ),
+        );
+        $this->assertEquals(
+            $numberOfJsonInstancesWrittenToStorage,
+            count($actualQueryResults->collection()),
+            $this->testFailedMessage(
+                $this->jsonFilesystemStorageDriverTestInstance(),
+                'read',
+                'return all stored Json if JsonFilesystemStorageQuery is empty.' .
+                'Expected ' .
+                $numberOfJsonInstancesWrittenToStorage .
+                ' items in the returned JsonCollection ' .
+                'but there are only' .
+                count($actualQueryResults->collection()) . ' items in the ' .
+                'returned JsonCollection',
             ),
         );
     }
 
+    /**
+     *
+     * @return void
+     *
+     * @covers JsonFilesystemStorageDriver->read()
+     *
+     */
+    public function test_read_returns_a_JsonCollection_that_only_contains_a_single_Json_instance_read_from_the_specified_JsonFilePath_if_the_specified_JsonFilesystemStorageQuery_specifies_a_JsonFilePath(): void
+    {
+        $randomData = [
+            $this->randomClassStringOrObjectInstance(),
+            $this->randomChars(),
+            rand(PHP_INT_MIN, PHP_INT_MAX),
+            floatval(strval(rand(0, 100)) . strval(rand(0, 100))),
+        ];
+        /** @var array<int, JsonFilePath> $jsonFilePaths */
+        $jsonFilePaths = [];
+        for(
+            $numberOfJsonInstancesWrittenToStorage = 0;
+            $numberOfJsonInstancesWrittenToStorage < rand(10, 20);
+            $numberOfJsonInstancesWrittenToStorage++
+        ) {
+            $jsonInstance = new JsonInstance($randomData[array_rand($randomData)]);
+            $jsonFilesystemStorageDirectoryPath = $this->expectedJsonFilePath->jsonStorageDirectoryPath();
+            $location = new Location(new Name(new Text($this->randomChars())));
+            $container = new Container($this->determineType($jsonInstance));
+            $owner = new Owner(new Name(new Text($this->randomChars())));
+            $name = $this->prefixedRandomName('ReadOnlyReturnsTheJsoneReadFromSpecifiedJsonFilePathIfJsonFilePathIsQueried');
+            $id = new Id();
+            $this->jsonFilesystemStorageDriverTestInstance()->write(
+                $jsonInstance,
+                $jsonFilesystemStorageDirectoryPath,
+                $location,
+                $owner,
+                $name,
+                $id,
+            );
+            $jsonFilePaths[] = new JsonFilePathInstance(
+                $jsonFilesystemStorageDirectoryPath,
+                $location,
+                $container,
+                $owner,
+                $name,
+                $id
+            );
+        }
+        $jsonFilesystemStorageQuery = new JsonFilesystemStorageQuery(jsonFilePath: $jsonFilePaths[array_rand($jsonFilePaths)]);
+        $expectedQueryResults = $this->expectedJsonFilesystemStorageQueryResults(
+            $jsonFilesystemStorageQuery
+        );
+        $actualQueryResults = $this->jsonFilesystemStorageDriverTestInstance()
+                             ->read($jsonFilesystemStorageQuery);
+        $this->assertEquals(
+            $expectedQueryResults,
+            $actualQueryResults,
+            $this->testFailedMessage(
+                $this->jsonFilesystemStorageDriverTestInstance(),
+                'read',
+                'return only the Json stored at the specified ' .
+                'JsonFilePath if the JsonFilesystemStorageQuery is specifies a ' .
+                'JsonFilePath',
+            ),
+        );
+    }
+
+    /**
+     *
+     * @return void
+     *
+     * @covers JsonFilesystemStorageDriver->read()
+     *
+     */
+    public function test_read_returns_a_JsonCollection_that_contains_the_expected_Json_intances_based_on_a_JsonFilesystemStorageQuery(): void
+    {
+        $randomData = [
+            $this->randomClassStringOrObjectInstance(),
+            $this->randomChars(),
+            rand(PHP_INT_MIN, PHP_INT_MAX),
+            floatval(strval(rand(0, 100)) . strval(rand(0, 100))),
+        ];
+        /** @var array<int, JsonFilesystemStorageQuery> $completeQueries */
+        $completeQueries = [];
+        /** @var array<int, JsonFilesystemStorageQuery> $incompleteQueries  */
+        $incompleteQueries = [];
+        /** @var array<int, JsonFilesystemStorageQuery> $jsonFilePathQueries */
+        $jsonFilePathQueries = [];
+        for(
+            $numberOfJsonInstancesWrittenToStorage = 0;
+            $numberOfJsonInstancesWrittenToStorage < rand(10, 20);
+            $numberOfJsonInstancesWrittenToStorage++
+        ) {
+            $jsonInstance = new JsonInstance($randomData[array_rand($randomData)]);
+            $jsonFilesystemStorageDirectoryPath = $this->expectedJsonFilePath->jsonStorageDirectoryPath();
+            $location = new Location(new Name(new Text($this->randomChars())));
+            $container = new Container($this->determineType($jsonInstance));
+            $owner = new Owner(new Name(new Text($this->randomChars())));
+            $name = $this->prefixedRandomName('ReadOnlyReturnsTheJsoneReadFromSpecifiedJsonFilePathIfJsonFilePathIsQueried');
+            $id = new Id();
+            $this->jsonFilesystemStorageDriverTestInstance()->write(
+                $jsonInstance,
+                $jsonFilesystemStorageDirectoryPath,
+                $location,
+                $owner,
+                $name,
+                $id,
+            );
+            $completeQueries[] = new JsonFilesystemStorageQuery(
+                jsonStorageDirectoryPath: $jsonFilesystemStorageDirectoryPath,
+                location: $location,
+                container: $container,
+                owner: $owner,
+                name: $name,
+                id: $id,
+            );
+            $incompleteQueries[] = new JsonFilesystemStorageQuery(
+                jsonStorageDirectoryPath: (rand(0, 1) === 0 ? $jsonFilesystemStorageDirectoryPath : null),
+                location: (rand(0, 1) === 0 ? $location : null),
+                container: (rand(0, 1) === 0 ? $container : null),
+                owner: (rand(0, 1) === 0 ? $owner : null),
+                name: (rand(0, 1) === 0 ? $name : null),
+                id: (rand(0, 1) === 0 ? $id : null),
+            );
+            $jsonFilePath = new JsonFilePathInstance(
+                $jsonFilesystemStorageDirectoryPath,
+                $location,
+                $container,
+                $owner,
+                $name,
+                $id
+            );
+            $jsonFilePathQueries[] = new JsonFilesystemStorageQuery(
+                jsonFilePath: $jsonFilePath,
+            );
+        }
+        $completeJsonFilesystemStorageQuery = $completeQueries[array_rand($completeQueries)];
+        $expectedQueryResults = $this->expectedJsonFilesystemStorageQueryResults(
+            $completeJsonFilesystemStorageQuery
+        );
+        $actualQueryResults = $this->jsonFilesystemStorageDriverTestInstance()
+                             ->read($completeJsonFilesystemStorageQuery);
+        $this->assertEquals(
+            $expectedQueryResults,
+            $actualQueryResults,
+            $this->testFailedMessage(
+                $this->jsonFilesystemStorageDriverTestInstance(),
+                'read',
+                'return only the Json stored at the specified ' .
+                'JsonFilePath if the JsonFilesystemStorageQuery is specifies a ' .
+                'JsonFilePath',
+            ),
+        );
+        $incompleteJsonFilesystemStorageQuery = $incompleteQueries[array_rand($incompleteQueries)];
+        $expectedQueryResults = $this->expectedJsonFilesystemStorageQueryResults(
+            $incompleteJsonFilesystemStorageQuery
+        );
+        $actualQueryResults = $this->jsonFilesystemStorageDriverTestInstance()
+                             ->read($incompleteJsonFilesystemStorageQuery);
+        $this->assertEquals(
+            $expectedQueryResults,
+            $actualQueryResults,
+            $this->testFailedMessage(
+                $this->jsonFilesystemStorageDriverTestInstance(),
+                'read',
+                'return only the Json stored at the specified ' .
+                'JsonFilePath if the JsonFilesystemStorageQuery is specifies a ' .
+                'JsonFilePath',
+            ),
+        );
+        $jsonFilePathJsonFilesystemStorageQuery = $jsonFilePathQueries[array_rand($jsonFilePathQueries)];
+        $expectedQueryResults = $this->expectedJsonFilesystemStorageQueryResults(
+            $jsonFilePathJsonFilesystemStorageQuery
+        );
+        $actualQueryResults = $this->jsonFilesystemStorageDriverTestInstance()
+                             ->read($jsonFilePathJsonFilesystemStorageQuery);
+        $this->assertEquals(
+            $expectedQueryResults,
+            $actualQueryResults,
+            $this->testFailedMessage(
+                $this->jsonFilesystemStorageDriverTestInstance(),
+                'read',
+                'return only the Json stored at the specified ' .
+                'JsonFilePath if the JsonFilesystemStorageQuery is specifies a ' .
+                'JsonFilePath',
+            ),
+        );
+    }
+
+    /**
+     * Test storedJsonFilePaths returns an empty
+     * JsonFilePathCollection if there is nothing in storage.
+     *
+     * @return void
+     *
+     * @covers JsonFilesystemStorageDriver->storedJsonFilePaths()
+     *
+     */
+    public function test_storedJsonFilePaths_returns_an_empty_JsonFilePathCollection_if_there_is_nothing_in_storage(): void
+    {
+        $jsonFilesystemStorageQuery = new JsonFilesystemStorageQuery(
+            id: new Id(),
+            name: $this->prefixedRandomName(
+                'NameForTeststoredJsonFilePathsReturnsEmptyJsonFilePathCollectionIfThereIsNothingInStorage'
+            ),
+            owner: new Owner(
+                $this->prefixedRandomName(
+                    'OwnerForTeststoredJsonFilePathsReturnsEmptyJsonFilePathCollectionIfThereIsNothingInStorage'
+                )
+            ),
+        );
+        $this->assertEquals(
+            [],
+            $this->jsonFilesystemStorageDriverTestInstance()
+                 ->storedJsonFilePaths($jsonFilesystemStorageQuery)
+                 ->collection(),
+            $this->testFailedMessage(
+                $this->jsonFilesystemStorageDriverTestInstance(),
+                'storedJsonFilePaths',
+                'returns an empty JsonFilePathCollection there is nothing in storage',
+            ),
+        );
+    }
+
+
+    /**
+     * Test storedJsonFilePaths returns an empty array if JsonFilesystemStorageQuery does not produce
+     * any matches.
+     *
+     * @return void
+     *
+     * @covers JsonFilesystemStorageDriver->storedJsonFilePaths()
+     *
+     */
+    public function test_storedJsonFilePaths_returns_an_empty_JsonFilePathCollection_if_JsonFilesystemStorageQuery_does_not_produce_any_matches(): void
+    {
+        $randomData = [
+            $this->randomClassStringOrObjectInstance(),
+            $this->randomChars(),
+            rand(PHP_INT_MIN, PHP_INT_MAX),
+            floatval(strval(rand(0, 100)) . strval(rand(0, 100))),
+        ];
+        for(
+            $numberOfJsonInstancesWrittenToStorage = 0;
+            $numberOfJsonInstancesWrittenToStorage < rand(10, 20);
+            $numberOfJsonInstancesWrittenToStorage++
+        ) {
+            $this->jsonFilesystemStorageDriverTestInstance()->write(
+                new JsonInstance($randomData[array_rand($randomData)]),
+                $this->expectedJsonFilePath->jsonStorageDirectoryPath(),
+                new Location(new Name(new Text($this->randomChars()))),
+                new Owner(new Name(new Text($this->randomChars()))),
+                $this->prefixedRandomName(
+                    'storedJsonFilePathsReturnsEmptyJsonFilePathCollectionIfQueryDoesNotMatch'
+                ),
+                new Id(),
+            );
+        }
+        $jsonFilesystemStorageQuery = new JsonFilesystemStorageQuery(
+            id: new Id(),
+            name: $this->prefixedRandomName(
+                'NameForTeststoredJsonFilePathsReturnsEmptyJsonFilePathCollectionIfQueryDoesNotMatch'
+            ),
+            owner: new Owner(
+                $this->prefixedRandomName(
+                    'OwnerForTeststoredJsonFilePathsReturnsEmptyJsonFilePathCollectionIfQueryDoesNotMatch'
+                )
+            ),
+        );
+        $this->assertEquals(
+            [],
+            $this->jsonFilesystemStorageDriverTestInstance()
+                 ->storedJsonFilePaths($jsonFilesystemStorageQuery)->collection(),
+            $this->testFailedMessage(
+                $this->jsonFilesystemStorageDriverTestInstance(),
+                'storedJsonFilePaths',
+                'returns an empty JsonFilePathCollection if JsonFilesystemStorageQuery does not ' .
+                'produce any matches',
+            ),
+        );
+    }
+
+    /**
+     *
+     * @return void
+     *
+     * @covers JsonFilesystemStorageDriver->storedJsonFilePaths()
+     *
+     */
+    public function test_storedJsonFilePaths_returns_a_JsonFilePathCollection_that_only_contains_a_single_JsonFilePath_instance_that_matches_the_specified_JsonFilePath_if_the_specified_JsonFilesystemStorageQuery_specifies_a_JsonFilePath(): void
+    {
+        $randomData = [
+            $this->randomClassStringOrObjectInstance(),
+            $this->randomChars(),
+            rand(PHP_INT_MIN, PHP_INT_MAX),
+            floatval(strval(rand(0, 100)) . strval(rand(0, 100))),
+        ];
+        /** @var array<int, JsonFilePath> $jsonFilePaths */
+        $jsonFilePaths = [];
+        for(
+            $numberOfJsonInstancesWrittenToStorage = 0;
+            $numberOfJsonInstancesWrittenToStorage < rand(10, 20);
+            $numberOfJsonInstancesWrittenToStorage++
+        ) {
+            $jsonInstance = new JsonInstance($randomData[array_rand($randomData)]);
+            $jsonFilesystemStorageDirectoryPath = $this->expectedJsonFilePath->jsonStorageDirectoryPath();
+            $location = new Location(new Name(new Text($this->randomChars())));
+            $container = new Container($this->determineType($jsonInstance));
+            $owner = new Owner(new Name(new Text($this->randomChars())));
+            $name = $this->prefixedRandomName('storedJsonFilePathsOnlyReturnsTheJsonestoredJsonFilePathsFromSpecifiedJsonFilePathIfJsonFilePathIsQueried');
+            $id = new Id();
+            $this->jsonFilesystemStorageDriverTestInstance()->write(
+                $jsonInstance,
+                $jsonFilesystemStorageDirectoryPath,
+                $location,
+                $owner,
+                $name,
+                $id,
+            );
+            $jsonFilePaths[] = new JsonFilePathInstance(
+                $jsonFilesystemStorageDirectoryPath,
+                $location,
+                $container,
+                $owner,
+                $name,
+                $id
+            );
+        }
+        $jsonFilesystemStorageQuery = new JsonFilesystemStorageQuery(jsonFilePath: $jsonFilePaths[array_rand($jsonFilePaths)]);
+        $expectedQueryResults = $this->expectedStoredJsonFilePathQueryResults(
+            $jsonFilesystemStorageQuery
+        );
+        $actualQueryResults = $this->jsonFilesystemStorageDriverTestInstance()
+                             ->storedJsonFilePaths($jsonFilesystemStorageQuery);
+        $this->assertEquals(
+            $expectedQueryResults,
+            $actualQueryResults,
+            $this->testFailedMessage(
+                $this->jsonFilesystemStorageDriverTestInstance(),
+                'storedJsonFilePaths',
+                'return only the Json stored at the specified ' .
+                'JsonFilePath if the JsonFilesystemStorageQuery is specifies a ' .
+                'JsonFilePath',
+            ),
+        );
+    }
+
+    /**
+     *
+     * @return void
+     *
+     * @covers JsonFilesystemStorageDriver->storedJsonFilePaths()
+     *
+     */
+    public function test_storedJsonFilePaths_returns_a_JsonCollection_that_contains_all_of_the_Json_in_storage_if_the_JsonFilesystemStorageQuery_is_empty(): void
+    {
+        $randomData = [
+            $this->randomClassStringOrObjectInstance(),
+            $this->randomChars(),
+            rand(PHP_INT_MIN, PHP_INT_MAX),
+            floatval(strval(rand(0, 100)) . strval(rand(0, 100))),
+        ];
+        for(
+            $numberOfJsonInstancesWrittenToStorage = 0;
+            $numberOfJsonInstancesWrittenToStorage < rand(10, 20);
+            $numberOfJsonInstancesWrittenToStorage++
+        ) {
+            $this->jsonFilesystemStorageDriverTestInstance()->write(
+                new JsonInstance($randomData[array_rand($randomData)]),
+                $this->expectedJsonFilePath->jsonStorageDirectoryPath(),
+                new Location(new Name(new Text($this->randomChars()))),
+                new Owner(new Name(new Text($this->randomChars()))),
+                $this->prefixedRandomName(
+                    'storedJsonFilePathsReturnsJsonCollectionContaingAllStoredJsonIfQueryIsEmpty'
+                ),
+                new Id(),
+            );
+        }
+        $jsonFilesystemStorageQuery = new JsonFilesystemStorageQuery();
+        $actualQueryResults = $this->jsonFilesystemStorageDriverTestInstance()
+                             ->storedJsonFilePaths($jsonFilesystemStorageQuery);
+        $this->assertEquals(
+            $this->expectedStoredJsonFilePathQueryResults(
+                $jsonFilesystemStorageQuery
+            ),
+            $actualQueryResults,
+            $this->testFailedMessage(
+                $this->jsonFilesystemStorageDriverTestInstance(),
+                'storedJsonFilePaths',
+                'return a JsonFilePathCollection that contains all ' .
+                'of the JsonFilePaths that exist in storage if ' .
+                'JsonFilesystemStorageQuery is empty.',
+            ),
+        );
+        $this->assertEquals(
+            $numberOfJsonInstancesWrittenToStorage,
+            count($actualQueryResults->collection()),
+            $this->testFailedMessage(
+                $this->jsonFilesystemStorageDriverTestInstance(),
+                'storedJsonFilePaths',
+                'return a JsonFilePathCollection that contains all ' .
+                'of the JsonFilePaths that exist in storage if ' .
+                'JsonFilesystemStorageQuery is empty.' .
+                'Expected ' .
+                $numberOfJsonInstancesWrittenToStorage .
+                ' items in the returned JsonCollection ' .
+                'but there are only' .
+                count($actualQueryResults->collection()) . ' items in the ' .
+                'returned JsonCollection',
+            ),
+        );
+    }
+
+    /**
+     *
+     * @return void
+     *
+     * @covers JsonFilesystemStorageDriver->storedJsonFilePaths()
+     *
+     */
+    public function test_storedJsonFilePaths_returns_a_JsonFilePathCollection_that_contains_the_expected_JsonFilePath_intances_based_on_a_JsonFilesystemStorageQuery(): void
+    {
+        $randomData = [
+            $this->randomClassStringOrObjectInstance(),
+            $this->randomChars(),
+            rand(PHP_INT_MIN, PHP_INT_MAX),
+            floatval(strval(rand(0, 100)) . strval(rand(0, 100))),
+        ];
+        /** @var array<int, JsonFilesystemStorageQuery> $completeQueries */
+        $completeQueries = [];
+        /** @var array<int, JsonFilesystemStorageQuery> $incompleteQueries  */
+        $incompleteQueries = [];
+        /** @var array<int, JsonFilesystemStorageQuery> $jsonFilePathQueries */
+        $jsonFilePathQueries = [];
+        for(
+            $numberOfJsonInstancesWrittenToStorage = 0;
+            $numberOfJsonInstancesWrittenToStorage < rand(10, 20);
+            $numberOfJsonInstancesWrittenToStorage++
+        ) {
+            $jsonInstance = new JsonInstance($randomData[array_rand($randomData)]);
+            $jsonFilesystemStorageDirectoryPath = $this->expectedJsonFilePath->jsonStorageDirectoryPath();
+            $location = new Location(new Name(new Text($this->randomChars())));
+            $container = new Container($this->determineType($jsonInstance));
+            $owner = new Owner(new Name(new Text($this->randomChars())));
+            $name = $this->prefixedRandomName('storedJsonFilePathsOnlyReturnsTheJsonestoredJsonFilePathsFromSpecifiedJsonFilePathIfJsonFilePathIsQueried');
+            $id = new Id();
+            $this->jsonFilesystemStorageDriverTestInstance()->write(
+                $jsonInstance,
+                $jsonFilesystemStorageDirectoryPath,
+                $location,
+                $owner,
+                $name,
+                $id,
+            );
+            $completeQueries[] = new JsonFilesystemStorageQuery(
+                jsonStorageDirectoryPath: $jsonFilesystemStorageDirectoryPath,
+                location: $location,
+                container: $container,
+                owner: $owner,
+                name: $name,
+                id: $id,
+            );
+            $incompleteQueries[] = new JsonFilesystemStorageQuery(
+                jsonStorageDirectoryPath: (rand(0, 1) === 0 ? $jsonFilesystemStorageDirectoryPath : null),
+                location: (rand(0, 1) === 0 ? $location : null),
+                container: (rand(0, 1) === 0 ? $container : null),
+                owner: (rand(0, 1) === 0 ? $owner : null),
+                name: (rand(0, 1) === 0 ? $name : null),
+                id: (rand(0, 1) === 0 ? $id : null),
+            );
+            $jsonFilePath = new JsonFilePathInstance(
+                $jsonFilesystemStorageDirectoryPath,
+                $location,
+                $container,
+                $owner,
+                $name,
+                $id
+            );
+            $jsonFilePathQueries[] = new JsonFilesystemStorageQuery(
+                jsonFilePath: $jsonFilePath,
+            );
+        }
+        $completeJsonFilesystemStorageQuery = $completeQueries[array_rand($completeQueries)];
+        $expectedQueryResults = $this->expectedStoredJsonFilePathQueryResults(
+            $completeJsonFilesystemStorageQuery
+        );
+        $actualQueryResults = $this->jsonFilesystemStorageDriverTestInstance()
+                             ->storedJsonFilePaths($completeJsonFilesystemStorageQuery);
+        $this->assertEquals(
+            $expectedQueryResults,
+            $actualQueryResults,
+            $this->testFailedMessage(
+                $this->jsonFilesystemStorageDriverTestInstance(),
+                'storedJsonFilePaths',
+                'return only the Json stored at the specified ' .
+                'JsonFilePath if the JsonFilesystemStorageQuery is specifies a ' .
+                'JsonFilePath',
+            ),
+        );
+        $incompleteJsonFilesystemStorageQuery = $incompleteQueries[array_rand($incompleteQueries)];
+        $expectedQueryResults = $this->expectedStoredJsonFilePathQueryResults(
+            $incompleteJsonFilesystemStorageQuery
+        );
+        $actualQueryResults = $this->jsonFilesystemStorageDriverTestInstance()
+                             ->storedJsonFilePaths($incompleteJsonFilesystemStorageQuery);
+        $this->assertEquals(
+            $expectedQueryResults,
+            $actualQueryResults,
+            $this->testFailedMessage(
+                $this->jsonFilesystemStorageDriverTestInstance(),
+                'storedJsonFilePaths',
+                'return only the Json stored at the specified ' .
+                'JsonFilePath if the JsonFilesystemStorageQuery is specifies a ' .
+                'JsonFilePath',
+            ),
+        );
+        $jsonFilePathJsonFilesystemStorageQuery = $jsonFilePathQueries[array_rand($jsonFilePathQueries)];
+        $expectedQueryResults = $this->expectedStoredJsonFilePathQueryResults(
+            $jsonFilePathJsonFilesystemStorageQuery
+        );
+        $actualQueryResults = $this->jsonFilesystemStorageDriverTestInstance()
+                             ->storedJsonFilePaths($jsonFilePathJsonFilesystemStorageQuery);
+        $this->assertEquals(
+            $expectedQueryResults,
+            $actualQueryResults,
+            $this->testFailedMessage(
+                $this->jsonFilesystemStorageDriverTestInstance(),
+                'storedJsonFilePaths',
+                'return only the Json stored at the specified ' .
+                'JsonFilePath if the JsonFilesystemStorageQuery is specifies a ' .
+                'JsonFilePath',
+            ),
+        );
+    }
+
+    /**
+     * Test delete returns false if there is nothing in storage.
+     *
+     * @return void
+     *
+     * @covers JsonFilesystemStorageDriver->delete()
+     *
+     */
+    public function test_delete_returns_false_if_there_is_nothing_in_storage(): void
+    {
+        $jsonFilesystemStorageQuery = new JsonFilesystemStorageQuery();
+        $this->assertFalse(
+            $this->jsonFilesystemStorageDriverTestInstance()
+                 ->delete($jsonFilesystemStorageQuery),
+            $this->testFailedMessage(
+                $this->jsonFilesystemStorageDriverTestInstance(),
+                'delete',
+                'returns false if there is nothing in storage',
+            ),
+        );
+    }
+
+    /**
+     * Test delete does not delete anything if JsonFilesystemStorageQuery does not
+     * produce any matches.
+     *
+     * @return void
+     *
+     * @covers JsonFilesystemStorageDriver->delete()
+     *
+     */
+    public function test_delete_does_not_delete_anything_if_JsonFilesystemStorageQuery_does_not_produce_any_matches(): void
+    {
+        $randomData = [
+            $this->randomClassStringOrObjectInstance(),
+            $this->randomChars(),
+            rand(PHP_INT_MIN, PHP_INT_MAX),
+            floatval(strval(rand(0, 100)) . strval(rand(0, 100))),
+        ];
+        for(
+            $numberOfJsonInstancesWrittenToStorage = 0;
+            $numberOfJsonInstancesWrittenToStorage < rand(10, 20);
+            $numberOfJsonInstancesWrittenToStorage++
+        ) {
+            $this->jsonFilesystemStorageDriverTestInstance()->write(
+                new JsonInstance($randomData[array_rand($randomData)]),
+                $this->expectedJsonFilePath->jsonStorageDirectoryPath(),
+                new Location(new Name(new Text($this->randomChars()))),
+                new Owner(new Name(new Text($this->randomChars()))),
+                $this->prefixedRandomName(
+                    'DeleteDoesNotDeleteAnythingIfQueryDoesNotProduceAnyMatches'
+                ),
+                new Id(),
+            );
+        }
+        $jsonFilesystemStorageQuery = new JsonFilesystemStorageQuery(
+            id: new Id(),
+            name: new Name(new Text($this->randomChars())),
+        );
+        $numberOfStoredJsonFilesBeforeDelete = count($this->jsonFilesystemStorageDriverTestInstance()->read($jsonFilesystemStorageQuery)->collection());
+        $deleteStatus = $this->jsonFilesystemStorageDriverTestInstance()->delete($jsonFilesystemStorageQuery);
+        $numberOfStoredJsonFilesAfterDelete = count($this->jsonFilesystemStorageDriverTestInstance()->read($jsonFilesystemStorageQuery)->collection());
+        $this->assertEquals(
+            $numberOfStoredJsonFilesBeforeDelete,
+            $numberOfStoredJsonFilesAfterDelete,
+            $this->testFailedMessage(
+                $this->jsonFilesystemStorageDriverTestInstance(),
+                'delete',
+                'does not delete anything if JsonFilesystemStorageQuery does not ' .
+                'produce any matches',
+            ),
+        );
+        $this->assertFalse(
+            $deleteStatus,
+            $this->testFailedMessage(
+                $this->jsonFilesystemStorageDriverTestInstance(),
+                'delete',
+                'returns false if JsonFilesystemStorageQuery does not produce any matches',
+            ),
+        );
+    }
+
+    /**
+     * test delete only deletes a the json file at the specified
+     * JsonFilePath if the specified JsonFilesystemStorageQuery
+     * specifies a JsonFilePath.
+     *
+     * @return void
+     *
+     * @covers JsonFilesystemStorageDriver->delete()
+     *
+     */
+    public function test_delete_only_deletes_a_the_json_file_at_the_specified_JsonFilePath_if_the_specified_JsonFilesystemStorageQuery_specifies_a_JsonFilePath(): void
+    {
+        $randomData = [
+            $this->randomClassStringOrObjectInstance(),
+            $this->randomChars(),
+            rand(PHP_INT_MIN, PHP_INT_MAX),
+            floatval(strval(rand(0, 100)) . strval(rand(0, 100))),
+        ];
+        /** @var array<int, JsonFilePath> $jsonFilePaths */
+        $jsonFilePaths = [];
+        for(
+            $numberOfJsonInstancesWrittenToStorage = 0;
+            $numberOfJsonInstancesWrittenToStorage < rand(10, 20);
+            $numberOfJsonInstancesWrittenToStorage++
+        ) {
+            $jsonInstance = new JsonInstance($randomData[array_rand($randomData)]);
+            $jsonFilesystemStorageDirectoryPath = $this->expectedJsonFilePath->jsonStorageDirectoryPath();
+            $location = new Location(new Name(new Text($this->randomChars())));
+            $container = new Container($this->determineType($jsonInstance));
+            $owner = new Owner(new Name(new Text($this->randomChars())));
+            $name = $this->prefixedRandomName('deleteOnlyReturnsTheJsonedeleteFromSpecifiedJsonFilePathIfJsonFilePathIsQueried');
+            $id = new Id();
+            $this->jsonFilesystemStorageDriverTestInstance()->write(
+                $jsonInstance,
+                $jsonFilesystemStorageDirectoryPath,
+                $location,
+                $owner,
+                $name,
+                $id,
+            );
+            $jsonFilePaths[] = new JsonFilePathInstance(
+                $jsonFilesystemStorageDirectoryPath,
+                $location,
+                $container,
+                $owner,
+                $name,
+                $id
+            );
+        }
+        $jsonFilePath = $jsonFilePaths[array_rand($jsonFilePaths)];
+        $jsonFilesystemStorageQuery = new JsonFilesystemStorageQuery(jsonFilePath: $jsonFilePath);
+        $resultsBeforeDelete = count($this->jsonFilesystemStorageDriverTestInstance()->read($jsonFilesystemStorageQuery)->collection());
+        $deleteStatus = $this->jsonFilesystemStorageDriverTestInstance()
+                             ->delete($jsonFilesystemStorageQuery);
+        $resultsAfterDelete = count($this->jsonFilesystemStorageDriverTestInstance()->read($jsonFilesystemStorageQuery)->collection());
+        $this->assertLessThan(
+            $resultsBeforeDelete,
+            $resultsAfterDelete,
+            $this->testFailedMessage(
+                $this->jsonFilesystemStorageDriverTestInstance(),
+                'delete',
+                'test delete only deletes a the json file at ' .
+                'the specified JsonFilePath if the specified ' .
+                'JsonFilesystemStorageQuery specifies a JsonFilePath',
+            ),
+        );
+        $this->assertTrue(
+            $deleteStatus,
+            $this->testFailedMessage(
+                $this->jsonFilesystemStorageDriverTestInstance(),
+                'delete',
+                'test delete only deletes a the json file at ' .
+                'the specified JsonFilePath if the specified ' .
+                'JsonFilesystemStorageQuery specifies a JsonFilePath',
+            ),
+        );
+    }
+
+    /**
+     * Test delete deletes all the json files in storage if the
+     * specified JsonFilesystemStorageQuery is empty.
+
+     * @return void
+     *
+     * @covers JsonFilesystemStorageDriver->delete()
+     *
+     */
+    public function test_delete_deletes_all_the_json_files_in_storage_if_the_specified_JsonFilesystemStorageQuery_is_empty(): void
+    {
+        $randomData = [
+            $this->randomClassStringOrObjectInstance(),
+            $this->randomChars(),
+            rand(PHP_INT_MIN, PHP_INT_MAX),
+            floatval(strval(rand(0, 100)) . strval(rand(0, 100))),
+        ];
+        for(
+            $numberOfJsonInstancesWrittenToStorage = 0;
+            $numberOfJsonInstancesWrittenToStorage < rand(10, 20);
+            $numberOfJsonInstancesWrittenToStorage++
+        ) {
+            $jsonInstance = new JsonInstance($randomData[array_rand($randomData)]);
+            $jsonFilesystemStorageDirectoryPath = $this->expectedJsonFilePath->jsonStorageDirectoryPath();
+            $location = new Location(new Name(new Text($this->randomChars())));
+            $container = new Container($this->determineType($jsonInstance));
+            $owner = new Owner(new Name(new Text($this->randomChars())));
+            $name = $this->prefixedRandomName('deleteOnlyReturnsTheJsonedeleteFromSpecifiedJsonFilePathIfJsonFilePathIsQueried');
+            $id = new Id();
+            $this->jsonFilesystemStorageDriverTestInstance()->write(
+                $jsonInstance,
+                $jsonFilesystemStorageDirectoryPath,
+                $location,
+                $owner,
+                $name,
+                $id,
+            );
+        }
+        $jsonFilesystemStorageQuery = new JsonFilesystemStorageQuery();
+        $resultsBeforeDelete = count($this->jsonFilesystemStorageDriverTestInstance()->read($jsonFilesystemStorageQuery)->collection());
+        $deleteStatus = $this->jsonFilesystemStorageDriverTestInstance()
+                             ->delete($jsonFilesystemStorageQuery);
+        $resultsAfterDelete = count($this->jsonFilesystemStorageDriverTestInstance()->read($jsonFilesystemStorageQuery)->collection());
+        $this->assertLessThan(
+            $resultsBeforeDelete,
+            $resultsAfterDelete,
+            $this->testFailedMessage(
+                $this->jsonFilesystemStorageDriverTestInstance(),
+                'delete',
+                'test delete deletes all the json files in storage ' .
+                'if the specified JsonFilesystemStorageQuery is empty',
+            ),
+        );
+        $this->assertTrue(
+            $deleteStatus,
+            $this->testFailedMessage(
+                $this->jsonFilesystemStorageDriverTestInstance(),
+                'delete',
+                'test delete deletes all the json files in storage ' .
+                'if the specified JsonFilesystemStorageQuery is empty',
+            ),
+        );
+    }
+
+    /**
+     *
+     * @return void
+     *
+     * @covers JsonFilesystemStorageDriver->delete()
+     *
+     */
+    public function test_delete_deletes_the_appropriate_json_files_from_storage_based_on_a_JsonFilesystemStorageQuery(): void
+    {
+        $randomData = [
+            $this->randomClassStringOrObjectInstance(),
+            $this->randomChars(),
+            rand(PHP_INT_MIN, PHP_INT_MAX),
+            floatval(strval(rand(0, 100)) . strval(rand(0, 100))),
+        ];
+        /** @var array<int, JsonFilesystemStorageQuery> $completeQueries */
+        $completeQueries = [];
+        /** @var array<int, JsonFilesystemStorageQuery> $incompleteQueries  */
+        $incompleteQueries = [];
+        /** @var array<int, JsonFilesystemStorageQuery> $jsonFilePathQueries */
+        $jsonFilePathQueries = [];
+        for(
+            $numberOfJsonInstancesWrittenToStorage = 0;
+            $numberOfJsonInstancesWrittenToStorage < rand(10, 20);
+            $numberOfJsonInstancesWrittenToStorage++
+        ) {
+            $jsonInstance = new JsonInstance($randomData[array_rand($randomData)]);
+            $jsonFilesystemStorageDirectoryPath = $this->expectedJsonFilePath->jsonStorageDirectoryPath();
+            $location = new Location(new Name(new Text($this->randomChars())));
+            $container = new Container($this->determineType($jsonInstance));
+            $owner = new Owner(new Name(new Text($this->randomChars())));
+            $name = $this->prefixedRandomName('deleteOnlyReturnsTheJsonedeleteFromSpecifiedJsonFilePathIfJsonFilePathIsQueried');
+            $id = new Id();
+            $this->jsonFilesystemStorageDriverTestInstance()->write(
+                $jsonInstance,
+                $jsonFilesystemStorageDirectoryPath,
+                $location,
+                $owner,
+                $name,
+                $id,
+            );
+            $completeQueries[] = new JsonFilesystemStorageQuery(
+                jsonStorageDirectoryPath: $jsonFilesystemStorageDirectoryPath,
+                location: $location,
+                container: $container,
+                owner: $owner,
+                name: $name,
+                id: $id,
+            );
+            $incompleteQueries[] = new JsonFilesystemStorageQuery(
+                jsonStorageDirectoryPath: (rand(0, 1) === 0 ? $jsonFilesystemStorageDirectoryPath : null),
+                location: (rand(0, 1) === 0 ? $location : null),
+                container: (rand(0, 1) === 0 ? $container : null),
+                owner: (rand(0, 1) === 0 ? $owner : null),
+                name: (rand(0, 1) === 0 ? $name : null),
+                id: (rand(0, 1) === 0 ? $id : null),
+            );
+            $jsonFilePath = new JsonFilePathInstance(
+                $jsonFilesystemStorageDirectoryPath,
+                $location,
+                $container,
+                $owner,
+                $name,
+                $id
+            );
+            $jsonFilePathQueries[] = new JsonFilesystemStorageQuery(
+                jsonFilePath: $jsonFilePath,
+            );
+        }
+        $completeJsonFilesystemStorageQuery = $completeQueries[array_rand($completeQueries)];
+        $this->jsonFilesystemStorageDriverTestInstance()->delete($completeJsonFilesystemStorageQuery);
+        $this->assertEmpty(
+            $this->jsonFilesystemStorageDriverTestInstance()->read($completeJsonFilesystemStorageQuery)->collection(),
+            $this->testFailedMessage(
+                $this->jsonFilesystemStorageDriverTestInstance(),
+                'delete',
+                'deletes the expected json files',
+            ),
+        );
+        $incompleteJsonFilesystemStorageQuery = $incompleteQueries[array_rand($incompleteQueries)];
+        $this->jsonFilesystemStorageDriverTestInstance()->delete($incompleteJsonFilesystemStorageQuery);
+        $this->assertEmpty(
+            $this->jsonFilesystemStorageDriverTestInstance()->read($incompleteJsonFilesystemStorageQuery)->collection(),
+            $this->testFailedMessage(
+                $this->jsonFilesystemStorageDriverTestInstance(),
+                'delete',
+                'deletes the expected json files',
+            ),
+        );
+        $jsonFilePathJsonFilesystemStorageQuery = $jsonFilePathQueries[array_rand($jsonFilePathQueries)];
+        $this->jsonFilesystemStorageDriverTestInstance()->delete($jsonFilePathJsonFilesystemStorageQuery);
+        $this->assertEmpty(
+            $this->jsonFilesystemStorageDriverTestInstance()->read($jsonFilePathJsonFilesystemStorageQuery)->collection(),
+            $this->testFailedMessage(
+                $this->jsonFilesystemStorageDriverTestInstance(),
+                'delete',
+                'deletes the expected json files',
+            ),
+        );
+    }
+
+    abstract protected function randomClassStringOrObjectInstance(): string|object;
     abstract protected function randomChars(): string;
+    abstract protected static function assertLessThan(int $expected, int $actual, string $message = ''): void;
     abstract protected static function assertTrue(bool $condition, string $message = ''): void;
+    abstract protected static function assertEmpty(mixed $dataHolder, string $message = ''): void;
     abstract protected static function assertFalse(bool $condition, string $message = ''): void;
     abstract protected static function assertEquals(mixed $expected, mixed $actual, string $message = ''): void;
     abstract protected function testFailedMessage(object $object, string $method, string $message): string;
 
 }
 
+        /* foreach(
+            $this->expectedStoredJsonFilePathQueryResults(
+                $jsonFilesystemStorageQuery
+            )->collection() as $q
+        )
+        {
+            var_dump($q->__toString());
+        } */
+
+        #foreach($data as $jsf) {
+            #echo PHP_EOL . "\033[0m\033[48;5;1m\033[38;5;0m" . $jsf->__toString() . "\033[0m" . PHP_EOL;
+        #}

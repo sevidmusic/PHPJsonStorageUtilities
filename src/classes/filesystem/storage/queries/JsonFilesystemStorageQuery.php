@@ -64,6 +64,9 @@ class JsonFilesystemStorageQuery implements JsonFilesystemStorageQueryInterface
 
     public function __toString(): string
     {
+        if($this->jsonFilePath() instanceof JsonFilePath) {
+            return $this->jsonFilePath()->__toString();
+        }
         return (
             is_null($this->jsonStorageDirectoryPath())
             ? dirname($this->jsonStorageDirectoryPathInstance()) .
