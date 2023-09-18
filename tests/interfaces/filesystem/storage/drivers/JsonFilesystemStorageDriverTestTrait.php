@@ -1422,10 +1422,113 @@ trait JsonFilesystemStorageDriverTestTrait
             ),
         );
     }
+
+    /**
+     *
+     * @return void
+     *
+     * @covers JsonFilesystemStorageDriver->delete()
+     *
+     */
+    public function test_delete_deletes_the_appropriate_json_files_from_storage_based_on_a_JsonFilesystemStorageQuery(): void
+    {
+        $randomData = [
+            $this->randomClassStringOrObjectInstance(),
+            $this->randomChars(),
+            rand(PHP_INT_MIN, PHP_INT_MAX),
+            floatval(strval(rand(0, 100)) . strval(rand(0, 100))),
+        ];
+        /** @var array<int, JsonFilesystemStorageQuery> $completeQueries */
+        $completeQueries = [];
+        /** @var array<int, JsonFilesystemStorageQuery> $incompleteQueries  */
+        $incompleteQueries = [];
+        /** @var array<int, JsonFilesystemStorageQuery> $jsonFilePathQueries */
+        $jsonFilePathQueries = [];
+        for(
+            $numberOfJsonInstancesWrittenToStorage = 0;
+            $numberOfJsonInstancesWrittenToStorage < rand(10, 20);
+            $numberOfJsonInstancesWrittenToStorage++
+        ) {
+            $jsonInstance = new JsonInstance($randomData[array_rand($randomData)]);
+            $jsonFilesystemStorageDirectoryPath = $this->expectedJsonFilePath->jsonStorageDirectoryPath();
+            $location = new Location(new Name(new Text($this->randomChars())));
+            $container = new Container($this->determineType($jsonInstance));
+            $owner = new Owner(new Name(new Text($this->randomChars())));
+            $name = $this->prefixedRandomName('deleteOnlyReturnsTheJsonedeleteFromSpecifiedJsonFilePathIfJsonFilePathIsQueried');
+            $id = new Id();
+            $this->jsonFilesystemStorageDriverTestInstance()->write(
+                $jsonInstance,
+                $jsonFilesystemStorageDirectoryPath,
+                $location,
+                $owner,
+                $name,
+                $id,
+            );
+            $completeQueries[] = new JsonFilesystemStorageQuery(
+                jsonStorageDirectoryPath: $jsonFilesystemStorageDirectoryPath,
+                location: $location,
+                container: $container,
+                owner: $owner,
+                name: $name,
+                id: $id,
+            );
+            $incompleteQueries[] = new JsonFilesystemStorageQuery(
+                jsonStorageDirectoryPath: (rand(0, 1) === 0 ? $jsonFilesystemStorageDirectoryPath : null),
+                location: (rand(0, 1) === 0 ? $location : null),
+                container: (rand(0, 1) === 0 ? $container : null),
+                owner: (rand(0, 1) === 0 ? $owner : null),
+                name: (rand(0, 1) === 0 ? $name : null),
+                id: (rand(0, 1) === 0 ? $id : null),
+            );
+            $jsonFilePath = new JsonFilePathInstance(
+                $jsonFilesystemStorageDirectoryPath,
+                $location,
+                $container,
+                $owner,
+                $name,
+                $id
+            );
+            $jsonFilePathQueries[] = new JsonFilesystemStorageQuery(
+                jsonFilePath: $jsonFilePath,
+            );
+        }
+        $completeJsonFilesystemStorageQuery = $completeQueries[array_rand($completeQueries)];
+        $this->jsonFilesystemStorageDriverTestInstance()->delete($completeJsonFilesystemStorageQuery);
+        $this->assertEmpty(
+            $this->jsonFilesystemStorageDriverTestInstance()->read($completeJsonFilesystemStorageQuery)->collection(),
+            $this->testFailedMessage(
+                $this->jsonFilesystemStorageDriverTestInstance(),
+                'delete',
+                'deletes the expected json files',
+            ),
+        );
+        $incompleteJsonFilesystemStorageQuery = $incompleteQueries[array_rand($incompleteQueries)];
+        $this->jsonFilesystemStorageDriverTestInstance()->delete($incompleteJsonFilesystemStorageQuery);
+        $this->assertEmpty(
+            $this->jsonFilesystemStorageDriverTestInstance()->read($incompleteJsonFilesystemStorageQuery)->collection(),
+            $this->testFailedMessage(
+                $this->jsonFilesystemStorageDriverTestInstance(),
+                'delete',
+                'deletes the expected json files',
+            ),
+        );
+        $jsonFilePathJsonFilesystemStorageQuery = $jsonFilePathQueries[array_rand($jsonFilePathQueries)];
+        $this->jsonFilesystemStorageDriverTestInstance()->delete($jsonFilePathJsonFilesystemStorageQuery);
+        $this->assertEmpty(
+            $this->jsonFilesystemStorageDriverTestInstance()->read($jsonFilePathJsonFilesystemStorageQuery)->collection(),
+            $this->testFailedMessage(
+                $this->jsonFilesystemStorageDriverTestInstance(),
+                'delete',
+                'deletes the expected json files',
+            ),
+        );
+    }
+
     abstract protected function randomClassStringOrObjectInstance(): string|object;
     abstract protected function randomChars(): string;
     abstract protected static function assertLessThan(int $expected, int $actual, string $message = ''): void;
     abstract protected static function assertTrue(bool $condition, string $message = ''): void;
+    abstract protected static function assertEmpty(mixed $dataHolder, string $message = ''): void;
     abstract protected static function assertFalse(bool $condition, string $message = ''): void;
     abstract protected static function assertEquals(mixed $expected, mixed $actual, string $message = ''): void;
     abstract protected function testFailedMessage(object $object, string $method, string $message): string;
