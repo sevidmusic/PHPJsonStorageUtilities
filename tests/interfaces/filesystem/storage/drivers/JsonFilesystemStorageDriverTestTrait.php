@@ -238,12 +238,12 @@ trait JsonFilesystemStorageDriverTestTrait
     }
 
     private function expectedJsonFilesystemStorageQueryResults(
-        JsonFilesystemStorageQuery $query
+        JsonFilesystemStorageQuery $jsonFilesystemStorageQuery
     ): JsonCollectionInstance
     {
         $jsonDecoder = $this->jsonFilesystemStorageDriverTestInstance()
                             ->jsonDecoder();
-        $jsonFilePath = $query->jsonFilePath();
+        $jsonFilePath = $jsonFilesystemStorageQuery->jsonFilePath();
         if($jsonFilePath instanceof JsonFilePath) {
             return new JsonCollectionInstance(
                 new JsonInstance(
@@ -257,7 +257,7 @@ trait JsonFilesystemStorageDriverTestTrait
                 )
             );
         }
-        $files = glob($query->__toString());
+        $files = glob($jsonFilesystemStorageQuery->__toString());
         $data = [];
         if(is_array($files)) {
             foreach($files as $file) {
@@ -272,16 +272,16 @@ trait JsonFilesystemStorageDriverTestTrait
     }
 
     private function expectedStoredJsonFilePathQueryResults(
-        JsonFilesystemStorageQuery $query
+        JsonFilesystemStorageQuery $jsonFilesystemStorageQuery
     ): JsonFilePathCollectionInstance
     {
         $jsonDecoder = $this->jsonFilesystemStorageDriverTestInstance()
                             ->jsonDecoder();
-        $jsonFilePath = $query->jsonFilePath();
+        $jsonFilePath = $jsonFilesystemStorageQuery->jsonFilePath();
         if($jsonFilePath instanceof JsonFilePath) {
             return new JsonFilePathCollectionInstance($jsonFilePath);
         }
-        $files = glob($query->__toString());
+        $files = glob($jsonFilesystemStorageQuery->__toString());
         /** @var array<int, JsonFilePath> $data */
         $data = [];
         if(is_array($files)) {
@@ -546,7 +546,7 @@ trait JsonFilesystemStorageDriverTestTrait
     }
 
     /**
-     * Test read returns an empty array if query does not produce
+     * Test read returns an empty array if JsonFilesystemStorageQuery does not produce
      * any matches.
      *
      * @return void
@@ -554,7 +554,7 @@ trait JsonFilesystemStorageDriverTestTrait
      * @covers JsonFilesystemStorageDriver->read()
      *
      */
-    public function test_read_returns_an_empty_JsonCollection_if_query_does_not_produce_any_matches(): void
+    public function test_read_returns_an_empty_JsonCollection_if_JsonFilesystemStorageQuery_does_not_produce_any_matches(): void
     {
         $randomData = [
             $this->randomClassStringOrObjectInstance(),
@@ -596,7 +596,7 @@ trait JsonFilesystemStorageDriverTestTrait
             $this->testFailedMessage(
                 $this->jsonFilesystemStorageDriverTestInstance(),
                 'read',
-                'returns an empty JsonCollection if query does not ' .
+                'returns an empty JsonCollection if JsonFilesystemStorageQuery does not ' .
                 'produce any matches',
             ),
         );
@@ -644,7 +644,7 @@ trait JsonFilesystemStorageDriverTestTrait
             $this->testFailedMessage(
                 $this->jsonFilesystemStorageDriverTestInstance(),
                 'read',
-                'return all stored Json if query is empty',
+                'return all stored Json if JsonFilesystemStorageQuery is empty',
             ),
         );
         $this->assertEquals(
@@ -653,7 +653,7 @@ trait JsonFilesystemStorageDriverTestTrait
             $this->testFailedMessage(
                 $this->jsonFilesystemStorageDriverTestInstance(),
                 'read',
-                'return all stored Json if query is empty.' .
+                'return all stored Json if JsonFilesystemStorageQuery is empty.' .
                 'Expected ' .
                 $numberOfJsonInstancesWrittenToStorage .
                 ' items in the returned JsonCollection ' .
@@ -723,7 +723,7 @@ trait JsonFilesystemStorageDriverTestTrait
                 $this->jsonFilesystemStorageDriverTestInstance(),
                 'read',
                 'return only the Json stored at the specified ' .
-                'JsonFilePath if the query is specifies a ' .
+                'JsonFilePath if the JsonFilesystemStorageQuery is specifies a ' .
                 'JsonFilePath',
             ),
         );
@@ -811,7 +811,7 @@ trait JsonFilesystemStorageDriverTestTrait
                 $this->jsonFilesystemStorageDriverTestInstance(),
                 'read',
                 'return only the Json stored at the specified ' .
-                'JsonFilePath if the query is specifies a ' .
+                'JsonFilePath if the JsonFilesystemStorageQuery is specifies a ' .
                 'JsonFilePath',
             ),
         );
@@ -828,7 +828,7 @@ trait JsonFilesystemStorageDriverTestTrait
                 $this->jsonFilesystemStorageDriverTestInstance(),
                 'read',
                 'return only the Json stored at the specified ' .
-                'JsonFilePath if the query is specifies a ' .
+                'JsonFilePath if the JsonFilesystemStorageQuery is specifies a ' .
                 'JsonFilePath',
             ),
         );
@@ -845,7 +845,7 @@ trait JsonFilesystemStorageDriverTestTrait
                 $this->jsonFilesystemStorageDriverTestInstance(),
                 'read',
                 'return only the Json stored at the specified ' .
-                'JsonFilePath if the query is specifies a ' .
+                'JsonFilePath if the JsonFilesystemStorageQuery is specifies a ' .
                 'JsonFilePath',
             ),
         );
@@ -888,7 +888,7 @@ trait JsonFilesystemStorageDriverTestTrait
 
 
     /**
-     * Test storedJsonFilePaths returns an empty array if query does not produce
+     * Test storedJsonFilePaths returns an empty array if JsonFilesystemStorageQuery does not produce
      * any matches.
      *
      * @return void
@@ -896,7 +896,7 @@ trait JsonFilesystemStorageDriverTestTrait
      * @covers JsonFilesystemStorageDriver->storedJsonFilePaths()
      *
      */
-    public function test_storedJsonFilePaths_returns_an_empty_JsonFilePathCollection_if_query_does_not_produce_any_matches(): void
+    public function test_storedJsonFilePaths_returns_an_empty_JsonFilePathCollection_if_JsonFilesystemStorageQuery_does_not_produce_any_matches(): void
     {
         $randomData = [
             $this->randomClassStringOrObjectInstance(),
@@ -938,7 +938,7 @@ trait JsonFilesystemStorageDriverTestTrait
             $this->testFailedMessage(
                 $this->jsonFilesystemStorageDriverTestInstance(),
                 'storedJsonFilePaths',
-                'returns an empty JsonFilePathCollection if query does not ' .
+                'returns an empty JsonFilePathCollection if JsonFilesystemStorageQuery does not ' .
                 'produce any matches',
             ),
         );
@@ -1003,7 +1003,7 @@ trait JsonFilesystemStorageDriverTestTrait
                 $this->jsonFilesystemStorageDriverTestInstance(),
                 'storedJsonFilePaths',
                 'return only the Json stored at the specified ' .
-                'JsonFilePath if the query is specifies a ' .
+                'JsonFilePath if the JsonFilesystemStorageQuery is specifies a ' .
                 'JsonFilePath',
             ),
         );
@@ -1053,7 +1053,7 @@ trait JsonFilesystemStorageDriverTestTrait
                 'storedJsonFilePaths',
                 'return a JsonFilePathCollection that contains all ' .
                 'of the JsonFilePaths that exist in storage if ' .
-                'query is empty.',
+                'JsonFilesystemStorageQuery is empty.',
             ),
         );
         $this->assertEquals(
@@ -1064,7 +1064,7 @@ trait JsonFilesystemStorageDriverTestTrait
                 'storedJsonFilePaths',
                 'return a JsonFilePathCollection that contains all ' .
                 'of the JsonFilePaths that exist in storage if ' .
-                'query is empty.' .
+                'JsonFilesystemStorageQuery is empty.' .
                 'Expected ' .
                 $numberOfJsonInstancesWrittenToStorage .
                 ' items in the returned JsonCollection ' .
@@ -1157,7 +1157,7 @@ trait JsonFilesystemStorageDriverTestTrait
                 $this->jsonFilesystemStorageDriverTestInstance(),
                 'storedJsonFilePaths',
                 'return only the Json stored at the specified ' .
-                'JsonFilePath if the query is specifies a ' .
+                'JsonFilePath if the JsonFilesystemStorageQuery is specifies a ' .
                 'JsonFilePath',
             ),
         );
@@ -1174,7 +1174,7 @@ trait JsonFilesystemStorageDriverTestTrait
                 $this->jsonFilesystemStorageDriverTestInstance(),
                 'storedJsonFilePaths',
                 'return only the Json stored at the specified ' .
-                'JsonFilePath if the query is specifies a ' .
+                'JsonFilePath if the JsonFilesystemStorageQuery is specifies a ' .
                 'JsonFilePath',
             ),
         );
@@ -1191,15 +1191,14 @@ trait JsonFilesystemStorageDriverTestTrait
                 $this->jsonFilesystemStorageDriverTestInstance(),
                 'storedJsonFilePaths',
                 'return only the Json stored at the specified ' .
-                'JsonFilePath if the query is specifies a ' .
+                'JsonFilePath if the JsonFilesystemStorageQuery is specifies a ' .
                 'JsonFilePath',
             ),
         );
     }
 
     /**
-     * Test delete returns an empty
-     * JsonFilePathCollection if there is nothing in storage.
+     * Test delete returns false if there is nothing in storage.
      *
      * @return void
      *
@@ -1216,6 +1215,66 @@ trait JsonFilesystemStorageDriverTestTrait
                 $this->jsonFilesystemStorageDriverTestInstance(),
                 'delete',
                 'returns false if there is nothing in storage',
+            ),
+        );
+    }
+
+    /**
+     * Test delete does not delete anything if JsonFilesystemStorageQuery does not
+     * produce any matches.
+     *
+     * @return void
+     *
+     * @covers JsonFilesystemStorageDriver->delete()
+     *
+     */
+    public function test_delete_does_not_delete_anything_if_JsonFilesystemStorageQuery_does_not_produce_any_matches(): void
+    {
+        $randomData = [
+            $this->randomClassStringOrObjectInstance(),
+            $this->randomChars(),
+            rand(PHP_INT_MIN, PHP_INT_MAX),
+            floatval(strval(rand(0, 100)) . strval(rand(0, 100))),
+        ];
+        for(
+            $numberOfJsonInstancesWrittenToStorage = 0;
+            $numberOfJsonInstancesWrittenToStorage < rand(10, 20);
+            $numberOfJsonInstancesWrittenToStorage++
+        ) {
+            $this->jsonFilesystemStorageDriverTestInstance()->write(
+                new JsonInstance($randomData[array_rand($randomData)]),
+                $this->expectedJsonFilePath->jsonStorageDirectoryPath(),
+                new Location(new Name(new Text($this->randomChars()))),
+                new Owner(new Name(new Text($this->randomChars()))),
+                $this->prefixedRandomName(
+                    'DeleteDoesNotDeleteAnythingIfQueryDoesNotProduceAnyMatches'
+                ),
+                new Id(),
+            );
+        }
+        $jsonFilesystemStorageQuery = new JsonFilesystemStorageQuery(
+            id: new Id(),
+            name: new Name(new Text($this->randomChars())),
+        );
+        $numberOfStoredJsonFilesBeforeDelete = count($this->jsonFilesystemStorageDriverTestInstance()->read($jsonFilesystemStorageQuery)->collection());
+        $deleteStatus = $this->jsonFilesystemStorageDriverTestInstance()->delete($jsonFilesystemStorageQuery);
+        $numberOfStoredJsonFilesAfterDelete = count($this->jsonFilesystemStorageDriverTestInstance()->read($jsonFilesystemStorageQuery)->collection());
+        $this->assertEquals(
+            $numberOfStoredJsonFilesBeforeDelete,
+            $numberOfStoredJsonFilesAfterDelete,
+            $this->testFailedMessage(
+                $this->jsonFilesystemStorageDriverTestInstance(),
+                'delete',
+                'does not delete anything if JsonFilesystemStorageQuery does not ' .
+                'produce any matches',
+            ),
+        );
+        $this->assertFalse(
+            $deleteStatus,
+            $this->testFailedMessage(
+                $this->jsonFilesystemStorageDriverTestInstance(),
+                'delete',
+                'returns false if JsonFilesystemStorageQuery does not produce any matches',
             ),
         );
     }
