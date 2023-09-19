@@ -45,12 +45,12 @@ trait OwnerTestTrait
      * @example
      *
      * ```
-     * protected function setUp(): void
+     * public function setUp(): void
      * {
      *     $expectedName = new Name(new Text($this->randomChars()));
-     *     $location = new Owner($expectedName);
+     *     $container = new Owner($expectedName);
      *     $this->setExpectedName($expectedName);
-     *     $this->setNamedIdentifierTestInstance($location);
+     *     $this->setNamedIdentifierTestInstance($container);
      *     $this->setOwnerTestInstance(
      *         new Owner($expectedName)
      *     );
@@ -75,11 +75,10 @@ trait OwnerTestTrait
     /**
      * Set the Owner implementation instance to test.
      *
-     * @param Owner $ownerTestInstance
-     *                              An instance of an
-     *                              implementation of
-     *                              the Owner
-     *                              interface to test.
+     * @param Owner $ownerTestInstance An instance of an
+     *                                 implementation of
+     *                                 the Owner interface
+     *                                 to test.
      *
      * @return void
      *

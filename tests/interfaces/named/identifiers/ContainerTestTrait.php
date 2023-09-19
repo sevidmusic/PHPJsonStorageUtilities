@@ -6,8 +6,6 @@ use \Darling\PHPJsonStorageUtilities\enumerations\Type;
 use \Darling\PHPJsonStorageUtilities\interfaces\named\identifiers\Container;
 use \Darling\PHPJsonStorageUtilities\tests\interfaces\named\identifiers\NamedIdentifierTestTrait;
 use \Darling\PHPTextTypes\classes\strings\ClassString;
-use \Darling\PHPTextTypes\classes\strings\Name;
-use \Darling\PHPTextTypes\classes\strings\Text;
 
 /**
  * The ContainerTestTrait defines common tests for implementations of
@@ -37,8 +35,8 @@ trait ContainerTestTrait
      * returned by the Container implementation instance being
      * tested's name() method via the setExpectedName() method.
      *
-     * The expected Name should be constructed from a hash of a valid
-     * Type or ClassString.
+     * The expected Name should be constructed from a hash of a
+     * valid Type or ClassString.
      *
      * This method must also set the Container implementation
      * being tested as the NamedIdentifier implementation to
@@ -52,48 +50,29 @@ trait ContainerTestTrait
      * @example
      *
      * ```
-     * protected function setUp(): void
-     * {
-     *     $types = [
-     *         Type::Array,
-     *         Type::Bool,
-     *         Type::Float,
-     *         Type::Int,
-     *         Type::Null,
-     *         Type::String,
-     *         new ClassString(Name::class),
-     *     ];
-     *     $type = $types[array_rand($types)];
-     *     $expectedName = new Name(
-     *         new Text(
-     *             $this->sha256hashType(
-     *                 $type
-     *             )
-     *         )
-     *     );
-     *     $this->setExpectedName($expectedName);
-     *     $container = new Container($type);
-     *     $this->setNamedIdentifierTestInstance($container);
-     *     $this->setContainerTestInstance(
-     *         $container
-     *     );
-     * }
-     *
-     * ```
-     *
-     */
-    abstract protected function setUp(): void;
+        $types = [
+            Type::Array,
+            Type::Bool,
+            Type::Float,
+            Type::Int,
+            Type::Null,
+            Type::String,
+            new ClassString(Name::class),
+        ];
+        $type = $types[array_rand($types)];
+        $expectedName = new Name(
+            new Text(
+                $this->sha256hashType(
+                    $type
+                )
+            )
+        );
+        $this->setExpectedName($expectedName);
+        $container = new Container($type);
+        $this->setNamedIdentifierTestInstance($container);
+        $this->setContainerTestInstance(
+            $container
 
-    /**
-     * Return the Container implementation instance to test.
-     *
-     * @return Container
-     *
-     */
-    protected function containerTestInstance(): Container
-    {
-        return $this->container;
-    }
 
     /**
      * Set the Container implementation instance to test.
