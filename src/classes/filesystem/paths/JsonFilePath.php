@@ -2,8 +2,8 @@
 
 namespace Darling\PHPJsonStorageUtilities\classes\filesystem\paths;
 
-use \Darling\PHPJsonStorageUtilities\interfaces\filesystem\paths\JsonStorageDirectoryPath;
 use \Darling\PHPJsonStorageUtilities\interfaces\filesystem\paths\JsonFilePath as JsonFilePathInterface;
+use \Darling\PHPJsonStorageUtilities\interfaces\filesystem\paths\JsonStorageDirectoryPath;
 use \Darling\PHPJsonStorageUtilities\interfaces\named\identifiers\Container;
 use \Darling\PHPJsonStorageUtilities\interfaces\named\identifiers\Location;
 use \Darling\PHPJsonStorageUtilities\interfaces\named\identifiers\Owner;
@@ -21,9 +21,7 @@ final class JsonFilePath implements JsonFilePathInterface
         private Owner $owner,
         private Name $name,
         private Id $id,
-    )
-    {
-    }
+    ) {}
 
     public function jsonStorageDirectoryPath(): JsonStorageDirectoryPath
     {
@@ -78,5 +76,6 @@ final class JsonFilePath implements JsonFilePathInterface
         $subDir = substr($id->__toString(), $index);
         return $parentDir . DIRECTORY_SEPARATOR . $subDir;
     }
+
 }
 

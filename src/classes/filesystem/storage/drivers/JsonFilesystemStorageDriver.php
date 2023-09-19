@@ -2,32 +2,32 @@
 
 namespace Darling\PHPJsonStorageUtilities\classes\filesystem\storage\drivers;
 
-use Darling\PHPJsonStorageUtilities\interfaces\collections\JsonCollection;
 use Darling\PHPJsonStorageUtilities\classes\collections\JsonCollection as JsonCollectionInstance;
-use Darling\PHPJsonStorageUtilities\interfaces\collections\JsonFilePathCollection;
 use Darling\PHPJsonStorageUtilities\classes\collections\JsonFilePathCollection as JsonFilePathCollectionInstance;
+use Darling\PHPJsonStorageUtilities\interfaces\collections\JsonCollection;
+use Darling\PHPJsonStorageUtilities\interfaces\collections\JsonFilePathCollection;
 use \Darling\PHPJsonStorageUtilities\classes\filesystem\paths\JsonFilePath;
+use \Darling\PHPJsonStorageUtilities\classes\filesystem\paths\JsonStorageDirectoryPath as JsonStorageDirectoryPathInstance;
 use \Darling\PHPJsonStorageUtilities\classes\named\identifiers\Container;
+use \Darling\PHPJsonStorageUtilities\classes\named\identifiers\Location as LocationInstance;
+use \Darling\PHPJsonStorageUtilities\classes\named\identifiers\Owner as OwnerInstance;
 use \Darling\PHPJsonStorageUtilities\enumerations\Type;
 use \Darling\PHPJsonStorageUtilities\interfaces\filesystem\paths\JsonStorageDirectoryPath;
-use \Darling\PHPJsonStorageUtilities\classes\filesystem\paths\JsonStorageDirectoryPath as JsonStorageDirectoryPathInstance;
 use \Darling\PHPJsonStorageUtilities\interfaces\filesystem\storage\drivers\JsonFilesystemStorageDriver as JsonFilesystemStorageDriverInterface;
 use \Darling\PHPJsonStorageUtilities\interfaces\filesystem\storage\queries\JsonFilesystemStorageQuery;
 use \Darling\PHPJsonStorageUtilities\interfaces\named\identifiers\Location;
-use \Darling\PHPJsonStorageUtilities\classes\named\identifiers\Location as LocationInstance;
 use \Darling\PHPJsonStorageUtilities\interfaces\named\identifiers\Owner;
-use \Darling\PHPJsonStorageUtilities\classes\named\identifiers\Owner as OwnerInstance;
 use \Darling\PHPJsonUtilities\classes\decoders\JsonDecoder;
-use \Darling\PHPJsonUtilities\interfaces\encoded\data\Json;
 use \Darling\PHPJsonUtilities\classes\encoded\data\Json as JsonInstance;
+use \Darling\PHPJsonUtilities\interfaces\encoded\data\Json;
+use \Darling\PHPTextTypes\classes\strings\AlphanumericText;
 use \Darling\PHPTextTypes\classes\strings\ClassString;
-use \Darling\PHPTextTypes\interfaces\strings\Id;
-use \Darling\PHPTextTypes\interfaces\strings\Name;
+use \Darling\PHPTextTypes\classes\strings\Id as IdInstance;
 use \Darling\PHPTextTypes\classes\strings\Name as NameInstance;
 use \Darling\PHPTextTypes\classes\strings\Text;
-use \Darling\PHPTextTypes\classes\strings\Id as IdInstance;
+use \Darling\PHPTextTypes\interfaces\strings\Id;
+use \Darling\PHPTextTypes\interfaces\strings\Name;
 use \ReflectionObject;
-use \Darling\PHPTextTypes\classes\strings\AlphanumericText;
 
 class JsonFilesystemStorageDriver implements JsonFilesystemStorageDriverInterface
 {
@@ -76,9 +76,15 @@ class JsonFilesystemStorageDriver implements JsonFilesystemStorageDriverInterfac
         return false;
     }
 
-    public function read(JsonFilesystemStorageQuery $jsonFilesystemStorageQuery): JsonCollection {
+    public function read(
+        JsonFilesystemStorageQuery $jsonFilesystemStorageQuery
+    ): JsonCollection {
         $jsonFilePath = $jsonFilesystemStorageQuery->jsonFilePath();
-        if($jsonFilePath instanceof JsonFilePath && file_exists($jsonFilePath->__toString())) {
+        if(
+            $jsonFilePath instanceof JsonFilePath
+            &&
+            file_exists($jsonFilePath->__toString())
+        ) {
             return new JsonCollectionInstance(
                 new JsonInstance(
                     $this->jsonDecoder()->decodeJsonString(
@@ -105,7 +111,9 @@ class JsonFilesystemStorageDriver implements JsonFilesystemStorageDriverInterfac
         return new JsonCollectionInstance(...$data);
     }
 
-    public function storedJsonFilePaths(JsonFilesystemStorageQuery $jsonFilesystemStorageQuery): JsonFilePathCollection
+    public function storedJsonFilePaths(
+        JsonFilesystemStorageQuery $jsonFilesystemStorageQuery
+    ): JsonFilePathCollection
     {
         $jsonFilePath = $jsonFilesystemStorageQuery->jsonFilePath();
         if($jsonFilePath instanceof JsonFilePath) {
@@ -118,8 +126,16 @@ class JsonFilesystemStorageDriver implements JsonFilesystemStorageDriverInterfac
             foreach($files as $file) {
                 $pathParts = explode(DIRECTORY_SEPARATOR, $file);
                 $data[] = new JsonFilePath(
-                    new JsonStorageDirectoryPathInstance(new NameInstance(new Text($pathParts[7] ?? ''))),
-                    new LocationInstance(new NameInstance(new Text($pathParts[8] ?? ''))),
+                    new JsonStorageDirectoryPathInstance(
+                        new NameInstance(
+                            new Text($pathParts[7] ?? '')
+                        )
+                    ),
+                    new LocationInstance(
+                        new NameInstance(
+                            new Text($pathParts[8] ?? '')
+                        )
+                    ),
                     new Container(
                         $this->determineType(
                             new JsonInstance(
@@ -129,7 +145,11 @@ class JsonFilesystemStorageDriver implements JsonFilesystemStorageDriverInterfac
                             )
                         )
                     ),
-                    new OwnerInstance(new NameInstance(new Text($pathParts[10] ?? ''))),
+                    new OwnerInstance(
+                        new NameInstance(
+                            new Text($pathParts[10] ?? '')
+                        )
+                    ),
                     new NameInstance(new Text($pathParts[11] ?? '')),
                     $this->determineIdFromFilePath($file),
                 );
@@ -235,11 +255,15 @@ class JsonFilesystemStorageDriver implements JsonFilesystemStorageDriverInterfac
         return new IdInstance();
     }
 
-    public function delete(JsonFilesystemStorageQuery $jsonFilesystemStorageQuery): bool
+    public function delete(
+        JsonFilesystemStorageQuery $jsonFilesystemStorageQuery
+    ): bool
     {
         $status = [];
-        foreach($this->storedJsonFilePaths($jsonFilesystemStorageQuery)->collection() as $jsonFilePath)
-        {
+        foreach(
+            $this->storedJsonFilePaths($jsonFilesystemStorageQuery)
+                 ->collection() as $jsonFilePath
+        ) {
             $status[] = (
                 file_exists(
                     $jsonFilePath->__toString()

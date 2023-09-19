@@ -4,9 +4,6 @@ namespace Darling\PHPJsonStorageUtilities\classes\filesystem\paths;
 
 use \Darling\PHPJsonStorageUtilities\interfaces\filesystem\paths\JsonStorageDirectoryPath as JsonStorageDirectoryPathInterface;
 use \Darling\PHPTextTypes\interfaces\strings\Name;
-use \Darling\PHPTextTypes\classes\strings\Name as NameClass;
-use \Darling\PHPTextTypes\interfaces\strings\Text;
-use \Darling\PHPTextTypes\classes\strings\Text as TextClass;
 
 final class JsonStorageDirectoryPath implements JsonStorageDirectoryPathInterface
 {

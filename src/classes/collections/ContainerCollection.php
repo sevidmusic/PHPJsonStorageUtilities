@@ -13,9 +13,7 @@ final class ContainerCollection implements ContainerCollectionInterface
      */
     private array $containers = [];
 
-    public function __construct(
-        Container ...$containers
-    ) {
+    public function __construct(Container ...$containers) {
         foreach($containers as $container) {
             $this->containers[] = $container;
         }
