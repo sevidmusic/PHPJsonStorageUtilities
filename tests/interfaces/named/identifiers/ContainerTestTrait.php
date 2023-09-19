@@ -101,6 +101,17 @@ trait ContainerTestTrait
     }
 
     /**
+     * Return the Container implementation instance to test.
+     *
+     * @return Container
+     *
+     */
+    protected function containerTestInstance(): Container
+    {
+        return $this->container;
+    }
+
+    /**
      * Create a hash of the specified Type or ClassString.
      *
      * @return string
