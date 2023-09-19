@@ -50,7 +50,7 @@ trait ContainerTestTrait
      * @example
      *
      * ```
-     * public function setUp(): void
+     * protected function setUp(): void
      * {
      *     $types = [
      *         Type::Array,
@@ -80,7 +80,7 @@ trait ContainerTestTrait
      * ```
      *
      */
-    abstract public function setUp(): void;
+    abstract protected function setUp(): void;
 
     /**
      * Set the Container implementation instance to test.
