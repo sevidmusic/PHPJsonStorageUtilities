@@ -37,7 +37,7 @@ trait NamedIdentifierTestTrait
      *
      * This method must also set the Name that is expected to be
      * assigned to the NamedIdentifier implementation instance
-     * being tested via the setExpectedName() method..
+     * being tested via the setExpectedName() method.
      *
      * This method may also be used to perform any additional setup
      * required by the implementation being tested.
@@ -76,10 +76,10 @@ trait NamedIdentifierTestTrait
      * Set the NamedIdentifier implementation instance to test.
      *
      * @param NamedIdentifier $namedIdentifierTestInstance
-     *                              An instance of an
-     *                              implementation of
-     *                              the NamedIdentifier
-     *                              interface to test.
+     *                                             An instance of an
+     *                                             implementation of
+     *                                             the NamedIdentifier
+     *                                             interface to test.
      *
      * @return void
      *
@@ -137,7 +137,7 @@ trait NamedIdentifierTestTrait
             $this->testFailedMessage(
                 $this->namedIdentifierTestInstance(),
                 'name',
-                'the expected ' . Name::class
+                'the expected ' . Name::class . ' instance'
             ),
         );
     }

@@ -6,8 +6,6 @@ use \Darling\PHPJsonStorageUtilities\enumerations\Type;
 use \Darling\PHPJsonStorageUtilities\interfaces\named\identifiers\Container;
 use \Darling\PHPJsonStorageUtilities\tests\interfaces\named\identifiers\NamedIdentifierTestTrait;
 use \Darling\PHPTextTypes\classes\strings\ClassString;
-use \Darling\PHPTextTypes\classes\strings\Name;
-use \Darling\PHPTextTypes\classes\strings\Text;
 
 /**
  * The ContainerTestTrait defines common tests for implementations of
@@ -37,8 +35,8 @@ trait ContainerTestTrait
      * returned by the Container implementation instance being
      * tested's name() method via the setExpectedName() method.
      *
-     * The expected Name should be constructed from a hash of a valid
-     * Type or ClassString.
+     * The expected Name should be constructed from a hash of a
+     * valid Type or ClassString.
      *
      * This method must also set the Container implementation
      * being tested as the NamedIdentifier implementation to
