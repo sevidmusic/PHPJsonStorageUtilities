@@ -50,30 +50,36 @@ trait ContainerTestTrait
      * @example
      *
      * ```
-        $types = [
-            Type::Array,
-            Type::Bool,
-            Type::Float,
-            Type::Int,
-            Type::Null,
-            Type::String,
-            new ClassString(Name::class),
-        ];
-        $type = $types[array_rand($types)];
-        $expectedName = new Name(
-            new Text(
-                $this->sha256hashType(
-                    $type
-                )
-            )
-        );
-        $this->setExpectedName($expectedName);
-        $container = new Container($type);
-        $this->setNamedIdentifierTestInstance($container);
-        $this->setContainerTestInstance(
-            $container
-    *
-    */
+     * public function setUp(): void
+     * {
+     *     $types = [
+     *         Type::Array,
+     *         Type::Bool,
+     *         Type::Float,
+     *         Type::Int,
+     *         Type::Null,
+     *         Type::String,
+     *         new ClassString(Name::class),
+     *     ];
+     *     $type = $types[array_rand($types)];
+     *     $expectedName = new Name(
+     *         new Text(
+     *             $this->sha256hashType(
+     *                 $type
+     *             )
+     *         )
+     *     );
+     *     $this->setExpectedName($expectedName);
+     *     $container = new Container($type);
+     *     $this->setNamedIdentifierTestInstance($container);
+     *     $this->setContainerTestInstance(
+     *         $container
+     *     );
+     * }
+     *
+     * ```
+     *
+     */
     abstract protected function setUp(): void;
 
     /**
