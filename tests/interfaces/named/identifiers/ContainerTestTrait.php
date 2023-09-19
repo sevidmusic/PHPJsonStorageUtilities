@@ -80,7 +80,7 @@ trait ContainerTestTrait
      * ```
      *
      */
-    abstract protected function setUp(): void;
+    abstract public function setUp(): void;
 
     /**
      * Set the Container implementation instance to test.
