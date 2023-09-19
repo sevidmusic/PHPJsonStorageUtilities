@@ -83,6 +83,17 @@ trait ContainerTestTrait
     abstract protected function setUp(): void;
 
     /**
+     * Return the Container implementation instance to test.
+     *
+     * @return Container
+     *
+     */
+    protected function containerTestInstance(): Container
+    {
+        return $this->container;
+    }
+
+    /**
      * Set the Container implementation instance to test.
      *
      * @param Container $containerTestInstance An instance of an
@@ -98,17 +109,6 @@ trait ContainerTestTrait
     ): void
     {
         $this->container = $containerTestInstance;
-    }
-
-    /**
-     * Return the Container implementation instance to test.
-     *
-     * @return Container
-     *
-     */
-    protected function containerTestInstance(): Container
-    {
-        return $this->container;
     }
 
     /**
