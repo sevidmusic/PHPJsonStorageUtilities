@@ -72,7 +72,9 @@ trait ContainerTestTrait
         $this->setNamedIdentifierTestInstance($container);
         $this->setContainerTestInstance(
             $container
-
+    *
+    */
+    abstract protected function setUp(): void;
 
     /**
      * Set the Container implementation instance to test.
