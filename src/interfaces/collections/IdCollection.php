@@ -8,8 +8,7 @@ interface IdCollection
 {
 
     /**
-     * Return a numerically indexed array of Id
-     * instances.
+     * Return a numerically indexed array of Id instances.
      *
      * @return array<int, Id>
      *
