@@ -34,8 +34,8 @@ final class JsonFilesystemStorageDriver implements JsonFilesystemStorageDriverIn
 
     private const EMPTY_STRING = '';
     private const JSON_EXTENSION = '.json';
-    private const SafeTextClassTextPropertyName = 'text';
-    private const TextClassStringPropertyName = 'string';
+    private const SAFE_TEXT_CLASS_TEXT_PROPERTY_NAME = 'text';
+    private const TEXT_CLASS_STRING_PROPERTY_NAME = 'string';
 
     private JsonDecoder $jsonDecoder;
 
@@ -234,7 +234,7 @@ final class JsonFilesystemStorageDriver implements JsonFilesystemStorageDriverIn
                     );
                     $property =
                         $reflectionClass->getProperty(
-                            self::SafeTextClassTextPropertyName
+                            self::SAFE_TEXT_CLASS_TEXT_PROPERTY_NAME
                         );
                     $property->setAccessible(true);
                     $property->setValue(
@@ -247,7 +247,7 @@ final class JsonFilesystemStorageDriver implements JsonFilesystemStorageDriverIn
                     if($reflectionClass !== false) {
                         $property =
                             $reflectionClass->getProperty(
-                                self::TextClassStringPropertyName
+                                self::TEXT_CLASS_STRING_PROPERTY_NAME
                             );
                         $property->setAccessible(true);
                         $property->setValue(

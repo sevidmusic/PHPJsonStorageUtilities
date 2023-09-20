@@ -17,6 +17,10 @@ use \Darling\PHPTextTypes\interfaces\strings\Name;
 final class JsonFilesystemStorageQuery implements JsonFilesystemStorageQueryInterface
 {
 
+    private const WILDCARD = '*';
+    private const JSON_EXTENSION = '.json';
+    private const DEFAULT_JSON_STORAGE_DIRECTORY_NAME = 'DEFAULT';
+
     /**
      * Instantiate a new JsonFilesystemStorageQuery instance.
      *
@@ -82,28 +86,32 @@ final class JsonFilesystemStorageQuery implements JsonFilesystemStorageQueryInte
         return (
             is_null($this->jsonStorageDirectoryPath())
             ? dirname($this->jsonStorageDirectoryPathInstance()) .
-            DIRECTORY_SEPARATOR . '*'
+            DIRECTORY_SEPARATOR . self::WILDCARD
             : $this->jsonStorageDirectoryPath()
         ) .
         DIRECTORY_SEPARATOR .
-        (is_null($this->location()) ? '*' : $this->location()) .
+        (is_null($this->location()) ? self::WILDCARD : $this->location()) .
         DIRECTORY_SEPARATOR .
-        (is_null($this->container()) ? '*' : $this->container()) .
+        (is_null($this->container()) ? self::WILDCARD : $this->container()) .
         DIRECTORY_SEPARATOR .
-        (is_null($this->owner()) ? '*' : $this->owner()) .
+        (is_null($this->owner()) ? self::WILDCARD : $this->owner()) .
         DIRECTORY_SEPARATOR .
-        (is_null($this->name()) ? '*' : $this->name()) .
+        (is_null($this->name()) ? self::WILDCARD : $this->name()) .
         DIRECTORY_SEPARATOR .
         (
             is_null($this->id())
-            ? '*' . DIRECTORY_SEPARATOR . '*'
-            : $this->shardId($this->id()) . '.json'
+            ? self::WILDCARD . DIRECTORY_SEPARATOR . self::WILDCARD
+            : $this->shardId($this->id()) . self::JSON_EXTENSION
         );
     }
 
     private function jsonStorageDirectoryPathInstance(): JsonStorageDirectoryPath
     {
-        return new JsonStorageDirectoryPathInstance(new NameInstance(new Text('DEFAULT')));
+        return new JsonStorageDirectoryPathInstance(
+            new NameInstance(
+                new Text(self::DEFAULT_JSON_STORAGE_DIRECTORY_NAME)
+            )
+        );
     }
 
     private function shardId(Id $id): string
