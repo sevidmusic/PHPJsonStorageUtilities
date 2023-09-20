@@ -13,6 +13,12 @@ final class IdCollection implements IdCollectionInterface
      */
     private array $ids = [];
 
+    /**
+     * Instantiate a new IdCollection.
+     *
+     * @param Id $ids
+     *
+     */
     public function __construct(Id ...$ids) {
         foreach($ids as $id) {
             $this->ids[] = $id;

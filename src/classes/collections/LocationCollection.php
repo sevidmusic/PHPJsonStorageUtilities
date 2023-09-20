@@ -13,6 +13,12 @@ final class LocationCollection implements LocationCollectionInterface
      */
     private array $locations = [];
 
+    /**
+     * Instantiate a new LocationCollection.
+     *
+     * @param Location $locations
+     *
+     */
     public function __construct(Location ...$locations) {
         foreach($locations as $location) {
             $this->locations[] = $location;

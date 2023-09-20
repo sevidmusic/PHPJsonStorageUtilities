@@ -13,6 +13,12 @@ final class ContainerCollection implements ContainerCollectionInterface
      */
     private array $containers = [];
 
+    /**
+     * Instantiate a new ContainerCollection.
+     *
+     * @param Container $containers
+     *
+     */
     public function __construct(Container ...$containers) {
         foreach($containers as $container) {
             $this->containers[] = $container;

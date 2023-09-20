@@ -13,6 +13,12 @@ final class OwnerCollection implements OwnerCollectionInterface
      */
     private array $owners = [];
 
+    /**
+     * Instantiate a new OwnerCollection.
+     *
+     * @param Owner $owners
+     *
+     */
     public function __construct(Owner ...$owners) {
         foreach($owners as $owner) {
             $this->owners[] = $owner;

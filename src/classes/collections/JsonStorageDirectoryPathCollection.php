@@ -13,6 +13,12 @@ final class JsonStorageDirectoryPathCollection implements JsonStorageDirectoryPa
      */
     private array $jsonStorageDirectoryPaths = [];
 
+    /**
+     * Instantiate a new JsonStorageDirectoryPathCollection.
+     *
+     * @param JsonStorageDirectoryPath $jsonStorageDirectoryPaths
+     *
+     */
     public function __construct(
         JsonStorageDirectoryPath ...$jsonStorageDirectoryPaths
     ) {
