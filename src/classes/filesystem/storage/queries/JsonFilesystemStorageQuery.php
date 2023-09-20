@@ -1,4 +1,4 @@
-<?php # WORKING ON THIS FILE...
+<?php
 
 namespace Darling\PHPJsonStorageUtilities\classes\filesystem\storage\queries;
 
