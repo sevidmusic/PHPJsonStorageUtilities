@@ -65,5 +65,6 @@ final class JsonStorageDirectoryPath implements JsonStorageDirectoryPathInterfac
             DIRECTORY_SEPARATOR .
             self::DATA_DIRECTORY_NAME;
     }
+
 }
 

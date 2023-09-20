@@ -32,6 +32,11 @@ use \ReflectionObject;
 final class JsonFilesystemStorageDriver implements JsonFilesystemStorageDriverInterface
 {
 
+    private const EMPTY_STRING = '';
+    private const JSON_EXTENSION = '.json';
+    private const SafeTextClassTextPropertyName = 'text';
+    private const TextClassStringPropertyName = 'string';
+
     private JsonDecoder $jsonDecoder;
 
     public function jsonDecoder(): JsonDecoder
@@ -128,12 +133,16 @@ final class JsonFilesystemStorageDriver implements JsonFilesystemStorageDriverIn
                 $data[] = new JsonFilePath(
                     new JsonStorageDirectoryPathInstance(
                         new NameInstance(
-                            new Text($pathParts[7] ?? '')
+                            new Text(
+                                $pathParts[7] ?? self::EMPTY_STRING
+                            )
                         )
                     ),
                     new LocationInstance(
                         new NameInstance(
-                            new Text($pathParts[8] ?? '')
+                            new Text(
+                                $pathParts[8] ?? self::EMPTY_STRING
+                            )
                         )
                     ),
                     new Container(
@@ -147,10 +156,14 @@ final class JsonFilesystemStorageDriver implements JsonFilesystemStorageDriverIn
                     ),
                     new OwnerInstance(
                         new NameInstance(
-                            new Text($pathParts[10] ?? '')
+                            new Text(
+                                $pathParts[10] ?? self::EMPTY_STRING
+                            )
                         )
                     ),
-                    new NameInstance(new Text($pathParts[11] ?? '')),
+                    new NameInstance(
+                        new Text($pathParts[11] ?? self::EMPTY_STRING)
+                    ),
                     $this->determineIdFromFilePath($file),
                 );
             }
@@ -215,13 +228,13 @@ final class JsonFilesystemStorageDriver implements JsonFilesystemStorageDriverIn
                 $reflectionClass = $reflectionClass->getParentClass();
                 if($reflectionClass !== false) {
                     $reconstructedId = str_replace(
-                        '.json',
-                        '',
+                        self::JSON_EXTENSION,
+                        self::EMPTY_STRING,
                         $pathParts[12] . $pathParts[13]
                     );
                     $property =
                         $reflectionClass->getProperty(
-                            'text'
+                            self::SafeTextClassTextPropertyName
                         );
                     $property->setAccessible(true);
                     $property->setValue(
@@ -234,7 +247,7 @@ final class JsonFilesystemStorageDriver implements JsonFilesystemStorageDriverIn
                     if($reflectionClass !== false) {
                         $property =
                             $reflectionClass->getProperty(
-                                'string'
+                                self::TextClassStringPropertyName
                             );
                         $property->setAccessible(true);
                         $property->setValue(
