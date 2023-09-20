@@ -11,14 +11,7 @@ final class JsonStorageDirectoryPath implements JsonStorageDirectoryPathInterfac
     /**
      * Instantiate a new instance of a JsonStorageDirectoryPath.
      *
-     * @example
-     *
-     * ```
-     * $jsonStorageDirectoryPath = new JsonStorageDirectoryPath(
-     *     new Name('FooBarBaz')
-     * );
-     *
-     * ```
+     * @param Name $name
      *
      */
     public function __construct(private Name $name) {}

@@ -4,7 +4,6 @@ namespace Darling\PHPJsonStorageUtilities\classes\named\identifiers;
 
 use \Darling\PHPJsonStorageUtilities\interfaces\named\identifiers\NamedIdentifier as NamedIdentifierInterface;
 use \Darling\PHPTextTypes\classes\strings\Name;
-use \Darling\PHPTextTypes\classes\strings\Text;
 
 class NamedIdentifier implements NamedIdentifierInterface
 {

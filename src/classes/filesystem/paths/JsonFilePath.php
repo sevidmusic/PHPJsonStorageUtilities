@@ -7,13 +7,23 @@ use \Darling\PHPJsonStorageUtilities\interfaces\filesystem\paths\JsonStorageDire
 use \Darling\PHPJsonStorageUtilities\interfaces\named\identifiers\Container;
 use \Darling\PHPJsonStorageUtilities\interfaces\named\identifiers\Location;
 use \Darling\PHPJsonStorageUtilities\interfaces\named\identifiers\Owner;
-use \Darling\PHPJsonStorageUtilities\tests\interfaces\filesystem\paths\JsonFilePathTestTrait;
 use \Darling\PHPTextTypes\interfaces\strings\Id;
 use \Darling\PHPTextTypes\interfaces\strings\Name;
 
 final class JsonFilePath implements JsonFilePathInterface
 {
 
+    /**
+     * Instantiate a new JsonFilePath instance.
+     *
+     * @param JsonStorageDirectoryPath $jsonStorageDirectoryPath
+     * @param Location $location
+     * @param Container $container
+     * @param Owner $owner
+     * @param Name $name
+     * @param Id $id
+     *
+     */
     public function __construct(
         private JsonStorageDirectoryPath $jsonStorageDirectoryPath,
         private Location $location,

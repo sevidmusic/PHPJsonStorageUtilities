@@ -29,7 +29,7 @@ use \Darling\PHPTextTypes\interfaces\strings\Id;
 use \Darling\PHPTextTypes\interfaces\strings\Name;
 use \ReflectionObject;
 
-class JsonFilesystemStorageDriver implements JsonFilesystemStorageDriverInterface
+final class JsonFilesystemStorageDriver implements JsonFilesystemStorageDriverInterface
 {
 
     private JsonDecoder $jsonDecoder;
@@ -158,12 +158,6 @@ class JsonFilesystemStorageDriver implements JsonFilesystemStorageDriverInterfac
         return new JsonFilePathCollectionInstance(...$data);
     }
 
-    /**
-     * Return an appropriate JsonFilePath.
-     *
-     * @return JsonFilePath
-     *
-     */
     private function jsonFilePath(
         Json $json,
         JsonStorageDirectoryPath $jsonStorageDirectoryPath,

@@ -1,4 +1,4 @@
-<?php
+<?php # WORKING ON THIS FILE...
 
 namespace Darling\PHPJsonStorageUtilities\classes\filesystem\storage\queries;
 
@@ -14,9 +14,21 @@ use \Darling\PHPTextTypes\classes\strings\Text;
 use \Darling\PHPTextTypes\interfaces\strings\Id;
 use \Darling\PHPTextTypes\interfaces\strings\Name;
 
-class JsonFilesystemStorageQuery implements JsonFilesystemStorageQueryInterface
+final class JsonFilesystemStorageQuery implements JsonFilesystemStorageQueryInterface
 {
 
+    /**
+     * Instantiate a new JsonFilesystemStorageQuery instance.
+     *
+     * @param JsonFilePath|null $jsonFilePath
+     * @param JsonStorageDirectoryPath|null $jsonStorageDirectoryPath
+     * @param Location|null $location
+     * @param Container|null $container
+     * @param Owner|null $owner
+     * @param Name|null $name
+     * @param Id|null $id
+     *
+     */
     public function __construct(
         private JsonFilePath|null $jsonFilePath = null,
         private JsonStorageDirectoryPath|null $jsonStorageDirectoryPath = null,
