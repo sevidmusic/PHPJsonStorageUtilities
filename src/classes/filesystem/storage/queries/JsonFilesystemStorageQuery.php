@@ -90,9 +90,17 @@ final class JsonFilesystemStorageQuery implements JsonFilesystemStorageQueryInte
             : $this->jsonStorageDirectoryPath()
         ) .
         DIRECTORY_SEPARATOR .
-        (is_null($this->location()) ? self::WILDCARD : $this->location()) .
+        (
+            is_null($this->location())
+            ? self::WILDCARD
+            : $this->location()
+        ) .
         DIRECTORY_SEPARATOR .
-        (is_null($this->container()) ? self::WILDCARD : $this->container()) .
+        (
+            is_null($this->container())
+            ? self::WILDCARD
+            : $this->container()
+        ) .
         DIRECTORY_SEPARATOR .
         (is_null($this->owner()) ? self::WILDCARD : $this->owner()) .
         DIRECTORY_SEPARATOR .
