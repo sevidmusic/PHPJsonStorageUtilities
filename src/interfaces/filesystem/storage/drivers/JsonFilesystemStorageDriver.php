@@ -14,13 +14,9 @@ use \Darling\PHPTextTypes\interfaces\strings\Name;
 use \Darling\PHPTextTypes\interfaces\strings\Id;
 
 /**
- * Description of this interface.
+ * A JsonFilesystemStorgeDrivere can be used to read, write, and
+ * delete json from storage.
  *
- * @example
- *
- * ```
- *
- * ```
  */
 interface JsonFilesystemStorageDriver
 {
