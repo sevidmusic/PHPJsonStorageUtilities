@@ -4,6 +4,11 @@ namespace Darling\PHPJsonStorageUtilities\interfaces\collections;
 
 use \Darling\PHPJsonStorageUtilities\interfaces\named\identifiers\Location;
 
+/**
+ * A LocationCollection is a collection of Location implementation
+ * instances.
+ *
+ */
 interface LocationCollection
 {
 

@@ -5,13 +5,9 @@ namespace Darling\PHPJsonStorageUtilities\interfaces\collections;
 use \Darling\PHPJsonUtilities\interfaces\encoded\data\Json;
 
 /**
- * Description of this interface.
+ * A JsonCollection is a collection of Json implementation
+ * instances.
  *
- * @example
- *
- * ```
- *
- * ```
  */
 interface JsonCollection
 {

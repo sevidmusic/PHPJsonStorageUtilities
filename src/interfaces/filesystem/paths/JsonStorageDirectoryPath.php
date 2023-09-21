@@ -6,18 +6,15 @@ use \Darling\PHPTextTypes\interfaces\strings\Name;
 use \Stringable;
 
 /**
- * The path to the directory used by implementations of the
- * \Darling\PHPJsonStorageUtilities\interfaces\drivers\storage\filesystem\JsonStorageDriver
- * interface to store `json` data.
+ * A JsonStorageDirectoryPath is the path to the directory where json
+ * files will be stored.
  *
  */
 interface JsonStorageDirectoryPath extends \Stringable
 {
 
    /**
-    * The path to the directory used by implementations of the
-    * \Darling\PHPJsonStorageUtilities\interfaces\drivers\storage\filesystem\JsonStorageDriver
-    * interface to store `json` data.
+    * The path to the directory where json files will be stored.
     *
     * This path will either be:
     *

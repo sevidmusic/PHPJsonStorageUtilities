@@ -22,6 +22,7 @@ namespace Darling\PHPJsonStorageUtilities\enumerations;
  * // example output: double(23.45)
  *
  * ```
+ *
  */
 enum Type: string {
 

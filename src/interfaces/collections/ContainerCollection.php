@@ -4,6 +4,11 @@ namespace Darling\PHPJsonStorageUtilities\interfaces\collections;
 
 use \Darling\PHPJsonStorageUtilities\interfaces\named\identifiers\Container;
 
+/**
+ * A ContainerCollection is a collection of Container implementation
+ * instances.
+ *
+ */
 interface ContainerCollection
 {
 

@@ -4,6 +4,11 @@ namespace Darling\PHPJsonStorageUtilities\interfaces\collections;
 
 use \Darling\PHPJsonStorageUtilities\interfaces\filesystem\paths\JsonFilePath;
 
+/**
+ * A JsonFilePathCollection is a collection of JsonFilePath
+ * implementation instances.
+ *
+ */
 interface JsonFilePathCollection
 {
 

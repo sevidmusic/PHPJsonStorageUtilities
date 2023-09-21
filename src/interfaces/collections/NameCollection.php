@@ -4,6 +4,10 @@ namespace Darling\PHPJsonStorageUtilities\interfaces\collections;
 
 use \Darling\PHPTextTypes\classes\strings\Name;
 
+/**
+ * A NameCollection is a collection of Name implementation instances.
+ *
+ */
 interface NameCollection
 {
 

@@ -4,6 +4,11 @@ namespace Darling\PHPJsonStorageUtilities\interfaces\collections;
 
 use \Darling\PHPTextTypes\interfaces\strings\Id;
 
+/**
+ * A IdCollection is a collection of Id implementation
+ * instances.
+ *
+ */
 interface IdCollection
 {
 

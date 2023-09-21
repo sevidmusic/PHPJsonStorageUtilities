@@ -4,6 +4,11 @@ namespace Darling\PHPJsonStorageUtilities\interfaces\collections;
 
 use \Darling\PHPJsonStorageUtilities\interfaces\named\identifiers\Owner;
 
+/**
+ * A OwnerCollection is a collection of Owner implementation
+ * instances.
+ *
+ */
 interface OwnerCollection
 {
 
