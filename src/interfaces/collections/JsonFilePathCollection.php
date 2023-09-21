@@ -14,7 +14,7 @@ interface JsonFilePathCollection
 
     /**
      * Return a numerically indexed array of JsonFilePath
-     * instances.
+     * implementation instances.
      *
      * @return array<int, JsonFilePath>
      *
@@ -22,3 +22,4 @@ interface JsonFilePathCollection
     public function collection(): array;
 
 }
+

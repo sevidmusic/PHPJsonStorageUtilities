@@ -13,7 +13,8 @@ interface ContainerCollection
 {
 
     /**
-     * Return a numerically indexed array of Container instances.
+     * Return a numerically indexed array of Container implementation
+     * instances.
      *
      * @return array<int, Container>
      *
@@ -21,3 +22,4 @@ interface ContainerCollection
     public function collection(): array;
 
 }
+

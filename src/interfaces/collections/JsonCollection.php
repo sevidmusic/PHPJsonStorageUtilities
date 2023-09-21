@@ -13,7 +13,7 @@ interface JsonCollection
 {
 
     /**
-     * Return a numerically indexed array of Json
+     * Return a numerically indexed array of Json implementation
      * instances.
      *
      * @return array<int, Json>

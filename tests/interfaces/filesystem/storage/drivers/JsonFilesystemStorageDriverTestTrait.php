@@ -1535,15 +1535,3 @@ trait JsonFilesystemStorageDriverTestTrait
 
 }
 
-        /* foreach(
-            $this->expectedStoredJsonFilePathQueryResults(
-                $jsonFilesystemStorageQuery
-            )->collection() as $q
-        )
-        {
-            var_dump($q->__toString());
-        } */
-
-        #foreach($data as $jsf) {
-            #echo PHP_EOL . "\033[0m\033[48;5;1m\033[38;5;0m" . $jsf->__toString() . "\033[0m" . PHP_EOL;
-        #}

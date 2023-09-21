@@ -5,7 +5,6 @@ namespace Darling\PHPJsonStorageUtilities\interfaces\filesystem\paths;
 use \Darling\PHPJsonStorageUtilities\interfaces\named\identifiers\Container;
 use \Darling\PHPJsonStorageUtilities\interfaces\named\identifiers\Location;
 use \Darling\PHPJsonStorageUtilities\interfaces\named\identifiers\Owner;
-use \Darling\PHPJsonStorageUtilities\tests\interfaces\filesystem\paths\JsonFilePathTestTrait;
 use \Darling\PHPTextTypes\interfaces\strings\Id;
 use \Darling\PHPTextTypes\interfaces\strings\Name;
 use \Stringable;
@@ -30,6 +29,7 @@ use \Stringable;
  * DIRECTORY_SEPARATOR .
  * $this->name()->__toString() .
  * DIRECTORY_SEPARATOR .
+ * # shardId() is not public, yet, see issue #31.
  * $this->shardId($this->id()) .
  * '.json';
  *
@@ -46,3 +46,4 @@ interface JsonFilePath extends \Stringable
     public function id(): Id;
     public function __toString(): string;
 }
+

@@ -13,7 +13,8 @@ interface IdCollection
 {
 
     /**
-     * Return a numerically indexed array of Id instances.
+     * Return a numerically indexed array of Id implementation
+     * instances.
      *
      * @return array<int, Id>
      *
@@ -21,3 +22,4 @@ interface IdCollection
     public function collection(): array;
 
 }
+

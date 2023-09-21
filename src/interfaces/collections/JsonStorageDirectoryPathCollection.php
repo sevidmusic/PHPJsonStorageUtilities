@@ -14,7 +14,7 @@ interface JsonStorageDirectoryPathCollection
 
     /**
      * Return a numerically indexed array of JsonStorageDirectoryPath
-     * instances.
+     * implementation instances.
      *
      * @return array<int, JsonStorageDirectoryPath>
      *
@@ -22,3 +22,4 @@ interface JsonStorageDirectoryPathCollection
     public function collection(): array;
 
 }
+

@@ -12,7 +12,8 @@ interface NameCollection
 {
 
     /**
-     * Return a numerically indexed array of Name instances.
+     * Return a numerically indexed array of Name implementation
+     * instances.
      *
      * @return array<int, Name>
      *
@@ -20,3 +21,4 @@ interface NameCollection
     public function collection(): array;
 
 }
+

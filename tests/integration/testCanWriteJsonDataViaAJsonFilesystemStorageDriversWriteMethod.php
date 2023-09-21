@@ -37,3 +37,4 @@ $name = new Name(new \Darling\PHPTextTypes\classes\strings\Text('Name'));
 $id = new Id();
 
 var_dump($jfsd->write($json, $jsdp, $loc, $own, $name, $id));
+
