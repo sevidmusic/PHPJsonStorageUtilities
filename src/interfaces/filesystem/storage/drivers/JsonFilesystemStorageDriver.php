@@ -2,7 +2,7 @@
 
 namespace Darling\PHPJsonStorageUtilities\interfaces\filesystem\storage\drivers;
 
-use Darling\PHPJsonStorageUtilities\interfaces\collections\JsonFilePathCollection;
+use \Darling\PHPJsonStorageUtilities\interfaces\collections\JsonFilePathCollection;
 use \Darling\PHPJsonStorageUtilities\interfaces\collections\JsonCollection;
 use \Darling\PHPJsonStorageUtilities\interfaces\filesystem\paths\JsonStorageDirectoryPath;
 use \Darling\PHPJsonStorageUtilities\interfaces\filesystem\storage\queries\JsonFilesystemStorageQuery;
