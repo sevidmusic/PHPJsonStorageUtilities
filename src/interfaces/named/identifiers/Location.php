@@ -8,11 +8,6 @@ use \Darling\PHPJsonStorageUtilities\interfaces\named\identifiers\NamedIdentifie
  * A Location is a NamedIdentifier that can be used to identify
  * stored Json.
  *
- * @example
- *
- * ```
- *
- * ```
  */
 interface Location extends NamedIdentifier
 {

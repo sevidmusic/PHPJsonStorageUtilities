@@ -2,8 +2,8 @@
 
 namespace Darling\PHPJsonStorageUtilities\interfaces\filesystem\storage\drivers;
 
-use \Darling\PHPJsonStorageUtilities\interfaces\collections\JsonFilePathCollection;
 use \Darling\PHPJsonStorageUtilities\interfaces\collections\JsonCollection;
+use \Darling\PHPJsonStorageUtilities\interfaces\collections\JsonFilePathCollection;
 use \Darling\PHPJsonStorageUtilities\interfaces\filesystem\paths\JsonStorageDirectoryPath;
 use \Darling\PHPJsonStorageUtilities\interfaces\filesystem\storage\queries\JsonFilesystemStorageQuery;
 use \Darling\PHPJsonStorageUtilities\interfaces\named\identifiers\Location;
@@ -28,7 +28,6 @@ interface JsonFilesystemStorageDriver
      *
      */
     public function jsonDecoder(): JsonDecoder;
-
 
     /**
      * Write the specified Json to storage.
@@ -63,8 +62,8 @@ interface JsonFilesystemStorageDriver
     ): bool;
 
     /**
-     * Return a JsonCollection of Json instances read from storage
-     * based on the specified JsonFilesystemStorageQuery.
+     * Return a JsonCollection of comprised of Json instances read
+     * from storage based on the specified JsonFilesystemStorageQuery.
      *
      * Note: An empty JsonFilesystemStorageQuery will result in
      * a JsonCollection that is comprised of all of the Json in

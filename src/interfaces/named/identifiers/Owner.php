@@ -8,11 +8,6 @@ use \Darling\PHPJsonStorageUtilities\interfaces\named\identifiers\NamedIdentifie
  * A Owner is a NamedIdentifier that can be used to identify
  * stored Json.
  *
- * @example
- *
- * ```
- *
- * ```
  */
 interface Owner extends NamedIdentifier
 {

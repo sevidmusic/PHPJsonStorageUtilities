@@ -8,11 +8,6 @@ use \Stringable;
 /**
  * A NamedIdentifier can be used to identify stored Json.
  *
- * @example
- *
- * ```
- *
- * ```
  */
 interface NamedIdentifier extends Stringable
 {
