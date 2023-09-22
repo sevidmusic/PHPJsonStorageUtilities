@@ -38,3 +38,4 @@ enum Type: string {
     case UnknownType = 'unknown type';
 
 }
+

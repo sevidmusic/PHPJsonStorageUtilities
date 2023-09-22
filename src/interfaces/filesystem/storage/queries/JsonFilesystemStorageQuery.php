@@ -14,8 +14,8 @@ use \Stringable;
 /**
  * Defines a query that can be passed to a
  * \Darling\PHPJsonStorageUtilities\interfaces\filesystem\storage\drivers\JsonFilesystemStorageDriver
- * instance's read(), delete(), and storedJsonFiles() methods to determine
- * which json files will be read or deleted from storage.
+ * instance's read(), delete(), or storedJsonFiles() method to
+ * determine which json files will be read or deleted from storage.
  *
  */
 interface JsonFilesystemStorageQuery extends \Stringable

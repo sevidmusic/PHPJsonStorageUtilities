@@ -11,30 +11,10 @@ use \Stringable;
 
 /**
  * A JsonFilePath can be used to construct an appropriate path to a
- * json file in a storage directory.
+ * json file in a json storage directory.
  *
  * The complete path to the json file can be obtained via the
  * __toString() method.
- *
- * The path will be constructed as follows:
- *
- * ```
- * $this->jsonStorageDirectoryPath()->__toString() .
- * DIRECTORY_SEPARATOR .
- * $this->location()->__toString() .
- * DIRECTORY_SEPARATOR .
- * $this->container()->__toString() .
- * DIRECTORY_SEPARATOR .
- * $this->owner()->__toString() .
- * DIRECTORY_SEPARATOR .
- * $this->name()->__toString() .
- * DIRECTORY_SEPARATOR .
- * # shardId() is not public, yet, see issue #31.
- * # https://github.com/sevidmusic/PHPJsonStorageUtilities/issues/31
- * $this->shardId($this->id()) .
- * '.json';
- *
- * ```
  *
  */
 interface JsonFilePath extends \Stringable
@@ -96,7 +76,7 @@ interface JsonFilePath extends \Stringable
     /**
      * Return the complete json file path.
      *
-     * The json file path will be constructed as follows:
+     * The complete json file path will be constructed as follows:
      *
      * ```
      * $this->jsonStorageDirectoryPath()->__toString() .
@@ -120,5 +100,6 @@ interface JsonFilePath extends \Stringable
      *
      */
     public function __toString(): string;
+
 }
 
