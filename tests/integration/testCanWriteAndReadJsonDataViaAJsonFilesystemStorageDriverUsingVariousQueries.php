@@ -11,57 +11,12 @@ use \Darling\PHPJsonStorageUtilities\classes\filesystem\storage\queries\JsonFile
 use \Darling\PHPJsonStorageUtilities\classes\named\identifiers\Container;
 use \Darling\PHPJsonStorageUtilities\classes\named\identifiers\Location;
 use \Darling\PHPJsonStorageUtilities\classes\named\identifiers\Owner;
-use \Darling\PHPJsonStorageUtilities\enumerations\Type;
 use \Darling\PHPJsonUtilities\classes\decoders\JsonDecoder;
 use \Darling\PHPJsonUtilities\classes\encoded\data\Json;
-use \Darling\PHPTextTypes\classes\strings\ClassString;
 use \Darling\PHPTextTypes\classes\strings\Id;
 use \Darling\PHPTextTypes\classes\strings\Name;
 use \Darling\PHPTextTypes\classes\strings\Text;
-
-
-/**
- * Apply the specified ANSI $colorCode to the specified $string.
- *
- * @param string $string The string to apply color to.
- *
- * @param int $colorCode The
- *
- * @return string
- *
- */
-function applyANSIColor(string $string, int $colorCode): string {
-    /**
-     * \033[0m : reset color
-     * \033[48;5;{$colorCode}m : set background color
-     * \033[38;5;{$colorCode}m : set foreground color
-     */
-    return "\033[0m\033[48;5;" .
-        strval($colorCode) .
-        "m\033[38;5;0m " .
-        $string .
-        " \033[0m";
-}
-
-function determineType(Json $json, JsonDecoder $jsonDecoder): Type|ClassString
-{
-    $data = $jsonDecoder->decode($json);
-    if(is_object($data)) {
-        return new ClassString($data);
-    }
-    return match(gettype($data)) {
-        Type::Array->value => Type::Array,
-        Type::Bool->value => Type::Bool,
-        Type::Float->value => Type::Float,
-        Type::Int->value => Type::Int,
-        Type::Null->value => Type::Null,
-        Type::String->value => Type::String,
-        Type::Object->value => Type::Object,
-        Type::Resource->value => Type::Resource,
-        Type::ResourceClosed->value => Type::ResourceClosed,
-        Type::UnknownType->value => Type::UnknownType,
-    };
-}
+use \Darling\PHPJsonStorageUtilities\tests\IntegrationTestUtilities;
 
 $jsonFilesystemStorageDriver = new JsonFilesystemStorageDriver();
 $jsonDecoder = new JsonDecoder();
@@ -97,7 +52,7 @@ for($jsonWrites = 0; $jsonWrites < rand(10, 20); $jsonWrites++) {
             new Text('Location' . strval(rand(1, 3)))
         )
     );
-    $container = new Container(determineType($json, $jsonDecoder));
+    $container = new Container(IntegrationTestUtilities::determineType($json, $jsonDecoder));
     $owner = new Owner(
         new Name(new Text('Owner' . strval(rand(1, 3))))
     );
@@ -121,7 +76,7 @@ for($jsonWrites = 0; $jsonWrites < rand(10, 20); $jsonWrites++) {
     $jsonFilePaths[] = $jsonFilePath;
     echo PHP_EOL .
         'Writing to the following path: ' .
-        applyANSIColor($jsonFilePath->__toString(), 1) .
+        IntegrationTestUtilities::applyANSIColor($jsonFilePath->__toString(), 1) .
         (
             $jsonFilesystemStorageDriver->write(
                 $json,
@@ -131,8 +86,8 @@ for($jsonWrites = 0; $jsonWrites < rand(10, 20); $jsonWrites++) {
                 $name,
                 $id,
             )
-            ? applyANSIColor('file was written', 2)
-            : applyANSIColor('failed to write file', 1)
+            ? IntegrationTestUtilities::applyANSIColor('file was written', 2)
+            : IntegrationTestUtilities::applyANSIColor('failed to write file', 1)
         ) .
         PHP_EOL;
     ;
@@ -156,7 +111,7 @@ echo PHP_EOL .
     PHP_EOL .
     PHP_EOL .
     '    ' .
-    applyANSIColor($jsonFilesystemStorageQuery->__toString(), 5) .
+    IntegrationTestUtilities::applyANSIColor($jsonFilesystemStorageQuery->__toString(), 5) .
     PHP_EOL .
     PHP_EOL;
 $jsonCollection = $jsonFilesystemStorageDriver->read(
@@ -165,11 +120,11 @@ $jsonCollection = $jsonFilesystemStorageDriver->read(
 echo PHP_EOL .
     PHP_EOL .
     'Number of items read from storage: ' .
-    applyANSIColor(strval(count($jsonCollection->collection())), 165);
+    IntegrationTestUtilities::applyANSIColor(strval(count($jsonCollection->collection())), 165);
 foreach($jsonCollection->collection() as $json) {
     echo PHP_EOL .
         'Json read: ' .
-        applyANSIColor($json->__toString(), 6);
+        IntegrationTestUtilities::applyANSIColor($json->__toString(), 6);
     echo PHP_EOL . 'Decoded value: ' . PHP_EOL;
     var_dump($jsonDecoder->decode($json));
 }
