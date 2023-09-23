@@ -17,6 +17,7 @@ use \Darling\PHPTextTypes\classes\strings\Text;
 use \FilesystemIterator;
 use \RecursiveDirectoryIterator;
 use \RecursiveIteratorIterator;
+use \SplFileInfo;
 
 final class JsonFilesystemStorageDriverTest extends PHPJsonStorageUtilitiesTest
 {
@@ -201,7 +202,7 @@ final class JsonFilesystemStorageDriverTest extends PHPJsonStorageUtilitiesTest
                 $value
             ) {
                 if(
-                    $value instanceof \SplFileInfo
+                    $value instanceof SplFileInfo
                 ) {
                     if($value->isFile()) {
                         unlink($value);
