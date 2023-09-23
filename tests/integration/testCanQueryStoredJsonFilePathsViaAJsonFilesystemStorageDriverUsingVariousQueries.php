@@ -19,6 +19,11 @@ use \Darling\PHPJsonStorageUtilities\enumerations\Type;
 use \Darling\PHPJsonUtilities\classes\encoded\data\Json;
 
 function applyCliColor(string $string, int $colorCode): string {
+    /**
+     * \033[0m : reset color
+     * \033[48;5;{$colorCode}m : set background color
+     * \033[38;5;{$colorCode}m : set foreground color
+     */
     return "\033[0m\033[48;5;" . strval($colorCode) . "m\033[38;5;0m " . $string . " \033[0m";
 }
 

@@ -4,27 +4,90 @@ namespace Darling\PHPJsonStorageUtilities\tests\integration;
 
 include(dirname(__DIR__, 2) . DIRECTORY_SEPARATOR . 'vendor' . DIRECTORY_SEPARATOR . 'autoload.php');
 
-$data = [new \Darling\PHPTextTypes\classes\strings\Id(), 'Foo', rand(PHP_INT_MIN, PHP_INT_MAX)];
+use \Darling\PHPJsonStorageUtilities\classes\filesystem\paths\JsonStorageDirectoryPath;
+use \Darling\PHPJsonStorageUtilities\classes\filesystem\paths\JsonFilePath;
+use \Darling\PHPJsonStorageUtilities\classes\filesystem\storage\drivers\JsonFilesystemStorageDriver;
+use \Darling\PHPJsonStorageUtilities\classes\filesystem\storage\queries\JsonFilesystemStorageQuery;
+use \Darling\PHPJsonStorageUtilities\classes\named\identifiers\Container;
+use \Darling\PHPJsonStorageUtilities\classes\named\identifiers\Location;
+use \Darling\PHPJsonStorageUtilities\classes\named\identifiers\Owner;
+use \Darling\PHPJsonStorageUtilities\enumerations\Type;
+use \Darling\PHPJsonUtilities\classes\encoded\data\Json;
+use \Darling\PHPTextTypes\classes\strings\Id;
+use \Darling\PHPTextTypes\classes\strings\Name;
+use \Darling\PHPTextTypes\classes\strings\Text;
 
-$json = new \Darling\PHPJsonUtilities\classes\encoded\data\Json($data);
+function applyCliColor(string $string, int $colorCode): string {
+    /**
+     * \033[0m : reset color
+     * \033[48;5;{$colorCode}m : set background color
+     * \033[38;5;{$colorCode}m : set foreground color
+     */
+    return "\033[0m\033[48;5;" .
+        strval($colorCode) .
+        "m\033[38;5;0m " .
+        $string .
+        " \033[0m";
+}
 
-$jfsd = new \Darling\PHPJsonStorageUtilities\classes\filesystem\storage\drivers\JsonFilesystemStorageDriver();
+$data = [new Id(), 'Foo', rand(PHP_INT_MIN, PHP_INT_MAX)];
 
-$jsdp = new \Darling\PHPJsonStorageUtilities\classes\filesystem\paths\JsonStorageDirectoryPath(new \Darling\PHPTextTypes\classes\strings\Name(new \Darling\PHPTextTypes\classes\strings\Text('Data')));
+$expectedContainer = new Container(Type::Array);
 
-$loc = new \Darling\PHPJsonStorageUtilities\classes\named\identifiers\Location(new \Darling\PHPTextTypes\classes\strings\Name(new \Darling\PHPTextTypes\classes\strings\Text('Location')));
+$json = new Json($data);
 
-$own = new \Darling\PHPJsonStorageUtilities\classes\named\identifiers\Owner(new \Darling\PHPTextTypes\classes\strings\Name(new \Darling\PHPTextTypes\classes\strings\Text('Owner')));
+$jsonFilesystemStorageDriver = new JsonFilesystemStorageDriver();
 
-$name = new \Darling\PHPTextTypes\classes\strings\Name(new \Darling\PHPTextTypes\classes\strings\Text('Name'));
+$jsonStorageDirectoryPath = new JsonStorageDirectoryPath(
+    new Name(new Text('Data'))
+);
 
-$id = new \Darling\PHPTextTypes\classes\strings\Id();
+$location = new Location(new Name(new Text('Location')));
 
-var_dump($jfsd->write($json, $jsdp, $loc, $own, $name, $id));
+$owner = new Owner(new Name(new Text('Owner')));
 
-$conToQuery = new \Darling\PHPJsonStorageUtilities\classes\named\identifiers\Container(\Darling\PHPJsonStorageUtilities\enumerations\Type::Array);
+$name = new Name(new Text('Name'));
 
-$jfsq = new \Darling\PHPJsonStorageUtilities\classes\filesystem\storage\queries\JsonFilesystemStorageQuery(container: $conToQuery);
+$id = new Id();
 
-var_dump($jfsd->read($jfsq));
+$expectedJsonFilePath = new JsonFilePath(
+    jsonStorageDirectoryPath: $jsonStorageDirectoryPath,
+    location: $location,
+    container: $expectedContainer,
+    owner: $owner,
+    name: $name,
+    id: $id,
+);
+
+echo PHP_EOL .
+    'Writing json to file: ' .
+    applyCliColor($expectedJsonFilePath->__toString(), 9);
+
+echo PHP_EOL . match(
+    $jsonFilesystemStorageDriver->write(
+        $json,
+        $jsonStorageDirectoryPath,
+        $location,
+        $owner,
+        $name,
+        $id,
+    )
+) {
+    true => applyCliColor('Json was written successfully', 2),
+    false => applyCliColor('Failed to write Json', 1),
+} . PHP_EOL;
+
+/** Should read all stored Json from the $expectedContainer */
+$jsonFilesystemStorageQuery = new JsonFilesystemStorageQuery(
+    container: $expectedContainer
+);
+
+foreach(
+    $jsonFilesystemStorageDriver->read($jsonFilesystemStorageQuery)
+                                ->collection()
+    as
+    $json
+) {
+   echo PHP_EOL . applyCliColor('Read json: ', 2) . applyCliColor($json, 9) . PHP_EOL;
+}
 
