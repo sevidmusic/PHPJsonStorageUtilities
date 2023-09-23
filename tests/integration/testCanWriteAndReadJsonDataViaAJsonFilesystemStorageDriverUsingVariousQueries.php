@@ -4,10 +4,10 @@ namespace Darling\PHPJsonStorageUtilities\tests\integration;
 
 include(dirname(__DIR__, 2) . DIRECTORY_SEPARATOR . 'vendor' . DIRECTORY_SEPARATOR . 'autoload.php');
 
-use \Darling\PHPJsonStorageUtilities\classes\filesystem\storage\queries\JsonFilesystemStorageQuery;
-use \Darling\PHPJsonStorageUtilities\classes\filesystem\storage\drivers\JsonFilesystemStorageDriver;
 use \Darling\PHPJsonStorageUtilities\classes\filesystem\paths\JsonFilePath;
 use \Darling\PHPJsonStorageUtilities\classes\filesystem\paths\JsonStorageDirectoryPath;
+use \Darling\PHPJsonStorageUtilities\classes\filesystem\storage\drivers\JsonFilesystemStorageDriver;
+use \Darling\PHPJsonStorageUtilities\classes\filesystem\storage\queries\JsonFilesystemStorageQuery;
 use \Darling\PHPJsonStorageUtilities\classes\named\identifiers\Container;
 use \Darling\PHPJsonStorageUtilities\classes\named\identifiers\Location;
 use \Darling\PHPJsonStorageUtilities\classes\named\identifiers\Owner;
@@ -56,11 +56,11 @@ $jsonFilesystemStorageDriver = new JsonFilesystemStorageDriver();
 $jsonDecoder = new JsonDecoder();
 $data = [
     new \Darling\PHPTextTypes\classes\strings\Id(),
-    'Foo',
+    'Foo' . strval(rand(PHP_INT_MIN, PHP_INT_MAX)),
     rand(PHP_INT_MIN, PHP_INT_MAX),
     [
         new \Darling\PHPTextTypes\classes\strings\Id(),
-        'Foo',
+        'Foo' . strval(rand(PHP_INT_MIN, PHP_INT_MAX)),
         rand(PHP_INT_MIN, PHP_INT_MAX),
     ],
 ];
