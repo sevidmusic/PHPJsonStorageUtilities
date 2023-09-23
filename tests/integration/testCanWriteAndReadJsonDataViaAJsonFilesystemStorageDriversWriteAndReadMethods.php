@@ -49,7 +49,10 @@ $expectedJsonFilePath = new JsonFilePath(
 
 echo PHP_EOL .
     'Writing json to file: ' .
-    IntegrationTestUtilities::applyANSIColor($expectedJsonFilePath->__toString(), 9);
+    IntegrationTestUtilities::applyANSIColor(
+        $expectedJsonFilePath->__toString(),
+        9
+    );
 
 echo PHP_EOL . match(
     $jsonFilesystemStorageDriver->write(
@@ -61,8 +64,14 @@ echo PHP_EOL . match(
         $id,
     )
 ) {
-    true => IntegrationTestUtilities::applyANSIColor('Json was written successfully', 2),
-    false => IntegrationTestUtilities::applyANSIColor('Failed to write Json', 1),
+        true => IntegrationTestUtilities::applyANSIColor(
+            'Json was written successfully',
+            2
+        ),
+        false => IntegrationTestUtilities::applyANSIColor(
+            'Failed to write Json',
+            1
+        ),
 } . PHP_EOL;
 
 /** Should read all stored Json from the $expectedContainer */

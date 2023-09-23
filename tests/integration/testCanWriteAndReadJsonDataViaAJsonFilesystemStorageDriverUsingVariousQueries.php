@@ -52,7 +52,9 @@ for($jsonWrites = 0; $jsonWrites < rand(10, 20); $jsonWrites++) {
             new Text('Location' . strval(rand(1, 3)))
         )
     );
-    $container = new Container(IntegrationTestUtilities::determineType($json, $jsonDecoder));
+    $container = new Container(
+        IntegrationTestUtilities::determineType($json, $jsonDecoder)
+    );
     $owner = new Owner(
         new Name(new Text('Owner' . strval(rand(1, 3))))
     );
@@ -76,7 +78,10 @@ for($jsonWrites = 0; $jsonWrites < rand(10, 20); $jsonWrites++) {
     $jsonFilePaths[] = $jsonFilePath;
     echo PHP_EOL .
         'Writing to the following path: ' .
-        IntegrationTestUtilities::applyANSIColor($jsonFilePath->__toString(), 1) .
+        IntegrationTestUtilities::applyANSIColor(
+            $jsonFilePath->__toString(),
+            1
+        ) .
         (
             $jsonFilesystemStorageDriver->write(
                 $json,
@@ -86,8 +91,14 @@ for($jsonWrites = 0; $jsonWrites < rand(10, 20); $jsonWrites++) {
                 $name,
                 $id,
             )
-            ? IntegrationTestUtilities::applyANSIColor('file was written', 2)
-            : IntegrationTestUtilities::applyANSIColor('failed to write file', 1)
+            ? IntegrationTestUtilities::applyANSIColor(
+                'file was written',
+                2
+            )
+            : IntegrationTestUtilities::applyANSIColor(
+                'failed to write file',
+                1
+            )
         ) .
         PHP_EOL;
     ;
@@ -111,7 +122,10 @@ echo PHP_EOL .
     PHP_EOL .
     PHP_EOL .
     '    ' .
-    IntegrationTestUtilities::applyANSIColor($jsonFilesystemStorageQuery->__toString(), 5) .
+    IntegrationTestUtilities::applyANSIColor(
+        $jsonFilesystemStorageQuery->__toString(),
+        5
+    ) .
     PHP_EOL .
     PHP_EOL;
 $jsonCollection = $jsonFilesystemStorageDriver->read(
@@ -120,11 +134,17 @@ $jsonCollection = $jsonFilesystemStorageDriver->read(
 echo PHP_EOL .
     PHP_EOL .
     'Number of items read from storage: ' .
-    IntegrationTestUtilities::applyANSIColor(strval(count($jsonCollection->collection())), 165);
+    IntegrationTestUtilities::applyANSIColor(
+        strval(count($jsonCollection->collection())),
+        165
+    );
 foreach($jsonCollection->collection() as $json) {
     echo PHP_EOL .
         'Json read: ' .
-        IntegrationTestUtilities::applyANSIColor($json->__toString(), 6);
+        IntegrationTestUtilities::applyANSIColor(
+            $json->__toString(),
+            6
+        );
     echo PHP_EOL . 'Decoded value: ' . PHP_EOL;
     var_dump($jsonDecoder->decode($json));
 }

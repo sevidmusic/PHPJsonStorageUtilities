@@ -18,7 +18,6 @@ use \Darling\PHPTextTypes\classes\strings\Name;
 use \Darling\PHPTextTypes\classes\strings\Text;
 use \Darling\PHPJsonStorageUtilities\tests\IntegrationTestUtilities;
 
-
 $jsonFilesystemStorageDriver = new JsonFilesystemStorageDriver();
 $jsonDecoder = new JsonDecoder();
 $data = [

@@ -35,7 +35,13 @@ $name = new Name(new Text('Name'));
 $id = new Id();
 
 echo match($jfsd->write($json, $jsdp, $loc, $own, $name, $id)) {
-    true => IntegrationTestUtilities::applyANSIColor('Json was written successfully', 1),
-    false => IntegrationTestUtilities::applyANSIColor('Failed to write Json', 2)
+    true => IntegrationTestUtilities::applyANSIColor(
+        'Json was written successfully',
+        1
+    ),
+    false => IntegrationTestUtilities::applyANSIColor(
+        'Failed to write Json',
+        2
+    )
 };
 
