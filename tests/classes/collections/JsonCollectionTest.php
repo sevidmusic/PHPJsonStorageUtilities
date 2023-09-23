@@ -12,8 +12,8 @@ class JsonCollectionTest extends PHPJsonStorageUtilitiesTest
 {
 
     /**
-     * The JsonCollectionTestTrait defines
-     * common tests for implementations of the
+     * The JsonCollectionTestTrait defines common tests for
+     * implementations of the
      * Darling\PHPJsonStorageUtilities\interfaces\collections\JsonCollection
      * interface.
      *

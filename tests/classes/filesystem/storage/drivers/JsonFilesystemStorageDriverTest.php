@@ -2,29 +2,30 @@
 
 namespace Darling\PHPJsonStorageUtilities\tests\classes\filesystem\storage\drivers;
 
-use \Darling\PHPJsonStorageUtilities\classes\filesystem\storage\drivers\JsonFilesystemStorageDriver;
-use \Darling\PHPJsonStorageUtilities\tests\PHPJsonStorageUtilitiesTest;
-use \Darling\PHPJsonStorageUtilities\tests\interfaces\filesystem\storage\drivers\JsonFilesystemStorageDriverTestTrait;
-
 use \Darling\PHPJsonStorageUtilities\classes\filesystem\paths\JsonFilePath;
 use \Darling\PHPJsonStorageUtilities\classes\filesystem\paths\JsonStorageDirectoryPath;
+use \Darling\PHPJsonStorageUtilities\classes\filesystem\storage\drivers\JsonFilesystemStorageDriver;
 use \Darling\PHPJsonStorageUtilities\classes\named\identifiers\Container;
 use \Darling\PHPJsonStorageUtilities\classes\named\identifiers\Location;
 use \Darling\PHPJsonStorageUtilities\classes\named\identifiers\Owner;
+use \Darling\PHPJsonStorageUtilities\tests\PHPJsonStorageUtilitiesTest;
+use \Darling\PHPJsonStorageUtilities\tests\interfaces\filesystem\storage\drivers\JsonFilesystemStorageDriverTestTrait;
 use \Darling\PHPJsonUtilities\classes\encoded\data\Json;
 use \Darling\PHPTextTypes\classes\strings\Id;
 use \Darling\PHPTextTypes\classes\strings\Name;
 use \Darling\PHPTextTypes\classes\strings\Text;
+use \FilesystemIterator;
 use \RecursiveDirectoryIterator;
 use \RecursiveIteratorIterator;
-use \FilesystemIterator;
 
 class JsonFilesystemStorageDriverTest extends PHPJsonStorageUtilitiesTest
 {
 
+    private const USERS_HOME_DIRECTORY_PATH_INDEX = 'dir';
+
     /**
-     * The JsonFilesystemStorageDriverTestTrait defines
-     * common tests for implementations of the
+     * The JsonFilesystemStorageDriverTestTrait defines common tests
+     * for implementations of the
      * Darling\PHPJsonStorageUtilities\interfaces\filesystem\storage\drivers\JsonFilesystemStorageDriver
      * interface.
      *
@@ -61,15 +62,23 @@ class JsonFilesystemStorageDriverTest extends PHPJsonStorageUtilitiesTest
         $this->setJsonFilesystemStorageDriverTestInstance(
             new JsonFilesystemStorageDriver()
         );
-        $this->deleteDarlingDataDirectory($this->expectedJsonFilePath()->jsonStorageDirectoryPath()->__toString());
+        $this->deleteDarlingDataDirectory(
+            $this->expectedJsonFilePath()
+                 ->jsonStorageDirectoryPath()
+                 ->__toString()
+        );
     }
 
     protected function usersHomeDirectoryPathOrNull(): string|null
     {
         $userInfo = posix_getpwuid(posix_geteuid());
-        if(is_array($userInfo) && isset($userInfo['dir'])) {
+        if(
+            is_array($userInfo)
+            &&
+            isset($userInfo[self::USERS_HOME_DIRECTORY_PATH_INDEX])
+        ) {
             $usersHomeDirectoryPath = realpath(
-                $userInfo['dir']
+                $userInfo[self::USERS_HOME_DIRECTORY_PATH_INDEX]
             );
         }
         return (
@@ -83,7 +92,11 @@ class JsonFilesystemStorageDriverTest extends PHPJsonStorageUtilitiesTest
 
     public function tearDown(): void
     {
-        $this->deleteDarlingDataDirectory($this->expectedJsonFilePath()->jsonStorageDirectoryPath()->__toString());
+        $this->deleteDarlingDataDirectory(
+            $this->expectedJsonFilePath()
+                 ->jsonStorageDirectoryPath()
+                 ->__toString()
+            );
     }
 
     private function deleteDarlingDataDirectory(string $path) : void

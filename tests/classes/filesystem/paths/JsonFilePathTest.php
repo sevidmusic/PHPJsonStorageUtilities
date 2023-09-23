@@ -9,9 +9,9 @@ use \Darling\PHPJsonStorageUtilities\classes\named\identifiers\Location;
 use \Darling\PHPJsonStorageUtilities\classes\named\identifiers\Owner;
 use \Darling\PHPJsonStorageUtilities\tests\PHPJsonStorageUtilitiesTest;
 use \Darling\PHPJsonStorageUtilities\tests\interfaces\filesystem\paths\JsonFilePathTestTrait;
+use \Darling\PHPTextTypes\classes\strings\ClassString;
 use \Darling\PHPTextTypes\classes\strings\Id;
 use \Darling\PHPTextTypes\classes\strings\Name;
-use \Darling\PHPTextTypes\classes\strings\ClassString;
 use \Darling\PHPTextTypes\classes\strings\Text;
 
 final class JsonFilePathTest extends PHPJsonStorageUtilitiesTest
