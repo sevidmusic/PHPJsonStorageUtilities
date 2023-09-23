@@ -62,13 +62,20 @@ final class JsonFilesystemStorageDriverTest extends PHPJsonStorageUtilitiesTest
         $this->setJsonFilesystemStorageDriverTestInstance(
             new JsonFilesystemStorageDriver()
         );
-        $this->deleteDarlingDataDirectory(
+        $this->deleteTestJsonStorageDirectory(
             $this->expectedJsonFilePath()
                  ->jsonStorageDirectoryPath()
                  ->__toString()
         );
     }
 
+    /**
+     * Return the path to the current users home directory if it can
+     * be determined, or null if it can't.
+     *
+     * return string|null
+     *
+     */
     protected function usersHomeDirectoryPathOrNull(): string|null
     {
         $userInfo = posix_getpwuid(posix_geteuid());
@@ -90,16 +97,30 @@ final class JsonFilesystemStorageDriverTest extends PHPJsonStorageUtilitiesTest
         );
     }
 
+    /**
+     * Clean up after tests:
+     *
+     * - Delete the test json storage directory.
+     *
+     * @return void
+     *
+     */
     public function tearDown(): void
     {
-        $this->deleteDarlingDataDirectory(
+        $this->deleteTestJsonStorageDirectory(
             $this->expectedJsonFilePath()
                  ->jsonStorageDirectoryPath()
                  ->__toString()
             );
     }
 
-    private function deleteDarlingDataDirectory(string $path) : void
+    /**
+     * Delete the test json storage directory.
+     *
+     * @return void
+     *
+     */
+    private function deleteTestJsonStorageDirectory(string $path) : void
     {
         $path = strval(realpath($path));
         if(
@@ -179,13 +200,14 @@ final class JsonFilesystemStorageDriverTest extends PHPJsonStorageUtilitiesTest
                 as
                 $value
             ) {
-                /**
-                 * @var \SplFileInfo $value
-                 */
-                if($value->isFile()) {
-                    unlink($value);
-                } else {
-                    rmdir($value);
+                if(
+                    $value instanceof \SplFileInfo
+                ) {
+                    if($value->isFile()) {
+                        unlink($value);
+                    } elseif($value->isDir()) {
+                        rmdir($value);
+                    }
                 }
             }
             rmdir($path);
