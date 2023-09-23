@@ -17,7 +17,18 @@ use \Darling\PHPTextTypes\classes\strings\Id;
 use \Darling\PHPTextTypes\classes\strings\Name;
 use \Darling\PHPTextTypes\classes\strings\Text;
 
-function applyCliColor(string $string, int $colorCode): string {
+
+/**
+ * Apply the specified ANSI $colorCode to the specified $string.
+ *
+ * @param string $string The string to apply color to.
+ *
+ * @param int $colorCode The
+ *
+ * @return string
+ *
+ */
+function applyANSIColor(string $string, int $colorCode): string {
     /**
      * \033[0m : reset color
      * \033[48;5;{$colorCode}m : set background color
@@ -61,7 +72,7 @@ $expectedJsonFilePath = new JsonFilePath(
 
 echo PHP_EOL .
     'Writing json to file: ' .
-    applyCliColor($expectedJsonFilePath->__toString(), 9);
+    applyANSIColor($expectedJsonFilePath->__toString(), 9);
 
 echo PHP_EOL . match(
     $jsonFilesystemStorageDriver->write(
@@ -73,8 +84,8 @@ echo PHP_EOL . match(
         $id,
     )
 ) {
-    true => applyCliColor('Json was written successfully', 2),
-    false => applyCliColor('Failed to write Json', 1),
+    true => applyANSIColor('Json was written successfully', 2),
+    false => applyANSIColor('Failed to write Json', 1),
 } . PHP_EOL;
 
 /** Should read all stored Json from the $expectedContainer */
@@ -88,6 +99,6 @@ foreach(
     as
     $json
 ) {
-   echo PHP_EOL . applyCliColor('Read json: ', 2) . applyCliColor($json, 9) . PHP_EOL;
+   echo PHP_EOL . applyANSIColor('Read json: ', 2) . applyANSIColor($json, 9) . PHP_EOL;
 }
 

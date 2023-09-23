@@ -19,7 +19,18 @@ use \Darling\PHPTextTypes\classes\strings\Id;
 use \Darling\PHPTextTypes\classes\strings\Name;
 use \Darling\PHPTextTypes\classes\strings\Text;
 
-function applyCliColor(string $string, int $colorCode): string {
+
+/**
+ * Apply the specified ANSI $colorCode to the specified $string.
+ *
+ * @param string $string The string to apply color to.
+ *
+ * @param int $colorCode The
+ *
+ * @return string
+ *
+ */
+function applyANSIColor(string $string, int $colorCode): string {
     /**
      * \033[0m : reset color
      * \033[48;5;{$colorCode}m : set background color
@@ -110,7 +121,7 @@ for($jsonWrites = 0; $jsonWrites < rand(10, 20); $jsonWrites++) {
     $jsonFilePaths[] = $jsonFilePath;
     echo PHP_EOL .
         'Writing to the following path: ' .
-        applyCliColor($jsonFilePath->__toString(), 1) .
+        applyANSIColor($jsonFilePath->__toString(), 1) .
         (
             $jsonFilesystemStorageDriver->write(
                 $json,
@@ -120,8 +131,8 @@ for($jsonWrites = 0; $jsonWrites < rand(10, 20); $jsonWrites++) {
                 $name,
                 $id,
             )
-            ? applyCliColor('file was written', 2)
-            : applyCliColor('failed to write file', 1)
+            ? applyANSIColor('file was written', 2)
+            : applyANSIColor('failed to write file', 1)
         ) .
         PHP_EOL;
     ;
@@ -145,7 +156,7 @@ echo PHP_EOL .
     PHP_EOL .
     PHP_EOL .
     '    ' .
-    applyCliColor($jsonFilesystemStorageQuery->__toString(), 5) .
+    applyANSIColor($jsonFilesystemStorageQuery->__toString(), 5) .
     PHP_EOL .
     PHP_EOL;
 $jsonCollection = $jsonFilesystemStorageDriver->read(
@@ -154,11 +165,11 @@ $jsonCollection = $jsonFilesystemStorageDriver->read(
 echo PHP_EOL .
     PHP_EOL .
     'Number of items read from storage: ' .
-    applyCliColor(strval(count($jsonCollection->collection())), 165);
+    applyANSIColor(strval(count($jsonCollection->collection())), 165);
 foreach($jsonCollection->collection() as $json) {
     echo PHP_EOL .
         'Json read: ' .
-        applyCliColor($json->__toString(), 6);
+        applyANSIColor($json->__toString(), 6);
     echo PHP_EOL . 'Decoded value: ' . PHP_EOL;
     var_dump($jsonDecoder->decode($json));
 }
