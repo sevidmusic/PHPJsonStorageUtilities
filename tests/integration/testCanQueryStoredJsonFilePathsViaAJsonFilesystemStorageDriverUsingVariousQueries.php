@@ -5,6 +5,7 @@ namespace Darling\PHPJsonStorageUtilities\tests\integration;
 include(dirname(__DIR__, 2) . DIRECTORY_SEPARATOR . 'vendor' . DIRECTORY_SEPARATOR . 'autoload.php');
 
 
+use \Darling\PHPJsonStorageUtilities\classes\filesystem\storage\drivers\JsonFilesystemStorageDriver;
 use \Darling\PHPTextTypes\classes\strings\Text;
 use \Darling\PHPJsonStorageUtilities\classes\named\identifiers\Container;
 use \Darling\PHPJsonStorageUtilities\classes\filesystem\paths\JsonFilePath;
@@ -47,7 +48,7 @@ function determineType(Json $json, JsonDecoder $jsonDecoder): Type|ClassString
     };
 }
 
-$jfsd = new \Darling\PHPJsonStorageUtilities\classes\filesystem\storage\drivers\JsonFilesystemStorageDriver();
+$jfsd = new JsonFilesystemStorageDriver();
 $jsonDecoder = new JsonDecoder();
 $data = [
     new \Darling\PHPTextTypes\classes\strings\Id(),
