@@ -8,7 +8,7 @@ use \Darling\PHPJsonStorageUtilities\tests\interfaces\collections\JsonCollection
 use \Darling\PHPJsonUtilities\classes\encoded\data\Json;
 use \Darling\PHPTextTypes\classes\strings\Id;
 
-class JsonCollectionTest extends PHPJsonStorageUtilitiesTest
+final class JsonCollectionTest extends PHPJsonStorageUtilitiesTest
 {
 
     /**

@@ -9,7 +9,7 @@ use \Darling\PHPJsonStorageUtilities\tests\interfaces\collections\LocationCollec
 use \Darling\PHPTextTypes\classes\strings\Name;
 use \Darling\PHPTextTypes\classes\strings\Text;
 
-class LocationCollectionTest extends PHPJsonStorageUtilitiesTest
+final class LocationCollectionTest extends PHPJsonStorageUtilitiesTest
 {
 
     /**

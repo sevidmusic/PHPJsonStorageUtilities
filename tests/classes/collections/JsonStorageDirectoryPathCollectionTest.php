@@ -9,7 +9,7 @@ use \Darling\PHPJsonStorageUtilities\tests\interfaces\collections\JsonStorageDir
 use \Darling\PHPTextTypes\classes\strings\Name;
 use \Darling\PHPTextTypes\classes\strings\Text;
 
-class JsonStorageDirectoryPathCollectionTest extends PHPJsonStorageUtilitiesTest
+final class JsonStorageDirectoryPathCollectionTest extends PHPJsonStorageUtilitiesTest
 {
 
     /**

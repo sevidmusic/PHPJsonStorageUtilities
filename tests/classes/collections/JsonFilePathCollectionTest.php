@@ -15,7 +15,7 @@ use \Darling\PHPTextTypes\classes\strings\Id;
 use \Darling\PHPTextTypes\classes\strings\Name;
 use \Darling\PHPTextTypes\classes\strings\Text;
 
-class JsonFilePathCollectionTest extends PHPJsonStorageUtilitiesTest
+final class JsonFilePathCollectionTest extends PHPJsonStorageUtilitiesTest
 {
 
     /**

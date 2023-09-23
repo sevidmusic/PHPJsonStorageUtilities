@@ -18,7 +18,7 @@ use \FilesystemIterator;
 use \RecursiveDirectoryIterator;
 use \RecursiveIteratorIterator;
 
-class JsonFilesystemStorageDriverTest extends PHPJsonStorageUtilitiesTest
+final class JsonFilesystemStorageDriverTest extends PHPJsonStorageUtilitiesTest
 {
 
     private const USERS_HOME_DIRECTORY_PATH_INDEX = 'dir';
