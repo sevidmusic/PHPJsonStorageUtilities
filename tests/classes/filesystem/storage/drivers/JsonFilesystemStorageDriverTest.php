@@ -163,7 +163,9 @@ class JsonFilesystemStorageDriverTest extends PHPJsonStorageUtilitiesTest
             &&
             is_writable($path)
             &&
-            str_contains($path, 'darling' . DIRECTORY_SEPARATOR . 'data')
+            str_contains(
+                $path, 'darling' . DIRECTORY_SEPARATOR . 'data'
+            )
         ) {
             foreach(
                 new RecursiveIteratorIterator(

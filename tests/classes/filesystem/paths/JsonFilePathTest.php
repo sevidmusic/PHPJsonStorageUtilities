@@ -30,13 +30,14 @@ final class JsonFilePathTest extends PHPJsonStorageUtilitiesTest
 
     public function setUp(): void
     {
-        $expectedJsonStorageDirectoryPath = new JsonStorageDirectoryPath(
-            new Name(
-                new Text(
-                    $this->randomChars()
+        $expectedJsonStorageDirectoryPath =
+            new JsonStorageDirectoryPath(
+                new Name(
+                    new Text(
+                        $this->randomChars()
+                    )
                 )
-            )
-        );
+            );
         $expectedLocation = new Location(
             new Name(
                 new Text(
@@ -66,7 +67,9 @@ final class JsonFilePathTest extends PHPJsonStorageUtilitiesTest
             )
         );
         $expectedId = new Id();
-        $this->setExpectedJsonStorageDirectoryPath($expectedJsonStorageDirectoryPath);
+        $this->setExpectedJsonStorageDirectoryPath(
+            $expectedJsonStorageDirectoryPath
+        );
         $this->setExpectedLocation($expectedLocation);
         $this->setExpectedContainer($expectedContainer);
         $this->setExpectedOwner($expectedOwner);

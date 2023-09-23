@@ -34,10 +34,18 @@ class JsonFilePathCollectionTest extends PHPJsonStorageUtilitiesTest
         $this->setExpectedCollection(
             [
                 new JsonFilePath(
-                    new JsonStorageDirectoryPath(new Name(new Text($this->randomChars()))),
-                    new Location(new Name(new Text($this->randomChars()))),
-                    new Container(new ClassString(Id::class)),
-                    new Owner(new Name(new Text($this->randomChars()))),
+                    new JsonStorageDirectoryPath(
+                        new Name(new Text($this->randomChars()))
+                    ),
+                    new Location(
+                        new Name(new Text($this->randomChars()))
+                    ),
+                    new Container(
+                        new ClassString(Id::class)
+                    ),
+                    new Owner(
+                        new Name(new Text($this->randomChars()))
+                    ),
                     new Name(new Text($this->randomChars())),
                     new Id(),
                 ),
