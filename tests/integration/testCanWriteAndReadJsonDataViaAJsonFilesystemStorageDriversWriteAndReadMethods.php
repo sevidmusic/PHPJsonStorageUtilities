@@ -1,5 +1,7 @@
 <?php
 
+namespace Darling\PHPJsonStorageUtilities\tests\integration;
+
 include(dirname(__DIR__, 2) . DIRECTORY_SEPARATOR . 'vendor' . DIRECTORY_SEPARATOR . 'autoload.php');
 
 $data = [new \Darling\PHPTextTypes\classes\strings\Id(), 'Foo', rand(PHP_INT_MIN, PHP_INT_MAX)];

@@ -1,6 +1,9 @@
 <?php
 
+namespace Darling\PHPJsonStorageUtilities\tests\integration;
+
 include(dirname(__DIR__, 2) . DIRECTORY_SEPARATOR . 'vendor' . DIRECTORY_SEPARATOR . 'autoload.php');
+
 
 use \Darling\PHPTextTypes\classes\strings\Text;
 use \Darling\PHPJsonStorageUtilities\classes\named\identifiers\Container;
