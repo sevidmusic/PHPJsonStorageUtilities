@@ -60,7 +60,7 @@ $data = [
     rand(PHP_INT_MIN, PHP_INT_MAX),
     [
         new \Darling\PHPTextTypes\classes\strings\Id(),
-        'Foo',
+        'Foo' . strval(rand(PHP_INT_MIN, PHP_INT_MAX)),
         rand(PHP_INT_MIN, PHP_INT_MAX),
     ],
 ];
