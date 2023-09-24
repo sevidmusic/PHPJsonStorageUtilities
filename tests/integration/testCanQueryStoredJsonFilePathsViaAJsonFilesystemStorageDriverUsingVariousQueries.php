@@ -97,14 +97,14 @@ $jsonFilesystemStorageQuery = new JsonFilesystemStorageQuery(
     jsonFilePath: (rand(0, 1) === 0 ? null : $jsonFilePath),
 );
 
-$jsonCollection = $jsonFilesystemStorageDriver->storedJsonFilePaths(
+$jsonFilePathCollection = $jsonFilesystemStorageDriver->storedJsonFilePaths(
     $jsonFilesystemStorageQuery
 );
 
 $expectedCount = glob($jsonFilesystemStorageQuery->__toString());
 
 echo match(
-    count($jsonCollection->collection())
+    count($jsonFilePathCollection->collection())
     ===
     count(is_array($expectedCount) ? $expectedCount : [])
 )
