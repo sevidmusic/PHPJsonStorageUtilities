@@ -22,26 +22,40 @@ $data = [
 
 $json = new Json($data);
 
-$jfsd = new JsonFilesystemStorageDriver();
+$jsonFilesystemStorageDriver = new JsonFilesystemStorageDriver();
 
-$jsdp = new JsonStorageDirectoryPath(new Name(new Text('Data')));
+$jsonStorageDirectoryPath = new JsonStorageDirectoryPath(
+    new Name(new Text('Data'))
+);
 
-$loc = new Location(new Name(new Text('Location')));
+$location = new Location(new Name(new Text('Location')));
 
-$own = new Owner(new Name(new Text('Owner')));
+$owner = new Owner(new Name(new Text('Owner')));
 
 $name = new Name(new Text('Name'));
 
 $id = new Id();
 
-echo match($jfsd->write($json, $jsdp, $loc, $own, $name, $id)) {
+echo match(
+    $jsonFilesystemStorageDriver->write(
+        $json,
+        $jsonStorageDirectoryPath,
+        $location,
+        $owner,
+        $name,
+        $id,
+    )
+) {
     true => IntegrationTestUtilities::applyANSIColor(
-        'Json was written successfully',
-        1
+        'Test Passed',
+        85
     ),
     false => IntegrationTestUtilities::applyANSIColor(
-        'Failed to write Json',
-        2
+        'Test Failed',
+        196
     )
 };
 
+IntegrationTestUtilities::deleteTestJsonStorageDirectory(
+    $jsonStorageDirectoryPath
+);

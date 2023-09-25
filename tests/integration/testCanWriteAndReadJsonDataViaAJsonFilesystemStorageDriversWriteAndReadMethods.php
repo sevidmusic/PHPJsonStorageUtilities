@@ -11,16 +11,16 @@ use \Darling\PHPJsonStorageUtilities\classes\filesystem\storage\queries\JsonFile
 use \Darling\PHPJsonStorageUtilities\classes\named\identifiers\Container;
 use \Darling\PHPJsonStorageUtilities\classes\named\identifiers\Location;
 use \Darling\PHPJsonStorageUtilities\classes\named\identifiers\Owner;
-use \Darling\PHPJsonStorageUtilities\enumerations\Type;
 use \Darling\PHPJsonUtilities\classes\encoded\data\Json;
 use \Darling\PHPTextTypes\classes\strings\Id;
 use \Darling\PHPTextTypes\classes\strings\Name;
 use \Darling\PHPTextTypes\classes\strings\Text;
 use \Darling\PHPJsonStorageUtilities\tests\IntegrationTestUtilities;
+use \Darling\PHPJsonUtilities\classes\decoders\JsonDecoder;
+
+$jsonDecoder = new JsonDecoder();
 
 $data = [new Id(), 'Foo', rand(PHP_INT_MIN, PHP_INT_MAX)];
-
-$expectedContainer = new Container(Type::Array);
 
 $json = new Json($data);
 
@@ -32,6 +32,9 @@ $jsonStorageDirectoryPath = new JsonStorageDirectoryPath(
 
 $location = new Location(new Name(new Text('Location')));
 
+$container = new Container(
+    IntegrationTestUtilities::determineType($json, $jsonDecoder)
+);
 $owner = new Owner(new Name(new Text('Owner')));
 
 $name = new Name(new Text('Name'));
@@ -41,53 +44,41 @@ $id = new Id();
 $expectedJsonFilePath = new JsonFilePath(
     jsonStorageDirectoryPath: $jsonStorageDirectoryPath,
     location: $location,
-    container: $expectedContainer,
+    container: $container,
     owner: $owner,
     name: $name,
     id: $id,
 );
 
-echo PHP_EOL .
-    'Writing json to file: ' .
-    IntegrationTestUtilities::applyANSIColor(
-        $expectedJsonFilePath->__toString(),
-        9
-    );
-
-echo PHP_EOL . match(
-    $jsonFilesystemStorageDriver->write(
-        $json,
-        $jsonStorageDirectoryPath,
-        $location,
-        $owner,
-        $name,
-        $id,
-    )
-) {
-        true => IntegrationTestUtilities::applyANSIColor(
-            'Json was written successfully',
-            2
-        ),
-        false => IntegrationTestUtilities::applyANSIColor(
-            'Failed to write Json',
-            1
-        ),
-} . PHP_EOL;
-
-/** Should read all stored Json from the $expectedContainer */
-$jsonFilesystemStorageQuery = new JsonFilesystemStorageQuery(
-    container: $expectedContainer
+$jsonFilesystemStorageDriver->write(
+    $json,
+    $jsonStorageDirectoryPath,
+    $location,
+    $owner,
+    $name,
+    $id,
 );
 
-foreach(
-    $jsonFilesystemStorageDriver->read($jsonFilesystemStorageQuery)
-                                ->collection()
-    as
-    $json
+$jsonFilesystemStorageQuery = new JsonFilesystemStorageQuery(
+    jsonFilePath: $expectedJsonFilePath
+);
+
+$expectedCount = glob($jsonFilesystemStorageQuery->__toString());
+
+$jsonCollection = $jsonFilesystemStorageDriver->read(
+    $jsonFilesystemStorageQuery
+);
+
+echo match(
+    count($jsonCollection->collection())
+    ===
+    count(is_array($expectedCount) ? $expectedCount : [])
 ) {
-    echo PHP_EOL .
-        IntegrationTestUtilities::applyANSIColor('Read json: ', 2) .
-        IntegrationTestUtilities::applyANSIColor($json, 9) .
-        PHP_EOL;
-}
+    true => IntegrationTestUtilities::applyANSIColor('Test Passed', 85),
+    false => IntegrationTestUtilities::applyANSIColor('Test Failed', 196),
+};
+
+IntegrationTestUtilities::deleteTestJsonStorageDirectory(
+    $jsonStorageDirectoryPath
+);
 
