@@ -24,10 +24,11 @@ trait OwnerCollectionTestTrait
     protected OwnerCollection $ownerCollection;
 
     /**
-     * @var array<int, Owner> The array of Owner instances that is
-     *                        expected to be returned by the
-     *                        OwnerCollection instance being
-     *                        tested's collection() method.
+     * @var array<int, Owner> $expectedCollection
+     *                            The array of Owner instances that is
+     *                            expected to be returned by the
+     *                            OwnerCollection instance being
+     *                            tested's collection() method.
      */
     private array $expectedCollection = [];
 

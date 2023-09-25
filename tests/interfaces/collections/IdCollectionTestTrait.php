@@ -22,9 +22,11 @@ trait IdCollectionTestTrait
     protected IdCollection $idCollection;
 
     /**
-     * @var array<int, Id> The array of Id instances that is expected
-     *                     to be returned by the IdCollection instance
-     *                     being tested's collection() method.
+     * @var array<int, Id> $expectedCollection
+     *                         The array of Id instances that is
+     *                         expected to be returned by the
+     *                         IdCollection instance being tested's
+     *                         collection() method.
      */
     private array $expectedCollection = [];
 
