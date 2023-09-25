@@ -16,10 +16,10 @@ trait JsonCollectionTestTrait
 {
 
     /**
-     * @var JsonCollection $jsonCollection
-     *                              An instance of a
-     *                              JsonCollection
-     *                              implementation to test.
+     * @var JsonCollection $jsonCollection An instance of a
+     *                                     JsonCollection
+     *                                     implementation to
+     *                                     test.
      */
     protected JsonCollection $jsonCollection;
 
@@ -50,10 +50,20 @@ trait JsonCollectionTestTrait
      * @example
      *
      * ```
-     * protected function setUp(): void
+     * public function setUp(): void
      * {
+     *     $this->setExpectedCollection(
+     *         [
+     *             new Json(new Id()),
+     *             new Json($this->randomClassStringOrObjectInstance()),
+     *             new Json($this->randomObjectInstance()),
+     *             new Json($this->randomChars()),
+     *         ]
+     *     );
      *     $this->setJsonCollectionTestInstance(
-     *         new \Darling\PHPJsonStorageUtilities\classes\collections\JsonCollection()
+     *         new JsonCollection(
+     *             ...$this->expectedCollection(),
+     *         )
      *     );
      * }
      *
@@ -77,10 +87,13 @@ trait JsonCollectionTestTrait
      * Set the JsonCollection implementation instance to test.
      *
      * @param JsonCollection $jsonCollectionTestInstance
-     *                              An instance of an
-     *                              implementation of
-     *                              the JsonCollection
-     *                              interface to test.
+     *                                                  An instance
+     *                                                  of an
+     *                                                  implementation
+     *                                                  of the
+     *                                                  JsonCollection
+     *                                                  interface to
+     *                                                  test.
      *
      * @return void
      *
@@ -93,9 +106,9 @@ trait JsonCollectionTestTrait
     }
 
     /**
-     * Set the array of Json instances that is
-     * expected to be returned by the JsonCollection
-     * instance being tested's collection() method.
+     * Set the array of Json instances that is expected to be returned
+     * by the JsonCollection instance being tested's collection()
+     * method.
      *
      * @param array<int, Json> $collection
      *
@@ -108,9 +121,9 @@ trait JsonCollectionTestTrait
     }
 
     /**
-     * Return the array of Json instances that is
-     * expected to be returned by the JsonCollection
-     * instance being tested's collection() method.
+     * Return the array of Json instances that is expected to be
+     * returned by the JsonCollection instance being tested's
+     * collection() method.
      *
      * @return array<int, Json>
      *
@@ -121,8 +134,7 @@ trait JsonCollectionTestTrait
     }
 
     /**
-     * Test collection() returns the expected array of
-     * Json instances.
+     * Test collection() returns the expected array of Json instances.
      *
      * @return void
      *
@@ -141,5 +153,9 @@ trait JsonCollectionTestTrait
             ),
         );
     }
+
+    abstract protected static function assertEquals(mixed $expected, mixed $actual, string $message = ''): void;
+    abstract protected function testFailedMessage(object $object, string $method, string $message): string;
+
 }
 
