@@ -6,9 +6,8 @@ use \Darling\PHPJsonStorageUtilities\interfaces\collections\IdCollection;
 use \Darling\PHPTextTypes\interfaces\strings\Id;
 
 /**
- * The IdCollectionTestTrait defines common
- * tests for implementations of the IdCollection
- * interface.
+ * The IdCollectionTestTrait defines common tests for implementations
+ * of the IdCollection interface.
  *
  * @see IdCollection
  *
@@ -149,6 +148,9 @@ trait IdCollectionTestTrait
             ),
         );
     }
+
+    abstract protected static function assertEquals(mixed $expected, mixed $actual, string $message = ''): void;
+    abstract protected function testFailedMessage(object $object, string $method, string $message): string;
 
 }
 
