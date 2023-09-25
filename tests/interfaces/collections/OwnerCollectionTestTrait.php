@@ -99,13 +99,10 @@ trait OwnerCollectionTestTrait
     /**
      * Set the OwnerCollection implementation instance to test.
      *
-     * @param OwnerCollection $ownerCollectionTestInstance An instance
-     *                                                     of an
-     *                                                     implementation
-     *                                                     of the
-     *                                                     OwnerCollection
-     *                                                     interface
-     *                                                     to test.
+     * @param OwnerCollection $ownerCollectionTestInstance
+     *                            An instance of an implementation
+     *                            of the OwnerCollection interface
+     *                            to test.
      *
      * @return void
      *
@@ -166,6 +163,9 @@ trait OwnerCollectionTestTrait
             ),
         );
     }
+
+    abstract protected static function assertEquals(mixed $expected, mixed $actual, string $message = ''): void;
+    abstract protected function testFailedMessage(object $object, string $method, string $message): string;
 
 }
 
