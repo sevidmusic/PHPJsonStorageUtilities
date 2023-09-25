@@ -76,32 +76,14 @@ for($jsonWrites = 0; $jsonWrites < rand(10, 20); $jsonWrites++) {
     $names[] = $name;
     $ids[] = $id;
     $jsonFilePaths[] = $jsonFilePath;
-    echo PHP_EOL .
-        'Writing to the following path: ' .
-        IntegrationTestUtilities::applyANSIColor(
-            $jsonFilePath->__toString(),
-            1
-        ) .
-        (
-            $jsonFilesystemStorageDriver->write(
-                $json,
-                $jsonStorageDirectoryPath,
-                $location,
-                $owner,
-                $name,
-                $id,
-            )
-            ? IntegrationTestUtilities::applyANSIColor(
-                'file was written',
-                2
-            )
-            : IntegrationTestUtilities::applyANSIColor(
-                'failed to write file',
-                1
-            )
-        ) .
-        PHP_EOL;
-    ;
+    $jsonFilesystemStorageDriver->write(
+        $json,
+        $jsonStorageDirectoryPath,
+        $location,
+        $owner,
+        $name,
+        $id,
+    );
 }
 
 $jsonFilesystemStorageQuery = new JsonFilesystemStorageQuery(
@@ -116,36 +98,23 @@ $jsonFilesystemStorageQuery = new JsonFilesystemStorageQuery(
     jsonFilePath: (rand(0, 1) === 0 ? null : $jsonFilePath),
 );
 
-echo PHP_EOL .
-    PHP_EOL .
-    'Reading based on the following JsonFilesystemStorageQuery: ' .
-    PHP_EOL .
-    PHP_EOL .
-    '    ' .
-    IntegrationTestUtilities::applyANSIColor(
-        $jsonFilesystemStorageQuery->__toString(),
-        5
-    ) .
-    PHP_EOL .
-    PHP_EOL;
+$expectedCount = glob($jsonFilesystemStorageQuery->__toString());
+
 $jsonCollection = $jsonFilesystemStorageDriver->read(
     $jsonFilesystemStorageQuery
 );
-echo PHP_EOL .
-    PHP_EOL .
-    'Number of items read from storage: ' .
-    IntegrationTestUtilities::applyANSIColor(
-        strval(count($jsonCollection->collection())),
-        165
+echo match(
+    count($jsonCollection->collection())
+    ===
+    count(is_array($expectedCount) ? $expectedCount : [])
+) {
+    true => IntegrationTestUtilities::applyANSIColor('Test Passed', 85),
+    false => IntegrationTestUtilities::applyANSIColor('Test Failed', 196),
+};
+
+foreach($jsonStorageDirectoryPaths as $jsonStorageDirectoryPath) {
+    IntegrationTestUtilities::deleteTestJsonStorageDirectory(
+        $jsonStorageDirectoryPath
     );
-foreach($jsonCollection->collection() as $json) {
-    echo PHP_EOL .
-        'Json read: ' .
-        IntegrationTestUtilities::applyANSIColor(
-            $json->__toString(),
-            6
-        );
-    echo PHP_EOL . 'Decoded value: ' . PHP_EOL;
-    var_dump($jsonDecoder->decode($json));
 }
 
