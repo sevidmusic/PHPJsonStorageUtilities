@@ -671,5 +671,9 @@ trait JsonFilesystemStorageQueryTestTrait
             ),
         );
     }
+
+    abstract protected static function assertEquals(mixed $expected, mixed $actual, string $message = ''): void;
+    abstract protected function testFailedMessage(object $object, string $method, string $message): string;
+
 }
 
