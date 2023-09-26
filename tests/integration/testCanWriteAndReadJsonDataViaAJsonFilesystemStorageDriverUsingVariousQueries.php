@@ -53,7 +53,7 @@ for($jsonWrites = 0; $jsonWrites < rand(10, 20); $jsonWrites++) {
         )
     );
     $container = new Container(
-        IntegrationTestUtilities::determineType($json, $jsonDecoder)
+        IntegrationTestUtilities::determineType($json)
     );
     $owner = new Owner(
         new Name(new Text('Owner' . strval(rand(1, 3))))

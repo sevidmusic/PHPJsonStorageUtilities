@@ -18,6 +18,7 @@ use \FilesystemIterator;
 use \RecursiveDirectoryIterator;
 use \RecursiveIteratorIterator;
 use \SplFileInfo;
+use \Darling\PHPJsonStorageUtilities\tests\IntegrationTestUtilities;
 
 final class JsonFilesystemStorageDriverTest extends PHPJsonStorageUtilitiesTest
 {
@@ -47,7 +48,7 @@ final class JsonFilesystemStorageDriverTest extends PHPJsonStorageUtilitiesTest
         $json = new Json($testData[array_rand($testData)]);
         $this->setExpectedJson($json);
         $container = new Container(
-            $this->determineType($this->expectedJson())
+            IntegrationTestUtilities::determineType($this->expectedJson())
         );
         $jsonFilePath = new JsonFilePath(
             new JsonStorageDirectoryPath(

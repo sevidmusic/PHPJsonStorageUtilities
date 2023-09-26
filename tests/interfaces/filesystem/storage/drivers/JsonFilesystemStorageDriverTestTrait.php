@@ -24,6 +24,7 @@ use \Darling\PHPTextTypes\classes\strings\Name;
 use \Darling\PHPTextTypes\classes\strings\Text;
 use \Darling\PHPTextTypes\interfaces\strings\ClassString;
 use \ReflectionObject;
+use \Darling\PHPJsonStorageUtilities\tests\IntegrationTestUtilities;
 
 
 /**
@@ -91,7 +92,7 @@ trait JsonFilesystemStorageDriverTestTrait
      *     $json = new Json($testData[array_rand($testData)]);
      *     $this->setExpectedJson($json);
      *     $container = new Container(
-     *         $this->determineType($this->expectedJson())
+     *         IntegrationTestUtilities::determineType($this->expectedJson())
      *     );
      *     $jsonFilePath = new JsonFilePath(
      *         new JsonStorageDirectoryPath(
@@ -165,33 +166,6 @@ trait JsonFilesystemStorageDriverTestTrait
     ): void
     {
         $this->expectedJsonFilePath = $jsonFilePath;
-    }
-
-    /**
-     * Determine the type of data that is encoded as Json.
-     *
-     * @return Type|ClassString
-     *
-     */
-    protected function determineType(Json $json): Type|ClassString
-    {
-        $jsonDecoder = new JsonDecoderInstance();
-        $data = $jsonDecoder->decode($json);
-        if(is_object($data)) {
-            return new ClassStringInstance($data);
-        }
-        return match(gettype($data)) {
-            Type::Array->value => Type::Array,
-            Type::Bool->value => Type::Bool,
-            Type::Float->value => Type::Float,
-            Type::Int->value => Type::Int,
-            Type::Null->value => Type::Null,
-            Type::String->value => Type::String,
-            Type::Object->value => Type::Object,
-            Type::Resource->value => Type::Resource,
-            Type::ResourceClosed->value => Type::ResourceClosed,
-            Type::UnknownType->value => Type::UnknownType,
-        };
     }
 
     /**
@@ -340,7 +314,7 @@ trait JsonFilesystemStorageDriverTestTrait
                         new Name(new Text($pathParts[8] ?? ''))
                     ),
                     new Container(
-                        $this->determineType(
+                        IntegrationTestUtilities::determineType(
                             new JsonInstance(
                                 $jsonDecoder->decodeJsonString(
                                     strval(file_get_contents($file))
@@ -779,7 +753,7 @@ trait JsonFilesystemStorageDriverTestTrait
                 new Name(new Text($this->randomChars()))
             );
             $container = new Container(
-                $this->determineType($jsonInstance)
+                IntegrationTestUtilities::determineType($jsonInstance)
             );
             $owner = new Owner(
                 new Name(new Text($this->randomChars()))
@@ -864,7 +838,7 @@ trait JsonFilesystemStorageDriverTestTrait
                 new Name(new Text($this->randomChars()))
             );
             $container = new Container(
-                $this->determineType($jsonInstance)
+                IntegrationTestUtilities::determineType($jsonInstance)
             );
             $owner = new Owner(
                 new Name(new Text($this->randomChars()))
@@ -1105,7 +1079,7 @@ trait JsonFilesystemStorageDriverTestTrait
                 new Name(new Text($this->randomChars()))
             );
             $container = new Container(
-                $this->determineType($jsonInstance)
+                IntegrationTestUtilities::determineType($jsonInstance)
             );
             $owner = new Owner(
                 new Name(new Text($this->randomChars()))
@@ -1261,7 +1235,7 @@ trait JsonFilesystemStorageDriverTestTrait
                 new Name(new Text($this->randomChars()))
             );
             $container = new Container(
-                $this->determineType($jsonInstance)
+                IntegrationTestUtilities::determineType($jsonInstance)
             );
             $owner = new Owner(
                 new Name(new Text($this->randomChars()))
@@ -1507,7 +1481,7 @@ trait JsonFilesystemStorageDriverTestTrait
                 new Name(new Text($this->randomChars()))
             );
             $container = new Container(
-                $this->determineType($jsonInstance)
+                IntegrationTestUtilities::determineType($jsonInstance)
             );
             $owner = new Owner(
                 new Name(new Text($this->randomChars()))
@@ -1604,7 +1578,7 @@ trait JsonFilesystemStorageDriverTestTrait
                 new Name(new Text($this->randomChars()))
             );
             $container = new Container(
-                $this->determineType($jsonInstance)
+                IntegrationTestUtilities::determineType($jsonInstance)
             );
             $owner = new Owner(
                 new Name(new Text($this->randomChars()))
@@ -1695,7 +1669,7 @@ trait JsonFilesystemStorageDriverTestTrait
                 new Name(new Text($this->randomChars()))
             );
             $container = new Container(
-                $this->determineType($jsonInstance)
+                IntegrationTestUtilities::determineType($jsonInstance)
             );
             $owner = new Owner(
                 new Name(new Text($this->randomChars()))

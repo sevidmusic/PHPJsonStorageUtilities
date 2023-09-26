@@ -5,7 +5,7 @@ namespace Darling\PHPJsonStorageUtilities\tests;
 use \Darling\PHPJsonStorageUtilities\enumerations\Type;
 use \Darling\PHPJsonStorageUtilities\interfaces\filesystem\paths\JsonStorageDirectoryPath;
 use \Darling\PHPJsonUtilities\classes\decoders\JsonDecoder;
-use \Darling\PHPJsonUtilities\classes\encoded\data\Json;
+use \Darling\PHPJsonUtilities\interfaces\encoded\data\Json;
 use \Darling\PHPTextTypes\classes\strings\ClassString;
 use \FilesystemIterator;
 use \RecursiveDirectoryIterator;
@@ -40,8 +40,9 @@ final class IntegrationTestUtilities
             " \033[0m";
     }
 
-    public static function determineType(Json $json, JsonDecoder $jsonDecoder): Type|ClassString
+    public static function determineType(Json $json): Type|ClassString
     {
+        $jsonDecoder = new JsonDecoder();
         $data = $jsonDecoder->decode($json);
         if(is_object($data)) {
             return new ClassString($data);

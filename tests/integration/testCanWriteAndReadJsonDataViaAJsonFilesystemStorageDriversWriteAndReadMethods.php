@@ -33,7 +33,7 @@ $jsonStorageDirectoryPath = new JsonStorageDirectoryPath(
 $location = new Location(new Name(new Text('Location')));
 
 $container = new Container(
-    IntegrationTestUtilities::determineType($json, $jsonDecoder)
+    IntegrationTestUtilities::determineType($json)
 );
 $owner = new Owner(new Name(new Text('Owner')));
 

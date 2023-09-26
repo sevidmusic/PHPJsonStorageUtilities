@@ -243,7 +243,8 @@ final class JsonFilesystemStorageDriver implements JsonFilesystemStorageDriverIn
                             new Text($reconstructedId)
                         )
                     );
-                    $reflectionClass = $reflectionClass->getParentClass();
+                    $reflectionClass =
+                        $reflectionClass->getParentClass();
                     if($reflectionClass !== false) {
                         $property =
                             $reflectionClass->getProperty(
