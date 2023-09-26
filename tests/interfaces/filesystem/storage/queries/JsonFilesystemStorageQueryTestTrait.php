@@ -245,7 +245,8 @@ trait JsonFilesystemStorageQueryTestTrait
         JsonFilesystemStorageQuery $jsonFilesystemStorageQueryTestInstance
     ): void
     {
-        $this->jsonFilesystemStorageQuery = $jsonFilesystemStorageQueryTestInstance;
+        $this->jsonFilesystemStorageQuery =
+            $jsonFilesystemStorageQueryTestInstance;
     }
 
 
@@ -350,7 +351,8 @@ trait JsonFilesystemStorageQueryTestTrait
         JsonStorageDirectoryPath|null $jsonStorageDirectoryPath
     ): void
     {
-        $this->expectedJsonStorageDirectoryPath = $jsonStorageDirectoryPath;
+        $this->expectedJsonStorageDirectoryPath =
+            $jsonStorageDirectoryPath;
     }
 
     /**
@@ -361,7 +363,9 @@ trait JsonFilesystemStorageQueryTestTrait
      * @return void
      *
      */
-    protected function setExpectedLocation(Location|null $location): void
+    protected function setExpectedLocation(
+        Location|null $location
+    ): void
     {
         $this->expectedLocation = $location;
     }
@@ -374,7 +378,9 @@ trait JsonFilesystemStorageQueryTestTrait
      * @return void
      *
      */
-    protected function setExpectedContainer(Container|null $container): void
+    protected function setExpectedContainer(
+        Container|null $container
+    ): void
     {
         $this->expectedContainer = $container;
     }
@@ -515,7 +521,8 @@ trait JsonFilesystemStorageQueryTestTrait
     {
         $this->assertEquals(
             $this->expectedJsonFilePath(),
-            $this->jsonFilesystemStorageQueryTestInstance()->jsonFilePath(),
+            $this->jsonFilesystemStorageQueryTestInstance()
+                 ->jsonFilePath(),
             $this->testFailedMessage(
                 $this->jsonFilesystemStorageQueryTestInstance(),
                 'jsonFilePath',
@@ -537,7 +544,8 @@ trait JsonFilesystemStorageQueryTestTrait
     {
         $this->assertEquals(
             $this->expectedJsonStorageDirectoryPath(),
-            $this->jsonFilesystemStorageQueryTestInstance()->jsonStorageDirectoryPath(),
+            $this->jsonFilesystemStorageQueryTestInstance()
+                 ->jsonStorageDirectoryPath(),
             $this->testFailedMessage(
                 $this->jsonFilesystemStorageQueryTestInstance(),
                 'jsonStorageDirectoryPath',
@@ -558,7 +566,8 @@ trait JsonFilesystemStorageQueryTestTrait
     {
         $this->assertEquals(
             $this->expectedLocation(),
-            $this->jsonFilesystemStorageQueryTestInstance()->location(),
+            $this->jsonFilesystemStorageQueryTestInstance()
+                 ->location(),
             $this->testFailedMessage(
                 $this->jsonFilesystemStorageQueryTestInstance(),
                 'location',
@@ -579,7 +588,8 @@ trait JsonFilesystemStorageQueryTestTrait
     {
         $this->assertEquals(
             $this->expectedContainer(),
-            $this->jsonFilesystemStorageQueryTestInstance()->container(),
+            $this->jsonFilesystemStorageQueryTestInstance()
+                 ->container(),
             $this->testFailedMessage(
                 $this->jsonFilesystemStorageQueryTestInstance(),
                 'container',
@@ -662,7 +672,9 @@ trait JsonFilesystemStorageQueryTestTrait
     public function test___toString_returns_expected_query_string(): void
     {
         $this->assertEquals(
-            $this->expectedQueryString($this->jsonFilesystemStorageQueryTestInstance()),
+            $this->expectedQueryString(
+                $this->jsonFilesystemStorageQueryTestInstance()
+            ),
             $this->jsonFilesystemStorageQueryTestInstance()->__toString(),
             $this->testFailedMessage(
                 $this->jsonFilesystemStorageQueryTestInstance(),

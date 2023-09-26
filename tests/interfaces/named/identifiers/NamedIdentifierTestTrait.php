@@ -47,7 +47,7 @@ trait NamedIdentifierTestTrait
      * @example
      *
      * ```
-     * protected function setUp(): void
+     * public function setUp(): void
      * {
      *     $expectedName = new Name(new Text($this->randomChars()));
      *     $this->setExpectedName($expectedName);
@@ -162,6 +162,9 @@ trait NamedIdentifierTestTrait
             ),
         );
     }
+
+    abstract protected static function assertEquals(mixed $expected, mixed $actual, string $message = ''): void;
+    abstract protected function testFailedMessage(object $object, string $method, string $message): string;
 
 }
 

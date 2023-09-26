@@ -45,7 +45,7 @@ trait LocationTestTrait
      * @example
      *
      * ```
-     * protected function setUp(): void
+     * public function setUp(): void
      * {
      *     $expectedName = new Name(new Text($this->randomChars()));
      *     $location = new Location($expectedName);
