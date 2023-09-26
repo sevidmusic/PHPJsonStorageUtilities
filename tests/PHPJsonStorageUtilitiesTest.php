@@ -31,7 +31,7 @@ class PHPJsonStorageUtilitiesTest extends TestCase
      *                                           storage directory to
      *                                           use for testing.
      */
-    protected const TEST_STORAGE_DIRECTORY_NAME = 'PHPJsonStorageUtiltitiesTestData';
+    public const TEST_STORAGE_DIRECTORY_NAME = 'PHPJsonStorageUtiltitiesTestData';
 
 }
 

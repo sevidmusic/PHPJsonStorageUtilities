@@ -2,17 +2,18 @@
 
 namespace Darling\PHPJsonStorageUtilities\tests\interfaces\filesystem\storage\queries;
 
+use \Darling\PHPJsonStorageUtilities\classes\filesystem\paths\JsonStorageDirectoryPath as JsonStorageDirectoryPathInstance;
 use \Darling\PHPJsonStorageUtilities\interfaces\filesystem\paths\JsonFilePath;
 use \Darling\PHPJsonStorageUtilities\interfaces\filesystem\paths\JsonStorageDirectoryPath;
 use \Darling\PHPJsonStorageUtilities\interfaces\filesystem\storage\queries\JsonFilesystemStorageQuery;
 use \Darling\PHPJsonStorageUtilities\interfaces\named\identifiers\Container;
 use \Darling\PHPJsonStorageUtilities\interfaces\named\identifiers\Location;
 use \Darling\PHPJsonStorageUtilities\interfaces\named\identifiers\Owner;
-use \Darling\PHPTextTypes\interfaces\strings\Id;
-use \Darling\PHPTextTypes\interfaces\strings\Name;
+use \Darling\PHPJsonStorageUtilities\tests\PHPJsonStorageUtilitiesTest;
 use \Darling\PHPTextTypes\classes\strings\Name as NameInstance;
 use \Darling\PHPTextTypes\classes\strings\Text;
-use \Darling\PHPJsonStorageUtilities\classes\filesystem\paths\JsonStorageDirectoryPath as JsonStorageDirectoryPathInstance;
+use \Darling\PHPTextTypes\interfaces\strings\Id;
+use \Darling\PHPTextTypes\interfaces\strings\Name;
 
 /**
  * The JsonFilesystemStorageQueryTestTrait defines common tests for
@@ -150,43 +151,64 @@ trait JsonFilesystemStorageQueryTestTrait
      * ```
      * public function setUp(): void
      * {
-     *     $jsonStorageDirectoryPath = new JsonStorageDirectoryPath(
-     *         new Name(
-     *             new Text($this->randomChars())
-     *         )
-     *     );
-     *     $this->setExpectedJsonStorageDirectoryPath($jsonStorageDirectoryPath);
-     *     $location = new Location(new Name(new Text($this->randomChars())));
-     *     $this->setExpectedLocation($location);
-     *     $container = new Container(new ClassString($this->randomClassStringOrObjectInstance()));
-     *     $this->setExpectedContainer($container);
-     *     $owner = new Owner(new Name(new Text($this->randomChars())));
-     *     $this->setExpectedOwner($owner);
-     *     $name = new Name(new Text($this->randomChars()));
-     *     $this->setExpectedName($name);
-     *     $id = new Id();
-     *     $this->setExpectedId($id);
      *     $jsonFilePath = new JsonFilePath(
-     *         new JsonStorageDirectoryPath(new Name(new Text(self::TEST_STORAGE_DIRECTORY_NAME))),
+     *         new JsonStorageDirectoryPath(
+     *             new Name(new Text(self::TEST_STORAGE_DIRECTORY_NAME))
+     *         ),
      *         new Location(new Name(new Text($this->randomChars()))),
      *         new Container(new ClassString(Name::class)),
      *         new Owner(new Name(new Text($this->randomChars()))),
      *         new Name(new Text($this->randomChars())),
      *         new Id(),
-
+     *
      *     );
-     *     $this->setExpectedJsonFilePath($jsonFilePath);
-     *     $this->setJsonFilesystemStorageQueryTestInstance(
-     *         new JsonFilesystemStorageQuery(
-     *             jsonFilePath: $jsonFilePath,
-     *             jsonStorageDirectoryPath: $jsonStorageDirectoryPath,
-     *             location: $location,
-     *             container: $container,
-     *             owner: $owner,
-     *             name: $name,
-     *             id: $id,
+     *     $jsonStorageDirectoryPath = new JsonStorageDirectoryPath(
+     *         new Name(
+     *             new Text($this->randomChars())
      *         )
      *     );
+     *     $locations = [
+     *         new Location(new Name(new Text($this->randomChars()))),
+     *         null
+     *     ];
+     *     $location = $locations[array_rand($locations)];
+     *     $containers = [
+     *         new Container(
+     *             new ClassString(
+     *                 $this->randomClassStringOrObjectInstance()
+     *             )
+     *         ),
+     *         null
+     *     ];
+     *     $container = $containers[array_rand($containers)];
+     *     $owners = [
+     *         new Owner(new Name(new Text($this->randomChars()))),
+     *         null
+     *     ];
+     *     $owner = $owners[array_rand($owners)];
+     *     $names = [new Name(new Text($this->randomChars())), null];
+     *     $name = $names[array_rand($names)];
+     *     $ids = [new Id(), null];
+     *     $id = $ids[array_rand($ids)];
+     *     $this->setExpectedId($id);
+     *     $this->setExpectedName($name);
+     *     $this->setExpectedOwner($owner);
+     *     $this->setExpectedContainer($container);
+     *     $this->setExpectedJsonStorageDirectoryPath(
+     *         $jsonStorageDirectoryPath
+     *     );
+     *     $this->setExpectedLocation($location);
+     *     $this->setExpectedJsonFilePath($jsonFilePath);
+     *     $query = new JsonFilesystemStorageQuery(
+     *         jsonFilePath: $jsonFilePath,
+     *         jsonStorageDirectoryPath: $jsonStorageDirectoryPath,
+     *         location: $location,
+     *         container: $container,
+     *         owner: $owner,
+     *         name: $name,
+     *         id: $id
+     *     );
+     *     $this->setJsonFilesystemStorageQueryTestInstance($query);
      * }
      *
      * ```
@@ -226,7 +248,18 @@ trait JsonFilesystemStorageQueryTestTrait
         $this->jsonFilesystemStorageQuery = $jsonFilesystemStorageQueryTestInstance;
     }
 
-    private function expectedQueryString(JsonFilesystemStorageQuery $query): string
+
+    /**
+     * Return the string that is expected to be returned by the
+     * JsonFilesystemStorageQuery instance being tested's
+     * __toString() method.
+     *
+     * @return string
+     *
+     */
+    private function expectedQueryString(
+        JsonFilesystemStorageQuery $query
+    ): string
     {
         if($query->jsonFilePath() instanceof JsonFilePath) {
             return $query->jsonFilePath()->__toString();
@@ -255,6 +288,15 @@ trait JsonFilesystemStorageQueryTestTrait
         return $queryString;
     }
 
+    /**
+     * Return a string generated by sharding the string returned
+     * by an Id instance's __toString() method.
+     *
+     * @param Id $id The Id to shard.
+     *
+     * @return string
+     *
+     */
     private function shardId(Id $id): string
     {
         $index = 3;
@@ -263,9 +305,22 @@ trait JsonFilesystemStorageQueryTestTrait
         return $parentDir . DIRECTORY_SEPARATOR . $subDir;
     }
 
+
+    /**
+     * Return an instance of a JsonStorageDirectoryPath.
+     *
+     * @return JsonStorageDirectoryPath
+     *
+     */
     private function jsonStorageDirectoryPathInstance(): JsonStorageDirectoryPath
     {
-        return new JsonStorageDirectoryPathInstance(new NameInstance(new Text('DEFAULT')));
+        return new JsonStorageDirectoryPathInstance(
+            new NameInstance(
+                new Text(
+                    PHPJsonStorageUtilitiesTest::TEST_STORAGE_DIRECTORY_NAME
+                )
+            )
+        );
     }
 
     /**

@@ -33,7 +33,11 @@ final class JsonFilesystemStorageQueryTest extends PHPJsonStorageUtilitiesTest
     {
         $jsonFilePath = new JsonFilePath(
             new JsonStorageDirectoryPath(
-                new Name(new Text(self::TEST_STORAGE_DIRECTORY_NAME))
+                new Name(
+                    new Text(
+                        PHPJsonStorageUtilitiesTest::TEST_STORAGE_DIRECTORY_NAME
+                    )
+                )
             ),
             new Location(new Name(new Text($this->randomChars()))),
             new Container(new ClassString(Name::class)),
