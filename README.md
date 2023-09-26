@@ -73,5 +73,3 @@ library.
 ### \Darling\classes\named\identifiers\Owner
 ### \Darling\enumerations\Type
 
-
-
