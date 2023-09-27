@@ -7,8 +7,8 @@ include(dirname(__DIR__, 1) . DIRECTORY_SEPARATOR . 'vendor' . DIRECTORY_SEPARAT
 use \Darling\PHPJsonStorageUtilities\classes\collections\ContainerCollection;
 use \Darling\PHPJsonStorageUtilities\classes\named\identifiers\Container;
 use \Darling\PHPJsonStorageUtilities\enumerations\Type;
-use \Darling\PHPTextTypes\classes\strings\ClassString;
 use \Darling\PHPJsonStorageUtilities\tests\IntegrationTestUtilities;
+use \Darling\PHPTextTypes\classes\strings\ClassString;
 
 /**
  * This file demonstrates the usage of a ContainerCollection.

@@ -5,9 +5,9 @@ namespace Darling\PHPJsonStorageUtilities\examples;
 include(dirname(__DIR__, 1) . DIRECTORY_SEPARATOR . 'vendor' . DIRECTORY_SEPARATOR . 'autoload.php');
 
 use \Darling\PHPJsonStorageUtilities\classes\collections\JsonCollection;
+use \Darling\PHPJsonStorageUtilities\tests\IntegrationTestUtilities;
 use \Darling\PHPJsonUtilities\classes\encoded\data\Json;
 use \Darling\PHPTextTypes\classes\strings\Id;
-use \Darling\PHPJsonStorageUtilities\tests\IntegrationTestUtilities;
 
 /**
  * This file demonstrates the usage of a JsonCollection.
