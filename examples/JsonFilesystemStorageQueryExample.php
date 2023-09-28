@@ -27,6 +27,8 @@ $data = [new Id(), 'Foo' . strval(rand(1, 100)), rand(PHP_INT_MIN, PHP_INT_MAX)]
 // Encode the data as json
 $json = new Json($data);
 
+// Instantiate a new JsonStorageDirectoryPath which will determine
+// which json storage directory the json will be written to/read from.
 $jsonStorageDirectoryPath = new JsonStorageDirectoryPath(
     new Name(
         new Text('JsonStorageDirectoryName' . strval(rand(1, 100)))
@@ -77,9 +79,17 @@ $jsonFilePathCollectiong = $jsonFilesystemStorageDriver->storedJsonFilePaths(
     $jsonFilesystemStorageQuery
 );
 
-echo PHP_EOL . IntegrationTestUtilities::applyANSIColor('The following query:', rand(1, 231)) . PHP_EOL;
-echo PHP_EOL . IntegrationTestUtilities::applyANSIColor($jsonFilesystemStorageQuery->__toString(), rand(1, 231)) . PHP_EOL;
-echo PHP_EOL . IntegrationTestUtilities::applyANSIColor('Produced the following matches:', rand(1, 231)) . PHP_EOL;
+echo PHP_EOL . IntegrationTestUtilities::applyANSIColor(
+    'The following query:', rand(1, 231)
+) . PHP_EOL;
+
+echo PHP_EOL . IntegrationTestUtilities::applyANSIColor(
+    $jsonFilesystemStorageQuery->__toString(), rand(1, 231)
+) . PHP_EOL;
+
+echo PHP_EOL . IntegrationTestUtilities::applyANSIColor(
+    'Produced the following matches:', rand(1, 231)
+) . PHP_EOL;
 
 // echo any stored json that matched the JsonFilesystemStorageQuery
 // that was passed to $jsonFilesystemStorageDriver->read()
