@@ -18,20 +18,20 @@ use \Darling\PHPTextTypes\classes\strings\Id;
 use \Darling\PHPTextTypes\classes\strings\Name;
 use \Darling\PHPTextTypes\classes\strings\Text;
 
+// Instantiate a new JsonFilesystemStorageDriver
+$jsonFilesystemStorageDriver = new JsonFilesystemStorageDriver();
+
 // Create some data to store.
 $data = [new Id(), 'Foo' . strval(rand(1, 100)), rand(PHP_INT_MIN, PHP_INT_MAX)];
 
 // Encode the data as json
 $json = new Json($data);
 
-// Instantiate a new JsonFilesystemStorageDriver
-$jsonFilesystemStorageDriver = new JsonFilesystemStorageDriver();
-
 // Instantiate a new JsonFilePath. The JsonFilePath will determine
 // the path where the json will be written to.
 $expectedJsonFilePath = new JsonFilePath(
     jsonStorageDirectoryPath: new JsonStorageDirectoryPath(
-        new Name(new Text('Data' . strval(rand(1, 100))))
+        new Name(new Text('JsonStorageDirectoryName' . strval(rand(1, 100))))
     ),
     location: new Location(new Name(new Text('Location'))),
     container: new Container(
@@ -65,7 +65,8 @@ $jsonFilesystemStorageQuery = new JsonFilesystemStorageQuery(
     jsonFilePath: $expectedJsonFilePath
 );
 
-// Use the JsonFilestystemStorageQuery to read the json from storage.
+// Get a JsonCollection of the Json in storage that
+// matches the specified $jsonFilesystemStorageQuery
 $jsonCollection = $jsonFilesystemStorageDriver->read(
     $jsonFilesystemStorageQuery
 );
