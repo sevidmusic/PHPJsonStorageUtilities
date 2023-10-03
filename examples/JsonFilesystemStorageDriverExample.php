@@ -16,7 +16,7 @@ use \Darling\PHPJsonUtilities\classes\encoded\data\Json;
 use \Darling\PHPTextTypes\classes\strings\Id;
 use \Darling\PHPTextTypes\classes\strings\Name;
 use \Darling\PHPTextTypes\classes\strings\Text;
-use stdClass;
+use \stdClass;
 
 /**
  * Instantiate a new JsonFilesystemStorageDriver
@@ -66,7 +66,6 @@ $json = new Json($data[array_rand($data)]);
  * that the Json is expected to be written to. This will be used to
  * query storage later.
  */
-
 $expectedJsonFilePath = new JsonFilePath(
     jsonStorageDirectoryPath: new JsonStorageDirectoryPath(
         new Name(
@@ -106,13 +105,16 @@ $jsonFilesystemStorageDriver->write(
 
 /**
  * Instantiate a JsonFilesystemStorageQuery that will be passed to
- * the $jsonFilesystemStorageDriver->read() method to query storage.
- * In this example the JsonFilesystemStorageQuery will only define a
- * single query parameter: jsonFilePath
+ * the $jsonFilesystemStorageDriver->read() method to query the Json
+ * in storage.
+ *
+ * In this example the JsonFilesystemStorageQuery will only specify a
+ * single query parameter:
+ *
+ * @param JsonFilePath|null $jsonFilePath
  *
  * Though any combination of the following parameters is possible:
  *
- * @param JsonFilePath|null $jsonFilePath
  * @param JsonStorageDirectoryPath|null $jsonStorageDirectoryPath
  * @param Location|null $location
  * @param Container|null $container
@@ -120,39 +122,61 @@ $jsonFilesystemStorageDriver->write(
  * @param Name|null $name
  * @param Id|null $id
  *
- * If defined, the jsonFilePath parameter will always take precedence
- * over the other parameters.
+ * If specified, the jsonFilePath parameter will always take
+ * precedence over the other parameters.
  */
 $jsonFilesystemStorageQuery = new JsonFilesystemStorageQuery(
     jsonFilePath: $expectedJsonFilePath
 );
 
 /**
- * Get a JsonCollection of the Json in storage that
- * matches the specified JsonFilesystemStorageQuery.
+ * Call JsonFilesystemStorageDriver->read() to obtain a
+ * JsonCollection of the Json in storage that matches the
+ * specified JsonFilesystemStorageQuery.
  *
- * The JsonFilesystemStorageQuery in this example defines a single
- * query parameter: jsonFilePath.
+ * The JsonFilesystemStorageQuery in this example only specifies a
+ * jsonFilePath.
  *
- * If a json file exists at the path that matches the JsonFilePath
- * specified  by the JsonFilesystemStorageQuery, then it's Json will
- * be the only Json included in the JsonCollection returned by read().
+ * If a json file exists at the path that matches the specified
+ * JsonFilePath, then it's Json will be the only Json included
+ * in the JsonCollection returned by read().
  *
+ * If a json file does not exist at the path that matches the
+ * specified JsonFilePath then an empty JsonCollection will be
+ * returned by read().
  */
 $jsonCollection = $jsonFilesystemStorageDriver->read(
     $jsonFilesystemStorageQuery
 );
 
 /**
- * Echo any stored json that matched the JsonFilesystemStorageQuery
+ * Echo any stored Json that matched the JsonFilesystemStorageQuery
  * that was passed to $jsonFilesystemStorageDriver->read()
  */
 foreach($jsonCollection->collection() as $index => $json) {
-    echo PHP_EOL . 'Json ' . strval($index) . ':' .
+    echo PHP_EOL .
+        PHP_EOL .
+        IntegrationTestUtilities::applyANSIColor(
+            'Path to json file:', rand(1, 231)
+        ) .
+        IntegrationTestUtilities::applyANSIColor(
+            (
+                $jsonFilesystemStorageQuery->jsonFilePath()?->__toString()
+                ??
+                'path is unknown'
+            ),
+            rand(1, 231)
+        ) .
+        PHP_EOL .
+        PHP_EOL .
+        IntegrationTestUtilities::applyANSIColor(
+            'Json: ', rand(1, 231)
+        ) .
         IntegrationTestUtilities::applyANSIColor(
             $json->__toString(),
             rand(1, 231)
-        );
+        ) .
+        PHP_EOL;
 }
 
 /**
