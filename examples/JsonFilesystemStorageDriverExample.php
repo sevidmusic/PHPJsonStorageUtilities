@@ -181,8 +181,8 @@ foreach($jsonCollection->collection() as $index => $json) {
 
 /**
  * Instantiate a JsonFilesystemStorageQuery that will be used to
- * delete the entire JsonStorageDirectory that the json was written
- * to on the call to  $jsonFilesystemStorageDriver->write(...)
+ * delete the entire JsonStorageDirectory that was used in this
+ * example.
  */
 $jsonFilesystemStorageQuery = new JsonFilesystemStorageQuery(
     jsonStorageDirectoryPath: $expectedJsonFilePath->jsonStorageDirectoryPath()
