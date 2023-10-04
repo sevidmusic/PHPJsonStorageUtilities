@@ -1,8 +1,19 @@
 <?php
 
+/**
+ * This file demonstrates how to use a JsonFilesystemStorageDriver
+ * to write and read Json to and from storage.
+ */
+
 namespace Darling\PHPJsonStorageUtilities\examples;
 
-include(dirname(__DIR__, 1) . DIRECTORY_SEPARATOR . 'vendor' . DIRECTORY_SEPARATOR . 'autoload.php');
+include(
+    dirname(__DIR__, 1) .
+    DIRECTORY_SEPARATOR .
+    'vendor' .
+    DIRECTORY_SEPARATOR .
+    'autoload.php'
+);
 
 use \Darling\PHPJsonStorageUtilities\classes\filesystem\paths\JsonFilePath;
 use \Darling\PHPJsonStorageUtilities\classes\filesystem\paths\JsonStorageDirectoryPath;
@@ -83,6 +94,7 @@ $expectedJsonFilePath = new JsonFilePath(
          * be used to determine Type for Container.
          *
          * @see https://github.com/sevidmusic/PHPJsonStorageUtilities/issues/34
+         *
          */
         IntegrationTestUtilities::determineType($json),
     ),
@@ -125,6 +137,7 @@ $jsonFilesystemStorageDriver->write(
  *
  * If specified, the jsonFilePath parameter will always take
  * precedence over the other parameters.
+ *
  */
 $jsonFilesystemStorageQuery = new JsonFilesystemStorageQuery(
     jsonFilePath: $expectedJsonFilePath
@@ -190,7 +203,8 @@ $jsonFilesystemStorageQuery = new JsonFilesystemStorageQuery(
 );
 
 /**
- * Delete the JsonStorageDirectory that was used in this example.
+ * Delete the JsonStorageDirectory that the Json in this example was
+ * written to.
  */
 $jsonFilesystemStorageDriver->delete(
     $jsonFilesystemStorageQuery

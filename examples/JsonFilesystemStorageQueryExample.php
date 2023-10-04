@@ -1,8 +1,19 @@
 <?php
 
+/**
+ * This file demonstrates how to use the JsonFilesystemStorageQuery
+ * in conjunction with a JsonFilesystemStorageDriver to query Json
+ * that exists in storage.
+ */
 namespace Darling\PHPJsonStorageUtilities\examples;
 
-include(dirname(__DIR__, 1) . DIRECTORY_SEPARATOR . 'vendor' . DIRECTORY_SEPARATOR . 'autoload.php');
+include(
+    dirname(__DIR__, 1) .
+    DIRECTORY_SEPARATOR .
+    'vendor' .
+    DIRECTORY_SEPARATOR .
+    'autoload.php'
+);
 
 use \Darling\PHPJsonStorageUtilities\classes\filesystem\paths\JsonFilePath;
 use \Darling\PHPJsonStorageUtilities\classes\filesystem\paths\JsonStorageDirectoryPath;
@@ -19,7 +30,43 @@ use \Darling\PHPTextTypes\classes\strings\Text;
 use \stdClass;
 
 /**
- * Instantiate a new JsonFilesystemStorageDriver.
+ * Instantiate a new JsonStorageDirectoryPath which will determine
+ * the path to the Json storage directory that all of the Json in
+ * this example will be written to.
+ */
+$jsonStorageDirectoryPath = new JsonStorageDirectoryPath(
+    new Name(
+        new Text('JsonStorageDirectoryName' . strval(rand(1, 100)))
+    )
+);
+
+/**
+ * Instantiate a JsonFilesystemStorageQuery that will be used to
+ * query the Json in storage.
+ *
+ * In this example the JsonFilesystemStorageQuery will only specify a
+ * single query parameter:
+ *
+ * @param JsonStorageDirectoryPath|null $jsonStorageDirectoryPath
+ *
+ * Though any combination of the following parameters is possible:
+ *
+ * @param JsonFilePath|null $jsonFilePath
+ * @param JsonStorageDirectoryPath|null $jsonStorageDirectoryPath
+ * @param Location|null $location
+ * @param Container|null $container
+ * @param Owner|null $owner
+ * @param Name|null $name
+ * @param Id|null $id
+ *
+ */
+$jsonFilesystemStorageQuery = new JsonFilesystemStorageQuery(
+    jsonStorageDirectoryPath: $jsonStorageDirectoryPath
+);
+
+/**
+ * Instantiate a new JsonFilesystemStorageDriver which will be used
+ * to write Json to storage.
  */
 $jsonFilesystemStorageDriver = new JsonFilesystemStorageDriver();
 
@@ -60,17 +107,6 @@ $data = [
 ];
 
 /**
- * Instantiate a new JsonStorageDirectoryPath which will determine
- * the path to the json storage directory that all of the Json in
- * this example will be written to.
- */
-$jsonStorageDirectoryPath = new JsonStorageDirectoryPath(
-    new Name(
-        new Text('JsonStorageDirectoryName' . strval(rand(1, 100)))
-    )
-);
-
-/**
  * Write a bunch of Json to storage.
  */
 for($writes = 0; $writes <= rand(10, 20); $writes++) {
@@ -82,7 +118,7 @@ for($writes = 0; $writes <= rand(10, 20); $writes++) {
     $json = new Json($data[array_rand($data)]);
 
     /**
-     * Write the json to storage
+     * Write the Json to storage
      */
     $jsonFilesystemStorageDriver->write(
         $json,
@@ -100,39 +136,14 @@ for($writes = 0; $writes <= rand(10, 20); $writes++) {
 }
 
 /**
- * Instantiate a JsonFilesystemStorageQuery that will be passed to
- * the $jsonFilesystemStorageDriver->read() method to query the Json
- * in storage.
- *
- * In this example the JsonFilesystemStorageQuery will only specify a
- * single query parameter:
- *
- * @param JsonStorageDirectoryPath|null $jsonStorageDirectoryPath
- *
- * Though any combination of the following parameters is possible:
- *
- * @param JsonFilePath|null $jsonFilePath
- * @param JsonStorageDirectoryPath|null $jsonStorageDirectoryPath
- * @param Location|null $location
- * @param Container|null $container
- * @param Owner|null $owner
- * @param Name|null $name
- * @param Id|null $id
- *
- */
-$jsonFilesystemStorageQuery = new JsonFilesystemStorageQuery(
-    jsonStorageDirectoryPath: $jsonStorageDirectoryPath
-);
-
-/**
- * Call JsonFilesystemStorageDriver->storedJsonFilePaths() to obtain a
- * JsonFilePathCollection of JsonFilePaths for the Json in storage
+ * Call JsonFilesystemStorageDriver->storedJsonFilePaths() to obtain
+ * a JsonFilePathCollection of JsonFilePaths for the Json in storage
  * that matches the specified JsonFilesystemStorageQuery.
  *
  * The JsonFilesystemStorageQuery in this example only specifies a
  * jsonStorageDirectoryPath.
  *
- * This will result in storedJsonFilePaths() returning a
+ * This will result in the storedJsonFilePaths() method returning a
  * JsonFilePathCollection that contains JsonFilePaths for
  * all of the Json that is stored in the specified
  * JsonStorageDirectoryPath.
@@ -141,22 +152,29 @@ $jsonFilePathCollection = $jsonFilesystemStorageDriver->storedJsonFilePaths(
     $jsonFilesystemStorageQuery
 );
 
-echo PHP_EOL . IntegrationTestUtilities::applyANSIColor(
+echo PHP_EOL .
+    IntegrationTestUtilities::applyANSIColor(
     'The following query:', rand(1, 231)
-) . PHP_EOL;
+    ) .
+    PHP_EOL;
 
-echo PHP_EOL . IntegrationTestUtilities::applyANSIColor(
+echo PHP_EOL .
+    IntegrationTestUtilities::applyANSIColor(
     $jsonFilesystemStorageQuery->__toString(), rand(1, 231)
-) . PHP_EOL;
+    ) .
+    PHP_EOL;
 
-echo PHP_EOL . IntegrationTestUtilities::applyANSIColor(
+echo PHP_EOL .
+    IntegrationTestUtilities::applyANSIColor(
     'Produced the following matches:', rand(1, 231)
-) . PHP_EOL;
+    ) .
+    PHP_EOL;
 
 /**
  * Echo the JsonFilePath and Json for any stored Json that
  * matched the JsonFilesystemStorageQuery that was passed to
- * $jsonFilesystemStorageDriver->storedJsonFilePaths()
+ * the $jsonFilesystemStorageDriver->storedJsonFilePaths()
+ * method.
  */
 foreach($jsonFilePathCollection->collection() as $jsonFilePath) {
     $jsonFilesystemStorageQuery = new JsonFilesystemStorageQuery(
@@ -167,7 +185,8 @@ foreach($jsonFilePathCollection->collection() as $jsonFilePath) {
             $jsonFilePath->__toString(),
             rand(1, 231)
         );
-    echo PHP_EOL . 'Json: ' .
+    echo PHP_EOL .
+        'Json: ' .
         IntegrationTestUtilities::applyANSIColor(
             (
                 $jsonFilesystemStorageDriver->read(
@@ -175,11 +194,14 @@ foreach($jsonFilePathCollection->collection() as $jsonFilePath) {
                 )->collection()[0] ?? ''
             ),
             rand(1, 231)
-        ) . PHP_EOL . PHP_EOL;
+        ) .
+        PHP_EOL .
+        PHP_EOL;
 }
 
 /**
- * Delete the JsonStorageDirectory that was used in this example.
+ * Delete the JsonStorageDirectory that the Json in this example was
+ * written to.
  */
 $jsonFilesystemStorageDriver->delete(
     $jsonFilesystemStorageQuery
