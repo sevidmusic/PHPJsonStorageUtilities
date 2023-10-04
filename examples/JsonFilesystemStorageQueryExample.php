@@ -180,7 +180,11 @@ foreach($jsonFilePathCollection->collection() as $jsonFilePath) {
         );
     echo PHP_EOL . 'Json: ' .
         IntegrationTestUtilities::applyANSIColor(
-            ($jsonFilesystemStorageDriver->read(jsonFilesystemStorageQuery: $jsonFilesystemStorageQuery)->collection()[0] ?? ''),
+            (
+                $jsonFilesystemStorageDriver->read(
+                    jsonFilesystemStorageQuery: $jsonFilesystemStorageQuery
+                )->collection()[0] ?? ''
+            ),
             rand(1, 231)
         ) . PHP_EOL . PHP_EOL;
 }
