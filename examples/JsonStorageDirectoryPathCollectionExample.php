@@ -39,7 +39,7 @@ $jsonStorageDirectoryPathCollection = new JsonStorageDirectoryPathCollection(
 );
 
 foreach($jsonStorageDirectoryPathCollection->collection() as $index => $jsonStorageDirectoryPath) {
-    echo PHP_EOL . 'JsonStorageDirectoryPath ' . strval($index) . ':' .
+    echo PHP_EOL . 'JsonStorageDirectoryPath[' . strval($index) . ']: ' .
         IntegrationTestUtilities::applyANSIColor(
             $jsonStorageDirectoryPath->__toString(),
             rand(1, 231)

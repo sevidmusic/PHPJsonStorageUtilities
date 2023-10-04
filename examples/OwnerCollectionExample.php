@@ -24,7 +24,7 @@ $ownerCollection = new OwnerCollection(
 );
 
 foreach($ownerCollection->collection() as $index => $owner) {
-    echo PHP_EOL . 'Owner ' . strval($index) . ':' .
+    echo PHP_EOL . 'Owner[' . strval($index) . ']: ' .
         IntegrationTestUtilities::applyANSIColor(
             $owner->__toString(),
             rand(1, 231)

@@ -104,7 +104,7 @@ $jsonFilePathCollection = new JsonFilePathCollection(
 );
 
 foreach($jsonFilePathCollection->collection() as $index => $jsonFilePath) {
-    echo PHP_EOL . 'JsonFilePath ' . strval($index) . ':' .
+    echo PHP_EOL . 'JsonFilePath[' . strval($index) . ']: ' .
         IntegrationTestUtilities::applyANSIColor(
             $jsonFilePath->__toString(),
             rand(1, 231)

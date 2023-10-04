@@ -23,7 +23,7 @@ $nameCollection = new NameCollection(
 );
 
 foreach($nameCollection->collection() as $index => $name) {
-    echo PHP_EOL . 'Name ' . strval($index) . ':' .
+    echo PHP_EOL . 'Name[' . strval($index) . ']: ' .
         IntegrationTestUtilities::applyANSIColor(
             $name->__toString(),
             rand(1, 231)

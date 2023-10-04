@@ -24,7 +24,7 @@ $containerCollection = new ContainerCollection(
 );
 
 foreach($containerCollection->collection() as $index => $container) {
-    echo PHP_EOL . 'Container ' . strval($index) . ':' .
+    echo PHP_EOL . 'Container[' . strval($index) . ']: ' .
         IntegrationTestUtilities::applyANSIColor(
             $container->__toString(),
             rand(1, 231)

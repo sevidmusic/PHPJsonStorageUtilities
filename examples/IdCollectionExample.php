@@ -22,7 +22,7 @@ $idCollection = new IdCollection(
 );
 
 foreach($idCollection->collection() as $index => $id) {
-    echo PHP_EOL . 'Id ' . strval($index) . ':' .
+    echo PHP_EOL . 'Id[' . strval($index) . ']: ' .
         IntegrationTestUtilities::applyANSIColor(
             $id->__toString(),
             rand(1, 231)

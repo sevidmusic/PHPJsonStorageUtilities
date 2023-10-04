@@ -26,7 +26,7 @@ $jsonCollection = new JsonCollection(
 );
 
 foreach($jsonCollection->collection() as $index => $json) {
-    echo PHP_EOL . 'Json ' . strval($index) . ':' .
+    echo PHP_EOL . 'Json[' . strval($index) . ']: ' .
         IntegrationTestUtilities::applyANSIColor(
             $json->__toString(),
             rand(1, 231)

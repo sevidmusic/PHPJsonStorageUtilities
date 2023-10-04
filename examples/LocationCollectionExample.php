@@ -24,7 +24,7 @@ $locationCollection = new LocationCollection(
 );
 
 foreach($locationCollection->collection() as $index => $location) {
-    echo PHP_EOL . 'Location ' . strval($index) . ':' .
+    echo PHP_EOL . 'Location[' . strval($index) . ']: ' .
         IntegrationTestUtilities::applyANSIColor(
             $location->__toString(),
             rand(1, 231)
