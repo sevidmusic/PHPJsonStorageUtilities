@@ -70,6 +70,9 @@ $jsonStorageDirectoryPath = new JsonStorageDirectoryPath(
     )
 );
 
+/**
+ * Write a bunch of Json to storage.
+ */
 for($writes = 0; $writes <= rand(10, 20); $writes++) {
 
     /**
@@ -79,41 +82,19 @@ for($writes = 0; $writes <= rand(10, 20); $writes++) {
     $json = new Json($data[array_rand($data)]);
 
     /**
-     * Instantiate a new JsonFilePath to emulate the path to the json file
-     * that the Json is expected to be written to. This will be used to
-     * query storage later.
-     */
-    $expectedJsonFilePath = new JsonFilePath(
-        jsonStorageDirectoryPath: $jsonStorageDirectoryPath,
-        location: new Location(
-            new Name(new Text('Location' . strval($writes)))
-        ),
-        container: new Container(
-            /**
-             * In the future Container::determineType(Json $json) should
-             * be used to determine Type for Container.
-             *
-             * @see https://github.com/sevidmusic/PHPJsonStorageUtilities/issues/34
-             */
-            IntegrationTestUtilities::determineType($json),
-        ),
-        owner: new Owner(
-            new Name(new Text('Owner' . strval($writes)))
-        ),
-        name: new Name(new Text('Name' . strval($writes))),
-        id: new Id(),
-    );
-
-    /**
      * Write the json to storage
      */
     $jsonFilesystemStorageDriver->write(
         $json,
-        $expectedJsonFilePath->jsonStorageDirectoryPath(),
-        $expectedJsonFilePath->location(),
-        $expectedJsonFilePath->owner(),
-        $expectedJsonFilePath->name(),
-        $expectedJsonFilePath->id(),
+        $jsonStorageDirectoryPath,
+        new Location(
+            new Name(new Text('Location' . strval($writes)))
+        ),
+        new Owner(
+            new Name(new Text('Owner' . strval($writes)))
+        ),
+        new Name(new Text('Name' . strval($writes))),
+        new Id(),
     );
 
 }
