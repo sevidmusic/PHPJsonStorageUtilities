@@ -165,16 +165,24 @@ echo PHP_EOL . IntegrationTestUtilities::applyANSIColor(
 ) . PHP_EOL;
 
 /**
- * Echo the JsonFilePaths for any stored Json that matched the
- * JsonFilesystemStorageQuery that was passed to
+ * Echo the JsonFilePath and Json for any stored Json that
+ * matched the JsonFilesystemStorageQuery that was passed to
  * $jsonFilesystemStorageDriver->storedJsonFilePaths()
  */
-foreach($jsonFilePathCollection->collection() as $index => $json) {
-    echo PHP_EOL . 'Json ' . strval($index) . ':' .
+foreach($jsonFilePathCollection->collection() as $jsonFilePath) {
+    $jsonFilesystemStorageQuery = new JsonFilesystemStorageQuery(
+        jsonFilePath: $jsonFilePath
+    );
+    echo PHP_EOL . 'Json File Path: ' .
         IntegrationTestUtilities::applyANSIColor(
-            $json->__toString(),
+            $jsonFilePath->__toString(),
             rand(1, 231)
         );
+    echo PHP_EOL . 'Json: ' .
+        IntegrationTestUtilities::applyANSIColor(
+            ($jsonFilesystemStorageDriver->read(jsonFilesystemStorageQuery: $jsonFilesystemStorageQuery)->collection()[0] ?? ''),
+            rand(1, 231)
+        ) . PHP_EOL . PHP_EOL;
 }
 
 /**
