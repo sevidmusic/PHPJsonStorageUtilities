@@ -45,8 +45,12 @@ $data = [
         "int" => rand(PHP_INT_MIN, PHP_INT_MAX),
         "closure" => function () : void {},
         "object" => new stdClass(),
-        "Json Instance" => new Json('Encoded Json Instance' . strval(rand(1, 100))),
-        "json string" => json_encode('json string ' . strval(rand(1, 100))),
+        "Json Instance" => new Json(
+            'Encoded Json Instance' . strval(rand(1, 100))
+        ),
+        "json string" => json_encode(
+            'json string ' . strval(rand(1, 100))
+        ),
         "float" => floatval(
             strval(rand(0, 100)) .
             '.' .
@@ -81,7 +85,9 @@ for($writes = 0; $writes <= rand(10, 20); $writes++) {
      */
     $expectedJsonFilePath = new JsonFilePath(
         jsonStorageDirectoryPath: $jsonStorageDirectoryPath,
-        location: new Location(new Name(new Text('Location' . strval($writes)))),
+        location: new Location(
+            new Name(new Text('Location' . strval($writes)))
+        ),
         container: new Container(
             /**
              * In the future Container::determineType(Json $json) should
@@ -91,7 +97,9 @@ for($writes = 0; $writes <= rand(10, 20); $writes++) {
              */
             IntegrationTestUtilities::determineType($json),
         ),
-        owner: new Owner(new Name(new Text('Owner' . strval($writes)))),
+        owner: new Owner(
+            new Name(new Text('Owner' . strval($writes)))
+        ),
         name: new Name(new Text('Name' . strval($writes))),
         id: new Id(),
     );
