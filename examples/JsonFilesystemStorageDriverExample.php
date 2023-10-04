@@ -78,11 +78,11 @@ $expectedJsonFilePath = new JsonFilePath(
         new Name(new Text('Location' . strval(rand(1, 100))))
     ),
     container: new Container(
-        /***
+        /**
          * In the future Container::determineType(Json $json) should
          * be used to determine Type for Container.
          *
-         * @see https:*github.com/sevidmusic/PHPJsonStorageUtilities/issues/34
+         * @see https://github.com/sevidmusic/PHPJsonStorageUtilities/issues/34
          */
         IntegrationTestUtilities::determineType($json),
     ),
@@ -115,6 +115,7 @@ $jsonFilesystemStorageDriver->write(
  *
  * Though any combination of the following parameters is possible:
  *
+ * @param JsonFilePath|null $jsonFilePath
  * @param JsonStorageDirectoryPath|null $jsonStorageDirectoryPath
  * @param Location|null $location
  * @param Container|null $container
