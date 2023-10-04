@@ -27,6 +27,7 @@ use \Darling\PHPJsonUtilities\classes\encoded\data\Json;
 use \Darling\PHPTextTypes\classes\strings\Id;
 use \Darling\PHPTextTypes\classes\strings\Name;
 use \Darling\PHPTextTypes\classes\strings\Text;
+use \Darling\PHPTextTypes\classes\strings\ClassString;
 use \stdClass;
 
 /**
@@ -44,10 +45,11 @@ $jsonStorageDirectoryPath = new JsonStorageDirectoryPath(
  * Instantiate a JsonFilesystemStorageQuery that will be used to
  * query the Json in storage.
  *
- * In this example the JsonFilesystemStorageQuery will only specify a
- * single query parameter:
+ * In this example the JsonFilesystemStorageQuery will only specify
+ * two query parameters:
  *
  * @param JsonStorageDirectoryPath|null $jsonStorageDirectoryPath
+ * @param Container|null $container
  *
  * Though any combination of the following parameters is possible:
  *
@@ -59,9 +61,15 @@ $jsonStorageDirectoryPath = new JsonStorageDirectoryPath(
  * @param Name|null $name
  * @param Id|null $id
  *
+ * By specifying a JsonStorageDirectoryPath and a Container, this
+ * query will target all of the Json in storage that exists in
+ * the specified JsonStorageDirectoryPath whose Container
+ * matches the specified Container.
+ *
  */
 $jsonFilesystemStorageQuery = new JsonFilesystemStorageQuery(
-    jsonStorageDirectoryPath: $jsonStorageDirectoryPath
+    jsonStorageDirectoryPath: $jsonStorageDirectoryPath,
+    container: new Container(new ClassString(Id::class)),
 );
 
 /**
@@ -140,13 +148,11 @@ for($writes = 0; $writes <= rand(10, 20); $writes++) {
  * a JsonFilePathCollection of JsonFilePaths for the Json in storage
  * that matches the specified JsonFilesystemStorageQuery.
  *
- * The JsonFilesystemStorageQuery in this example only specifies a
- * jsonStorageDirectoryPath.
- *
- * This will result in the storedJsonFilePaths() method returning a
- * JsonFilePathCollection that contains JsonFilePaths for
- * all of the Json that is stored in the specified
- * JsonStorageDirectoryPath.
+ * In this example the JsonFilesystemStorageQuery speicifes a
+ * JsonStorageDirectoryPath and a Container. This will target
+ * all of the Json in storage that exists in the specified
+ * JsonStorageDirectoryPath whose Container matches the
+ * specified Container.
  */
 $jsonFilePathCollection = $jsonFilesystemStorageDriver->storedJsonFilePaths(
     $jsonFilesystemStorageQuery
