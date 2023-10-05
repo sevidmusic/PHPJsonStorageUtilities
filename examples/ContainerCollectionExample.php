@@ -1,18 +1,24 @@
 <?php
 
+/**
+ * This file demonstrates the usage of a ContainerCollection.
+ */
+
 namespace Darling\PHPJsonStorageUtilities\examples;
 
-include(dirname(__DIR__, 1) . DIRECTORY_SEPARATOR . 'vendor' . DIRECTORY_SEPARATOR . 'autoload.php');
+include(
+    dirname(__DIR__, 1) .
+    DIRECTORY_SEPARATOR .
+    'vendor' .
+    DIRECTORY_SEPARATOR .
+    'autoload.php'
+);
 
 use \Darling\PHPJsonStorageUtilities\classes\collections\ContainerCollection;
 use \Darling\PHPJsonStorageUtilities\classes\named\identifiers\Container;
 use \Darling\PHPJsonStorageUtilities\enumerations\Type;
 use \Darling\PHPJsonStorageUtilities\tests\IntegrationTestUtilities;
 use \Darling\PHPTextTypes\classes\strings\ClassString;
-
-/**
- * This file demonstrates the usage of a ContainerCollection.
- */
 
 $containerCollection = new ContainerCollection(
     new Container(Type::Bool),

@@ -1,5 +1,9 @@
 <?php
 
+/**
+ * This file demonstrates the usage of a IdCollection.
+ */
+
 namespace Darling\PHPJsonStorageUtilities\examples;
 
 include(dirname(__DIR__, 1) . DIRECTORY_SEPARATOR . 'vendor' . DIRECTORY_SEPARATOR . 'autoload.php');
@@ -7,10 +11,6 @@ include(dirname(__DIR__, 1) . DIRECTORY_SEPARATOR . 'vendor' . DIRECTORY_SEPARAT
 use \Darling\PHPJsonStorageUtilities\classes\collections\IdCollection;
 use \Darling\PHPJsonStorageUtilities\tests\IntegrationTestUtilities;
 use \Darling\PHPTextTypes\classes\strings\Id;
-
-/**
- * This file demonstrates the usage of a IdCollection.
- */
 
 $idCollection = new IdCollection(
     new Id(),

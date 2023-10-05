@@ -1,5 +1,9 @@
 <?php
 
+/**
+ * This file demonstrates the usage of a JsonFilePathCollection.
+ */
+
 namespace Darling\PHPJsonFilePathStorageUtilities\examples;
 
 include(dirname(__DIR__, 1) . DIRECTORY_SEPARATOR . 'vendor' . DIRECTORY_SEPARATOR . 'autoload.php');
@@ -15,10 +19,6 @@ use \Darling\PHPJsonStorageUtilities\tests\IntegrationTestUtilities;
 use \Darling\PHPTextTypes\classes\strings\Id;
 use \Darling\PHPTextTypes\classes\strings\Name;
 use \Darling\PHPTextTypes\classes\strings\Text;
-
-/**
- * This file demonstrates the usage of a JsonFilePathCollection.
- */
 
 $jsonFilePathCollection = new JsonFilePathCollection(
     new JsonFilePath(

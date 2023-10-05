@@ -9,7 +9,7 @@
  *
  * A Container's value is a hash of either the value returned by
  * a ClassString instance's __toString() method, or a hash of
- * one of Type enumeration's cases.
+ * one of the Type enumeration's cases.
  *
  */
 

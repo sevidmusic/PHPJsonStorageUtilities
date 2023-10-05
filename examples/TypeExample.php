@@ -2,12 +2,17 @@
 
 /**
  * This file demonstrates the usage the Type enum.
+ *
+ * The Type enum is typically used in conjunction with the
+ * gettype() function to match a values type.
+ *
  */
 
 namespace Darling\PHPJsonStorageUtilities\examples;
 
 use \Darling\PHPJsonStorageUtilities\enumerations\Type;
 use \Darling\PHPJsonStorageUtilities\tests\IntegrationTestUtilities;
+use \Darling\PHPTextTypes\classes\strings\Id;
 use \stdClass;
 
 include(
@@ -42,6 +47,7 @@ $values = [
     new stdClass(),
     $openResource,
     $closedResource,
+    new Id(),
 ];
 
 /**
