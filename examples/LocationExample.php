@@ -59,6 +59,9 @@ $jsonFilesystemStorageQuery = new JsonFilesystemStorageQuery(
     location: $location,
 );
 
+/**
+ * Echo the Location.
+ */
 echo PHP_EOL . IntegrationTestUtilities::applyANSIColor(
     'Location: ', rand(1, 231)
 );
@@ -68,6 +71,9 @@ echo IntegrationTestUtilities::applyANSIColor(
         rand(1, 231),
     );
 
+/**
+ * Echo the JsonFilePath that was defined using the Location.
+ */
 echo PHP_EOL . IntegrationTestUtilities::applyANSIColor(
     'Json File Path that uses specified $location: ', rand(1, 231)
 );
@@ -76,6 +82,10 @@ echo IntegrationTestUtilities::applyANSIColor(
         $jsonFilePath->__toString(),
         rand(1, 231),
     );
+
+/**
+ * Echo the JsonFilesystemStorageQuery that uses the Location.
+ */
 echo PHP_EOL . IntegrationTestUtilities::applyANSIColor(
     'JsonFilesystemStorageQuery that uses specified $location: ', rand(1, 231)
 );
