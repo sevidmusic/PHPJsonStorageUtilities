@@ -22,9 +22,11 @@ $types = Type::cases();
 
 $container = new Container($types[array_rand($types)]);
 
-echo PHP_EOL .
-    'Container: ' .
-    IntegrationTestUtilities::applyANSIColor(
+echo PHP_EOL . IntegrationTestUtilities::applyANSIColor(
+    'Container: ', rand(1, 231)
+);
+
+echo IntegrationTestUtilities::applyANSIColor(
         $container->__toString(),
         rand(1, 231),
     );

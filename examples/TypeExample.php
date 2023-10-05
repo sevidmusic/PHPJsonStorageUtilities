@@ -17,10 +17,13 @@ include(
     'autoload.php'
 );
 
- $values = ['foo', 1, 23.45, true];
- // @var mixed $value
- $value = $values[array_rand($values)];
+$values = ['foo', 1, 23.45, true];
+
+// @var mixed $value
+$value = $values[array_rand($values)];
+
 echo IntegrationTestUtilities::applyANSIColor('Type:', rand(1, 231));
+
 echo IntegrationTestUtilities::applyANSIColor(
     match(gettype($value)) {
         Type::String->value => Type::String->value,

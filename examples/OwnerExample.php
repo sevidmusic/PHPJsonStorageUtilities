@@ -23,9 +23,11 @@ $owner = new Owner(
     new Name(new Text('Owner' . strval(rand(1, 100))))
 );
 
-echo PHP_EOL .
-    'Owner: ' .
-    IntegrationTestUtilities::applyANSIColor(
+echo PHP_EOL . IntegrationTestUtilities::applyANSIColor(
+    'Owner: ', rand(1, 231)
+);
+
+echo IntegrationTestUtilities::applyANSIColor(
         $owner->__toString(),
         rand(1, 231),
     );
