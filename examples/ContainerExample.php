@@ -1,7 +1,5 @@
 <?php
 
-// Container
-
 /**
  * This file demonstrates the usage of a Container.
  *
@@ -11,7 +9,7 @@
  *
  * A Container's value is a hash of either the value returned by
  * a ClassString instance's __toString() method, or a hash of
- * one of Type enumerations cases.
+ * one of Type enumeration's cases.
  *
  */
 
@@ -37,8 +35,15 @@ use \Darling\PHPTextTypes\classes\strings\Id;
 use \Darling\PHPTextTypes\classes\strings\Name;
 use \Darling\PHPTextTypes\classes\strings\Text;
 
+/*
+ * Define an array of the possible cases defined by the
+ * Type enumeration.
+ */
 $types = Type::cases();
 
+/**
+ * Instantiate a new Container using a randomly selected Type.
+ */
 $container = new Container($types[array_rand($types)]);
 
 /**
