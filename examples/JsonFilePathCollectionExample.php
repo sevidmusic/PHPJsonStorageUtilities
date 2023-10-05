@@ -6,7 +6,13 @@
 
 namespace Darling\PHPJsonFilePathStorageUtilities\examples;
 
-include(dirname(__DIR__, 1) . DIRECTORY_SEPARATOR . 'vendor' . DIRECTORY_SEPARATOR . 'autoload.php');
+include(
+    dirname(__DIR__, 1) .
+    DIRECTORY_SEPARATOR .
+    'vendor' .
+    DIRECTORY_SEPARATOR .
+    'autoload.php'
+);
 
 use Darling\PHPJsonStorageUtilities\classes\filesystem\paths\JsonFilePath;
 use Darling\PHPJsonStorageUtilities\classes\filesystem\paths\JsonStorageDirectoryPath;

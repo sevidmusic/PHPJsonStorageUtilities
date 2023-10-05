@@ -6,7 +6,13 @@
 
 namespace Darling\PHPJsonStorageUtilities\examples;
 
-include(dirname(__DIR__, 1) . DIRECTORY_SEPARATOR . 'vendor' . DIRECTORY_SEPARATOR . 'autoload.php');
+include(
+    dirname(__DIR__, 1) .
+    DIRECTORY_SEPARATOR .
+    'vendor' .
+    DIRECTORY_SEPARATOR .
+    'autoload.php'
+);
 
 use \Darling\PHPJsonStorageUtilities\classes\collections\LocationCollection;
 use \Darling\PHPJsonStorageUtilities\classes\named\identifiers\Location;

@@ -50,7 +50,9 @@ $jsonFilePath = new JsonFilePath(
             )
         )
     ),
-    new Location(new Name(new Text('Location' . strval(rand(1, 100))))),
+    new Location(
+        new Name(new Text('Location' . strval(rand(1, 100))))
+    ),
     new Container(Type::Array),
     $owner,
     new Name(new Text('Name' . strval(rand(1, 100)))),
@@ -94,7 +96,8 @@ echo IntegrationTestUtilities::applyANSIColor(
  * to as a query parameter.
  */
 echo PHP_EOL . IntegrationTestUtilities::applyANSIColor(
-    'JsonFilesystemStorageQuery that uses specified $owner: ', rand(1, 231)
+    'JsonFilesystemStorageQuery that uses specified $owner: ',
+    rand(1, 231)
 );
 
 echo IntegrationTestUtilities::applyANSIColor(

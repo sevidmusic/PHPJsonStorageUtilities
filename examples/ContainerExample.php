@@ -101,7 +101,8 @@ echo IntegrationTestUtilities::applyANSIColor(
  * to as a query parameter.
  */
 echo PHP_EOL . IntegrationTestUtilities::applyANSIColor(
-    'JsonFilesystemStorageQuery that uses specified $container: ', rand(1, 231)
+    'JsonFilesystemStorageQuery that uses specified $container: ',
+    rand(1, 231)
 );
 
 echo IntegrationTestUtilities::applyANSIColor(
