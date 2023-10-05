@@ -3,7 +3,9 @@
 /**
  * This file demonstrates the usage of a Location.
  *
- * A Location is used to identify Json in storage.
+ * A Location is used to identify Json in storage, and will
+ * typically be used in conjunction with a JsonFilePath or a
+ * JsonFilesystemStorageQuery.
  *
  */
 
@@ -29,8 +31,32 @@ use \Darling\PHPTextTypes\classes\strings\Id;
 use \Darling\PHPTextTypes\classes\strings\Name;
 use \Darling\PHPTextTypes\classes\strings\Text;
 
+/**
+ * Instantiate a new Location.
+ */
 $location = new Location(
     new Name(new Text('Location' . strval(rand(1, 100))))
+);
+
+
+/**
+ * Use the Location as part of the definition of a JsonFilePath.
+ */
+$jsonFilePath = new JsonFilePath(
+    new JsonStorageDirectoryPath(new Name(new Text('StorageDirectoryPathName' . strval(rand(1, 100))))),
+    $location,
+    new Container(Type::Array),
+    new Owner(new Name(new Text('Owner' . strval(rand(1, 100))))),
+    new Name(new Text('Name' . strval(rand(1, 100)))),
+    new Id(),
+);
+
+
+/**
+ * Use the Location as a JsonFilesystemStorageQuery parameter.
+ */
+$jsonFilesystemStorageQuery = new JsonFilesystemStorageQuery(
+    location: $location,
 );
 
 echo PHP_EOL . IntegrationTestUtilities::applyANSIColor(
@@ -42,16 +68,6 @@ echo IntegrationTestUtilities::applyANSIColor(
         rand(1, 231),
     );
 
-$jsonFilePath = new JsonFilePath(
-    new JsonStorageDirectoryPath(new Name(new Text('StorageDirectoryPathName' . strval(rand(1, 100))))),
-    $location,
-    new Container(Type::Array),
-    new Owner(new Name(new Text('Owner' . strval(rand(1, 100))))),
-    new Name(new Text('Name' . strval(rand(1, 100)))),
-    new Id(),
-);
-
-
 echo PHP_EOL . IntegrationTestUtilities::applyANSIColor(
     'Json File Path that uses specified $location: ', rand(1, 231)
 );
@@ -60,11 +76,6 @@ echo IntegrationTestUtilities::applyANSIColor(
         $jsonFilePath->__toString(),
         rand(1, 231),
     );
-
-$jsonFilesystemStorageQuery = new JsonFilesystemStorageQuery(
-    location: $location,
-);
-
 echo PHP_EOL . IntegrationTestUtilities::applyANSIColor(
     'JsonFilesystemStorageQuery that uses specified $location: ', rand(1, 231)
 );
