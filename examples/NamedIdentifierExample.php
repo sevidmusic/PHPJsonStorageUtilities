@@ -19,7 +19,9 @@ use \Darling\PHPJsonStorageUtilities\tests\IntegrationTestUtilities;
 use \Darling\PHPTextTypes\classes\strings\Name;
 use \Darling\PHPTextTypes\classes\strings\Text;
 
-$namedIdentifier = new NamedIdentifier(new Name(new Text('NamedIdentifier' . strval(rand(1, 100)))));
+$namedIdentifier = new NamedIdentifier(
+    new Name(new Text('NamedIdentifier' . strval(rand(1, 100))))
+);
 
 echo PHP_EOL .
     'NamedIdentifier:' .
