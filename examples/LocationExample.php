@@ -94,3 +94,4 @@ echo IntegrationTestUtilities::applyANSIColor(
         $jsonFilesystemStorageQuery->__toString(),
         rand(1, 231),
     );
+
