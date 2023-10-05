@@ -43,7 +43,13 @@ $location = new Location(
  * Use the Location as part of the definition of a JsonFilePath.
  */
 $jsonFilePath = new JsonFilePath(
-    new JsonStorageDirectoryPath(new Name(new Text('StorageDirectoryPathName' . strval(rand(1, 100))))),
+    new JsonStorageDirectoryPath(
+        new Name(
+            new Text(
+                'StorageDirectoryPathName' . strval(rand(1, 100))
+            )
+        )
+    ),
     $location,
     new Container(Type::Array),
     new Owner(new Name(new Text('Owner' . strval(rand(1, 100))))),
@@ -72,7 +78,7 @@ echo IntegrationTestUtilities::applyANSIColor(
     );
 
 /**
- * Echo the JsonFilePath that was defined using the Location.
+ * Echo the JsonFilePath that included the Location in it's definition.
  */
 echo PHP_EOL . IntegrationTestUtilities::applyANSIColor(
     'Json File Path that uses specified $location: ', rand(1, 231)
@@ -84,7 +90,8 @@ echo IntegrationTestUtilities::applyANSIColor(
     );
 
 /**
- * Echo the JsonFilesystemStorageQuery that uses the Location.
+ * Echo the JsonFilesystemStorageQuery that the Location was passed
+ * to as a query parameter.
  */
 echo PHP_EOL . IntegrationTestUtilities::applyANSIColor(
     'JsonFilesystemStorageQuery that uses specified $location: ', rand(1, 231)
