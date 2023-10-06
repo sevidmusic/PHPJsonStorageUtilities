@@ -52,9 +52,8 @@ composer require darling/php-json-storage-utilities
 This library is meant to be used in conjunction with the
 [PHPJsonUtilities](https://github.com/sevidmusic/PHPJsonUtilities)
 library.
-```
 
-### Classes
+# Classes
 
 ### \Darling\PHPJsonStorageUtilities\classes\collections\ContainerCollection
 
