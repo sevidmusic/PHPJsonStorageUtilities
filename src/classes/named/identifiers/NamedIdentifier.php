@@ -4,11 +4,16 @@ namespace Darling\PHPJsonStorageUtilities\classes\named\identifiers;
 
 use \Darling\PHPJsonStorageUtilities\interfaces\named\identifiers\NamedIdentifier as NamedIdentifierInterface;
 use \Darling\PHPTextTypes\classes\strings\Name;
-use \Darling\PHPTextTypes\classes\strings\Text;
 
 class NamedIdentifier implements NamedIdentifierInterface
 {
 
+    /**
+     * Instantiate a new NamedIdentifier  instance.
+     *
+     * @param Name $name
+     *
+     */
     public function __construct(private Name $name) {}
 
     public function name(): Name
@@ -20,5 +25,6 @@ class NamedIdentifier implements NamedIdentifierInterface
     {
         return $this->name->__toString();
     }
+
 }
 

@@ -24,10 +24,11 @@ trait OwnerCollectionTestTrait
     protected OwnerCollection $ownerCollection;
 
     /**
-     * @var array<int, Owner> The array of Owner instances that is
-     *                        expected to be returned by the
-     *                        OwnerCollection instance being
-     *                        tested's collection() method.
+     * @var array<int, Owner> $expectedCollection
+     *                            The array of Owner instances that is
+     *                            expected to be returned by the
+     *                            OwnerCollection instance being
+     *                            tested's collection() method.
      */
     private array $expectedCollection = [];
 
@@ -98,13 +99,10 @@ trait OwnerCollectionTestTrait
     /**
      * Set the OwnerCollection implementation instance to test.
      *
-     * @param OwnerCollection $ownerCollectionTestInstance An instance
-     *                                                     of an
-     *                                                     implementation
-     *                                                     of the
-     *                                                     OwnerCollection
-     *                                                     interface
-     *                                                     to test.
+     * @param OwnerCollection $ownerCollectionTestInstance
+     *                            An instance of an implementation
+     *                            of the OwnerCollection interface
+     *                            to test.
      *
      * @return void
      *
@@ -165,6 +163,9 @@ trait OwnerCollectionTestTrait
             ),
         );
     }
+
+    abstract protected static function assertEquals(mixed $expected, mixed $actual, string $message = ''): void;
+    abstract protected function testFailedMessage(object $object, string $method, string $message): string;
 
 }
 

@@ -14,8 +14,8 @@ use \Stringable;
 /**
  * Defines a query that can be passed to a
  * \Darling\PHPJsonStorageUtilities\interfaces\filesystem\storage\drivers\JsonFilesystemStorageDriver
- * instance's read() or delete() method to determine which
- * json files will be read or deleted from storage.
+ * instance's read(), storedJsonFiles(), or delete() method to
+ * determine which json files will be read or deleted from storage.
  *
  */
 interface JsonFilesystemStorageQuery extends \Stringable
@@ -67,8 +67,8 @@ interface JsonFilesystemStorageQuery extends \Stringable
     public function owner(): Owner|null;
 
     /**
-     * Return Name instance that will determine the name of the json
-     * to query.
+     * Return Name instance that will determine the storage name of
+     * the json to query.
      *
      * @return Name|null
      *
@@ -76,8 +76,8 @@ interface JsonFilesystemStorageQuery extends \Stringable
     public function name(): Name|null;
 
     /**
-     * Return Name instance that will determine the id of the json
-     * to query.
+     * Return Name instance that will determine the storage id of the
+     * json to query.
      *
      * @return Id|null
      *

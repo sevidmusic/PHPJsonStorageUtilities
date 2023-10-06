@@ -13,9 +13,13 @@ final class JsonCollection implements JsonCollectionInterface
      */
     private array $json = [];
 
-    public function __construct(
-        Json ...$json
-    ) {
+    /**
+     * Instantiate a new JsonCollection.
+     *
+     * @param Json $json
+     *
+     */
+    public function __construct(Json ...$json) {
         foreach($json as $jsonInstance) {
             $this->json[] = $jsonInstance;
         }
@@ -25,5 +29,6 @@ final class JsonCollection implements JsonCollectionInterface
     {
         return $this->json;
     }
+
 }
 

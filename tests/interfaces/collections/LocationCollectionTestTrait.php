@@ -24,7 +24,8 @@ trait LocationCollectionTestTrait
     protected LocationCollection $locationCollection;
 
     /**
-     * @var array<int, Location> The array of Location instances that
+     * @var array<int, Location> $expectedCollection
+     *                           The array of Location instances that
      *                           is expected to be returned by the
      *                           LocationCollection instance being
      *                           tested's collection() method.
@@ -165,6 +166,9 @@ trait LocationCollectionTestTrait
             ),
         );
     }
+
+    abstract protected static function assertEquals(mixed $expected, mixed $actual, string $message = ''): void;
+    abstract protected function testFailedMessage(object $object, string $method, string $message): string;
 
 }
 

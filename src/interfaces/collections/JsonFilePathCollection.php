@@ -4,12 +4,17 @@ namespace Darling\PHPJsonStorageUtilities\interfaces\collections;
 
 use \Darling\PHPJsonStorageUtilities\interfaces\filesystem\paths\JsonFilePath;
 
+/**
+ * A JsonFilePathCollection is a collection of JsonFilePath
+ * implementation instances.
+ *
+ */
 interface JsonFilePathCollection
 {
 
     /**
      * Return a numerically indexed array of JsonFilePath
-     * instances.
+     * implementation instances.
      *
      * @return array<int, JsonFilePath>
      *
@@ -17,3 +22,4 @@ interface JsonFilePathCollection
     public function collection(): array;
 
 }
+

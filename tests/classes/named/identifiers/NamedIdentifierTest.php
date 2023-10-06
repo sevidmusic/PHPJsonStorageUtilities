@@ -8,7 +8,7 @@ use \Darling\PHPJsonStorageUtilities\tests\interfaces\named\identifiers\NamedIde
 use \Darling\PHPTextTypes\classes\strings\Name;
 use \Darling\PHPTextTypes\classes\strings\Text;
 
-class NamedIdentifierTest extends PHPJsonStorageUtilitiesTest
+final class NamedIdentifierTest extends PHPJsonStorageUtilitiesTest
 {
 
     /**

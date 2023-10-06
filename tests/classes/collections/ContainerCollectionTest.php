@@ -10,7 +10,7 @@ use \Darling\PHPTextTypes\classes\strings\ClassString;
 use \Darling\PHPTextTypes\classes\strings\Name;
 use \Darling\PHPTextTypes\classes\strings\Text;
 
-class ContainerCollectionTest extends PHPJsonStorageUtilitiesTest
+final class ContainerCollectionTest extends PHPJsonStorageUtilitiesTest
 {
 
     /**

@@ -8,12 +8,12 @@ use \Darling\PHPJsonStorageUtilities\tests\interfaces\collections\JsonCollection
 use \Darling\PHPJsonUtilities\classes\encoded\data\Json;
 use \Darling\PHPTextTypes\classes\strings\Id;
 
-class JsonCollectionTest extends PHPJsonStorageUtilitiesTest
+final class JsonCollectionTest extends PHPJsonStorageUtilitiesTest
 {
 
     /**
-     * The JsonCollectionTestTrait defines
-     * common tests for implementations of the
+     * The JsonCollectionTestTrait defines common tests for
+     * implementations of the
      * Darling\PHPJsonStorageUtilities\interfaces\collections\JsonCollection
      * interface.
      *

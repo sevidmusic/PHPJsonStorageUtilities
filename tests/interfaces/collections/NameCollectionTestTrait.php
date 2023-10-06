@@ -23,10 +23,11 @@ trait NameCollectionTestTrait
     protected NameCollection $nameCollection;
 
     /**
-     * @var array<int, Name> The array of Name instances that is
-     *                       expected to be returned by the
-     *                       NameCollection instance being tested's
-     *                       collection() method.
+     * @var array<int, Name> $expectedCollection
+     *                           The array of Name instances that
+     *                           is expected to be returned by the
+     *                           NameCollection instance being
+     *                           tested's collection() method.
      */
     private array $expectedCollection = [];
 
@@ -54,11 +55,11 @@ trait NameCollectionTestTrait
      * {
      *     $this->setExpectedCollection(
      *         [
-     *             new Name(new Name(new Text($this->randomChars()))),
-     *             new Name(new Name(new Text($this->randomChars()))),
-     *             new Name(new Name(new Text($this->randomChars()))),
-     *             new Name(new Name(new Text($this->randomChars()))),
-     *             new Name(new Name(new Text($this->randomChars()))),
+     *             new Name(new Text($this->randomChars())),
+     *             new Name(new Text($this->randomChars())),
+     *             new Name(new Text($this->randomChars())),
+     *             new Name(new Text($this->randomChars())),
+     *             new Name(new Text($this->randomChars())),
      *         ]
      *     );
      *     $this->setNameCollectionTestInstance(
@@ -154,5 +155,7 @@ trait NameCollectionTestTrait
         );
     }
 
+    abstract protected static function assertEquals(mixed $expected, mixed $actual, string $message = ''): void;
+    abstract protected function testFailedMessage(object $object, string $method, string $message): string;
 }
 

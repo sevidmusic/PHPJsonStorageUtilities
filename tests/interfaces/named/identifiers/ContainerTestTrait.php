@@ -50,7 +50,7 @@ trait ContainerTestTrait
      * @example
      *
      * ```
-     * protected function setUp(): void
+     * public function setUp(): void
      * {
      *     $types = [
      *         Type::Array,

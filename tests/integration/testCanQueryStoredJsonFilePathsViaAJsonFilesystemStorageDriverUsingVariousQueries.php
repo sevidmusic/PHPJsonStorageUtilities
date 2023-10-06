@@ -1,53 +1,32 @@
 <?php
 
+namespace Darling\PHPJsonStorageUtilities\tests\integration;
+
 include(dirname(__DIR__, 2) . DIRECTORY_SEPARATOR . 'vendor' . DIRECTORY_SEPARATOR . 'autoload.php');
 
-use \Darling\PHPTextTypes\classes\strings\Text;
-use \Darling\PHPJsonStorageUtilities\classes\named\identifiers\Container;
 use \Darling\PHPJsonStorageUtilities\classes\filesystem\paths\JsonFilePath;
+use \Darling\PHPJsonStorageUtilities\classes\filesystem\paths\JsonStorageDirectoryPath;
+use \Darling\PHPJsonStorageUtilities\classes\filesystem\storage\drivers\JsonFilesystemStorageDriver;
+use \Darling\PHPJsonStorageUtilities\classes\filesystem\storage\queries\JsonFilesystemStorageQuery;
+use \Darling\PHPJsonStorageUtilities\classes\named\identifiers\Container;
+use \Darling\PHPJsonStorageUtilities\classes\named\identifiers\Location;
+use \Darling\PHPJsonStorageUtilities\classes\named\identifiers\Owner;
+use \Darling\PHPJsonStorageUtilities\tests\IntegrationTestUtilities;
 use \Darling\PHPJsonUtilities\classes\decoders\JsonDecoder;
+use \Darling\PHPJsonUtilities\classes\encoded\data\Json;
 use \Darling\PHPTextTypes\classes\strings\Id;
 use \Darling\PHPTextTypes\classes\strings\Name;
-use \Darling\PHPTextTypes\classes\strings\ClassString;
-use \Darling\PHPJsonStorageUtilities\classes\named\identifiers\Owner;
-use \Darling\PHPJsonStorageUtilities\classes\named\identifiers\Location;
-use \Darling\PHPJsonStorageUtilities\classes\filesystem\paths\JsonStorageDirectoryPath;
-use \Darling\PHPJsonStorageUtilities\enumerations\Type;
-use \Darling\PHPJsonUtilities\classes\encoded\data\Json;
+use \Darling\PHPTextTypes\classes\strings\Text;
 
-function applyCliColor(string $string, int $colorCode): string {
-    return "\033[0m\033[48;5;" . strval($colorCode) . "m\033[38;5;0m " . $string . " \033[0m";
-}
-
-function determineType(Json $json, JsonDecoder $jsonDecoder): Type|ClassString
-{
-    $data = $jsonDecoder->decode($json);
-    if(is_object($data)) {
-        return new ClassString($data);
-    }
-    return match(gettype($data)) {
-        Type::Array->value => Type::Array,
-        Type::Bool->value => Type::Bool,
-        Type::Float->value => Type::Float,
-        Type::Int->value => Type::Int,
-        Type::Null->value => Type::Null,
-        Type::String->value => Type::String,
-        Type::Object->value => Type::Object,
-        Type::Resource->value => Type::Resource,
-        Type::ResourceClosed->value => Type::ResourceClosed,
-        Type::UnknownType->value => Type::UnknownType,
-    };
-}
-
-$jfsd = new \Darling\PHPJsonStorageUtilities\classes\filesystem\storage\drivers\JsonFilesystemStorageDriver();
+$jsonFilesystemStorageDriver = new JsonFilesystemStorageDriver();
 $jsonDecoder = new JsonDecoder();
 $data = [
     new \Darling\PHPTextTypes\classes\strings\Id(),
-    'Foo',
+    'Foo' . strval(rand(PHP_INT_MIN, PHP_INT_MAX)),
     rand(PHP_INT_MIN, PHP_INT_MAX),
     [
         new \Darling\PHPTextTypes\classes\strings\Id(),
-        'Foo',
+        'Foo' . strval(rand(PHP_INT_MIN, PHP_INT_MAX)),
         rand(PHP_INT_MIN, PHP_INT_MAX),
     ],
 ];
@@ -61,7 +40,6 @@ $names =[];
 $ids = [];
 $jsonFilePaths = [];
 for($jsonWrites = 0; $jsonWrites < rand(10, 20); $jsonWrites++) {
-
     $json = new Json($data[array_rand($data)]);
     $jsonStorageDirectoryPath = new JsonStorageDirectoryPath(
         new Name(
@@ -73,8 +51,12 @@ for($jsonWrites = 0; $jsonWrites < rand(10, 20); $jsonWrites++) {
             new Text('Location' . strval(rand(1, 3)))
         )
     );
-    $container = new Container(determineType($json, $jsonDecoder));
-    $owner = new Owner(new Name(new Text('Owner' . strval(rand(1, 3)))));
+    $container = new Container(
+        IntegrationTestUtilities::determineType($json)
+    );
+    $owner = new Owner(
+        new Name(new Text('Owner' . strval(rand(1, 3))))
+    );
     $name = new Name(new Text('Name' . strval(rand(1, 3))));
     $id = new Id();
     $jsonFilePath = new JsonFilePath(
@@ -93,16 +75,20 @@ for($jsonWrites = 0; $jsonWrites < rand(10, 20); $jsonWrites++) {
     $names[] = $name;
     $ids[] = $id;
     $jsonFilePaths[] = $jsonFilePath;
-    echo PHP_EOL .
-        'Writing to the following path: ' .
-        applyCliColor($jsonFilePath->__toString(), 1) .
-        ($jfsd->write($json, $jsonStorageDirectoryPath, $location, $owner, $name, $id) ? 'file was written' : 'failed to write file') .
-        PHP_EOL;
-    ;
+    $jsonFilesystemStorageDriver->write(
+        $json,
+        $jsonStorageDirectoryPath,
+        $location,
+        $owner,
+        $name,
+        $id
+    );
 }
 
-$jfsq = new \Darling\PHPJsonStorageUtilities\classes\filesystem\storage\queries\JsonFilesystemStorageQuery(
-    jsonStorageDirectoryPath: (rand(0, 1) === 0 ? null : $jsonStorageDirectoryPath),
+$jsonFilesystemStorageQuery = new JsonFilesystemStorageQuery(
+    jsonStorageDirectoryPath: (
+        rand(0, 1) === 0 ? null : $jsonStorageDirectoryPath
+    ),
     location: (rand(0, 1) === 0 ? null : $location),
     container: (rand(0, 1) === 0 ? null : $container),
     owner: (rand(0, 1) === 0 ? null : $owner),
@@ -111,11 +97,24 @@ $jfsq = new \Darling\PHPJsonStorageUtilities\classes\filesystem\storage\queries\
     jsonFilePath: (rand(0, 1) === 0 ? null : $jsonFilePath),
 );
 
-echo PHP_EOL . PHP_EOL . 'Reading based on the following JsonFilesystemStorageQuery: ' .PHP_EOL . PHP_EOL . '    ' . applyCliColor($jfsq->__toString(), 5) . PHP_EOL . PHP_EOL;
-$jsonCollection = $jfsd->storedJsonFilePaths($jfsq);
-echo PHP_EOL . PHP_EOL . 'Number of items read from storage: ' . applyCliColor(strval(count($jsonCollection->collection())), 7);
-echo PHP_EOL . 'Json File Paths: ' . PHP_EOL;
-foreach($jsonCollection->collection() as $json) {
-    echo PHP_EOL . applyCliColor($json->__toString(), 6);
+$jsonFilePathCollection = $jsonFilesystemStorageDriver->storedJsonFilePaths(
+    $jsonFilesystemStorageQuery
+);
+
+$expectedCount = glob($jsonFilesystemStorageQuery->__toString());
+
+echo match(
+    count($jsonFilePathCollection->collection())
+    ===
+    count(is_array($expectedCount) ? $expectedCount : [])
+) {
+    true => IntegrationTestUtilities::applyANSIColor('Test Passed', 85),
+    false => IntegrationTestUtilities::applyANSIColor('Test Failed', 196),
+};
+
+foreach($jsonStorageDirectoryPaths as $jsonStorageDirectoryPath) {
+    IntegrationTestUtilities::deleteTestJsonStorageDirectory(
+        $jsonStorageDirectoryPath
+    );
 }
 

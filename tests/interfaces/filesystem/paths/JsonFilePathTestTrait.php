@@ -11,8 +11,8 @@ use \Darling\PHPTextTypes\interfaces\strings\Id;
 use \Darling\PHPTextTypes\interfaces\strings\Name;
 
 /**
- * The JsonFilePathTestTrait defines common tests for
- * implementations of the JsonFilePath interface.
+ * The JsonFilePathTestTrait defines common tests for implementations
+ * of the JsonFilePath interface.
  *
  * @see JsonFilePath
  *
@@ -76,8 +76,26 @@ trait JsonFilePathTestTrait
     /**
      * Set up an instance of a JsonFilePath implementation to test.
      *
-     * This method must also set the JsonFilePath implementation instance
+     * This method must set the JsonFilePath implementation instance
      * to be tested via the setJsonFilePathTestInstance() method.
+     *
+     * This method must also set the expected JsonStorageDirectoryPath
+     * via the setExpectedJsonStorageDirectoryPath() method.
+     *
+     * This method must also set the expected Location via the
+     * setExpectedLocation() method.
+     *
+     * This method must also set the expected Container via the
+     * setExpectedContainer() method.
+     *
+     * This method must also set the expected Owner via the
+     * setExpectedOwner() method.
+     *
+     * This method must also set the expected Name via the
+     * setExpectedName() method.
+     *
+     * This method must also set the expected Id via the
+     * setExpectedId() method.
      *
      * This method may also be used to perform any additional setup
      * required by the implementation being tested.
@@ -87,10 +105,62 @@ trait JsonFilePathTestTrait
      * @example
      *
      * ```
-     * protected function setUp(): void
+     * public function setUp(): void
      * {
+     *     $expectedJsonStorageDirectoryPath =
+     *         new JsonStorageDirectoryPath(
+     *             new Name(
+     *                 new Text(
+     *                     $this->randomChars()
+     *                 )
+     *             )
+     *         );
+     *     $expectedLocation = new Location(
+     *         new Name(
+     *             new Text(
+     *                 $this->randomChars()
+     *             )
+     *         )
+     *     );
+     *     $expectedContainer = new Container(
+     *         new ClassString(
+     *             new Name(
+     *                 new Text(
+     *                     $this->randomChars()
+     *                 )
+     *             )
+     *         )
+     *     );
+     *     $expectedOwner = new Owner(
+     *         new Name(
+     *             new Text(
+     *                 $this->randomChars()
+     *             )
+     *         )
+     *     );
+     *     $expectedName = new Name(
+     *         new Text(
+     *             $this->randomChars()
+     *         )
+     *     );
+     *     $expectedId = new Id();
+     *     $this->setExpectedJsonStorageDirectoryPath(
+     *         $expectedJsonStorageDirectoryPath
+     *     );
+     *     $this->setExpectedLocation($expectedLocation);
+     *     $this->setExpectedContainer($expectedContainer);
+     *     $this->setExpectedOwner($expectedOwner);
+     *     $this->setExpectedName($expectedName);
+     *     $this->setExpectedId($expectedId);
      *     $this->setJsonFilePathTestInstance(
-     *         new \Darling\PHPJsonStorageUtilities\classes\filesystem\paths\JsonFilePath()
+     *         new JsonFilePath(
+     *             $expectedJsonStorageDirectoryPath,
+     *             $expectedLocation,
+     *             $expectedContainer,
+     *             $expectedOwner,
+     *             $expectedName,
+     *             $expectedId,
+     *         )
      *     );
      * }
      *
@@ -133,10 +203,21 @@ trait JsonFilePathTestTrait
      * expected to be returned by the JsonFilePath to test's
      * jsonStorageDiectoryPath() method.
      *
+     * @param JsonStorageDirectoryPath $jsonStorageDirectoryPath
+     *                                    The JsonStorageDirectoryPath
+     *                                    instance that is expected
+     *                                    to be returned by the
+     *                                    JsonFilePath instance being
+     *                                    tested's
+     *                                    jsonStorageDirectoryPath()
+     *                                    method.
+     *
      * @return void
      *
      */
-    protected function setExpectedJsonStorageDirectoryPath(JsonStorageDirectoryPath $jsonStorageDirectoryPath): void
+    protected function setExpectedJsonStorageDirectoryPath(
+        JsonStorageDirectoryPath $jsonStorageDirectoryPath
+    ): void
     {
         $this->expectedJsonStorageDirectoryPath = $jsonStorageDirectoryPath;
     }
@@ -157,6 +238,8 @@ trait JsonFilePathTestTrait
     /**
      * Set the location instance that is expected to be returned by
      * the JsonFilePath to test's location() method.
+     *
+     * @param Location $location
      *
      * @return void
      *
@@ -182,6 +265,8 @@ trait JsonFilePathTestTrait
      * Set the Container instance that is expected to be returned by
      * the JsonFilePath to test's container() method.
      *
+     * @param Container $container
+     *
      * @return void
      *
      */
@@ -205,6 +290,8 @@ trait JsonFilePathTestTrait
     /**
      * Set the Owner instance that is expected to be returned by
      * the JsonFilePath to test's owner() method.
+     *
+     * @param Owner $owner
      *
      * @return void
      *
@@ -230,6 +317,8 @@ trait JsonFilePathTestTrait
      * Set the Name instance that is expected to be returned by
      * the JsonFilePath to test's name() method.
      *
+     * @param Name $name
+     *
      * @return void
      *
      */
@@ -254,6 +343,8 @@ trait JsonFilePathTestTrait
      * Set the Id instance that is expected to be returned by
      * the JsonFilePath to test's id() method.
      *
+     * @param Id $id
+     *
      * @return void
      *
      */
@@ -274,6 +365,13 @@ trait JsonFilePathTestTrait
         return $this->expectedId;
     }
 
+    /**
+     * Return the string that is expected to be returned
+     * by the JsonFilePath to test's __toString() method.
+     *
+     * @return string
+     *
+     */
     private function expectedJsonFilePath(): string
     {
         return $this->expectedJsonStorageDirectoryPath()->__toString() .
@@ -290,6 +388,14 @@ trait JsonFilePathTestTrait
             '.json';
     }
 
+    /**
+     * Shard an Id, and return the resulting string.
+     *
+     * @param Id $id
+     *
+     * @return string
+     *
+     */
     private function shardId(Id $id): string
     {
         $index = 3;
@@ -310,7 +416,8 @@ trait JsonFilePathTestTrait
     {
         $this->assertEquals(
             $this->expectedJsonStorageDirectoryPath(),
-            $this->jsonFilePathTestInstance()->jsonStorageDirectoryPath(),
+            $this->jsonFilePathTestInstance()
+                 ->jsonStorageDirectoryPath(),
             $this->testFailedMessage(
                 $this->jsonFilePathTestInstance(),
                 'jsonStorageDirectoryPath',
@@ -438,5 +545,9 @@ trait JsonFilePathTestTrait
             )
         );
     }
+
+    abstract protected static function assertEquals(mixed $expected, mixed $actual, string $message = ''): void;
+    abstract protected function testFailedMessage(object $object, string $method, string $message): string;
+
 }
 

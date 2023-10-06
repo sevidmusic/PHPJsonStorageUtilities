@@ -8,15 +8,18 @@ use \Darling\PHPJsonStorageUtilities\interfaces\named\identifiers\Location;
 final class LocationCollection implements LocationCollectionInterface
 {
 
-
     /**
      * @var array<int, Location> $locations
      */
     private array $locations = [];
 
-    public function __construct(
-        Location ...$locations
-    ) {
+    /**
+     * Instantiate a new LocationCollection.
+     *
+     * @param Location $locations
+     *
+     */
+    public function __construct(Location ...$locations) {
         foreach($locations as $location) {
             $this->locations[] = $location;
         }

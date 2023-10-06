@@ -13,9 +13,13 @@ final class JsonFilePathCollection implements JsonFilePathCollectionInterface
      */
     private array $jsonFilePaths = [];
 
-    public function __construct(
-        JsonFilePath ...$jsonFilePaths
-    ) {
+    /**
+     * Instantiate a new JsonFilePathCollection.
+     *
+     * @param JsonFilePath $jsonFilePaths
+     *
+     */
+    public function __construct(JsonFilePath ...$jsonFilePaths) {
         foreach($jsonFilePaths as $jsonFilePath) {
             $this->jsonFilePaths[] = $jsonFilePath;
         }

@@ -8,16 +8,23 @@ use \Darling\PHPJsonStorageUtilities\interfaces\filesystem\paths\JsonStorageDire
 final class JsonStorageDirectoryPathCollection implements JsonStorageDirectoryPathCollectionInterface
 {
 
-
     /**
      * @var array<int, JsonStorageDirectoryPath> $jsonStorageDirectoryPaths
      */
     private array $jsonStorageDirectoryPaths = [];
 
+    /**
+     * Instantiate a new JsonStorageDirectoryPathCollection.
+     *
+     * @param JsonStorageDirectoryPath $jsonStorageDirectoryPaths
+     *
+     */
     public function __construct(
         JsonStorageDirectoryPath ...$jsonStorageDirectoryPaths
     ) {
-        foreach($jsonStorageDirectoryPaths as $jsonStorageDirectoryPath) {
+        foreach(
+            $jsonStorageDirectoryPaths as $jsonStorageDirectoryPath
+        ) {
             $this->jsonStorageDirectoryPaths[] = $jsonStorageDirectoryPath;
         }
     }

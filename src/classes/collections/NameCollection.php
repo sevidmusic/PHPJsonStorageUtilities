@@ -13,9 +13,13 @@ final class NameCollection implements NameCollectionInterface
      */
     private array $names = [];
 
-    public function __construct(
-        Name ...$names
-    ) {
+    /**
+     * Instantiate a new NameCollection.
+     *
+     * @param Name $names
+     *
+     */
+    public function __construct(Name ...$names) {
         foreach($names as $name) {
             $this->names[] = $name;
         }

@@ -2,18 +2,28 @@
 
 namespace Darling\PHPJsonStorageUtilities\classes\filesystem\paths;
 
-use \Darling\PHPJsonStorageUtilities\interfaces\filesystem\paths\JsonStorageDirectoryPath;
 use \Darling\PHPJsonStorageUtilities\interfaces\filesystem\paths\JsonFilePath as JsonFilePathInterface;
+use \Darling\PHPJsonStorageUtilities\interfaces\filesystem\paths\JsonStorageDirectoryPath;
 use \Darling\PHPJsonStorageUtilities\interfaces\named\identifiers\Container;
 use \Darling\PHPJsonStorageUtilities\interfaces\named\identifiers\Location;
 use \Darling\PHPJsonStorageUtilities\interfaces\named\identifiers\Owner;
-use \Darling\PHPJsonStorageUtilities\tests\interfaces\filesystem\paths\JsonFilePathTestTrait;
 use \Darling\PHPTextTypes\interfaces\strings\Id;
 use \Darling\PHPTextTypes\interfaces\strings\Name;
 
 final class JsonFilePath implements JsonFilePathInterface
 {
 
+    /**
+     * Instantiate a new JsonFilePath instance.
+     *
+     * @param JsonStorageDirectoryPath $jsonStorageDirectoryPath
+     * @param Location $location
+     * @param Container $container
+     * @param Owner $owner
+     * @param Name $name
+     * @param Id $id
+     *
+     */
     public function __construct(
         private JsonStorageDirectoryPath $jsonStorageDirectoryPath,
         private Location $location,
@@ -21,9 +31,7 @@ final class JsonFilePath implements JsonFilePathInterface
         private Owner $owner,
         private Name $name,
         private Id $id,
-    )
-    {
-    }
+    ) {}
 
     public function jsonStorageDirectoryPath(): JsonStorageDirectoryPath
     {
@@ -78,5 +86,6 @@ final class JsonFilePath implements JsonFilePathInterface
         $subDir = substr($id->__toString(), $index);
         return $parentDir . DIRECTORY_SEPARATOR . $subDir;
     }
+
 }
 

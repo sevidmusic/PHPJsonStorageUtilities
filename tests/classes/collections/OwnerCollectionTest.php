@@ -9,7 +9,7 @@ use \Darling\PHPJsonStorageUtilities\tests\interfaces\collections\OwnerCollectio
 use \Darling\PHPTextTypes\classes\strings\Name;
 use \Darling\PHPTextTypes\classes\strings\Text;
 
-class OwnerCollectionTest extends PHPJsonStorageUtilitiesTest
+final class OwnerCollectionTest extends PHPJsonStorageUtilitiesTest
 {
 
     /**

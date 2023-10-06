@@ -34,7 +34,7 @@ trait JsonStorageDirectoryPathTestTrait
      * Set up an instance of a JsonStorageDirectoryPath implementation
      * to test.
      *
-     * This method must also set the JsonStorageDirectoryPath
+     * This method must set the JsonStorageDirectoryPath
      * implementation instance to be tested via the
      * setJsonStorageDirectoryPathTestInstance() method.
      *
@@ -50,7 +50,7 @@ trait JsonStorageDirectoryPathTestTrait
      * @example
      *
      * ```
-     * protected function setUp(): void
+     * public function setUp(): void
      * {
      *     $expectedName = new Name(new Text($this->randomChars()));
      *     $this->setExpectedName($expectedName);
@@ -135,6 +135,10 @@ trait JsonStorageDirectoryPathTestTrait
      * Set the Name instance that is expected to be returned by the
      * JsonStorageDirectoryPath to test's name() method.
      *
+     * @param Name $name The Name instance that is expected to be
+     *                   returned by the JsonStorageDirectoryPath
+     *                   being tested's name() method.
+     *
      * @return void
      *
      */
@@ -156,7 +160,8 @@ trait JsonStorageDirectoryPathTestTrait
     }
 
     /**
-     * Test __toString() returns the expected root directroy path.
+     * Test __toString() returns the expected json storage directroy
+     * path.
      *
      * @return void
      *
@@ -194,5 +199,9 @@ trait JsonStorageDirectoryPathTestTrait
             ),
         );
     }
+
+    abstract protected static function assertEquals(mixed $expected, mixed $actual, string $message = ''): void;
+    abstract protected function testFailedMessage(object $object, string $method, string $message): string;
+
 }
 

@@ -6,10 +6,8 @@ use \Darling\PHPJsonStorageUtilities\classes\collections\IdCollection;
 use \Darling\PHPJsonStorageUtilities\tests\PHPJsonStorageUtilitiesTest;
 use \Darling\PHPJsonStorageUtilities\tests\interfaces\collections\IdCollectionTestTrait;
 use \Darling\PHPTextTypes\classes\strings\Id;
-use \Darling\PHPTextTypes\classes\strings\Name;
-use \Darling\PHPTextTypes\classes\strings\Text;
 
-class IdCollectionTest extends PHPJsonStorageUtilitiesTest
+final class IdCollectionTest extends PHPJsonStorageUtilitiesTest
 {
 
     /**

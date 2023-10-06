@@ -16,18 +16,21 @@ trait ContainerCollectionTestTrait
 {
 
     /**
-     * @var ContainerCollection $containerLocation An instance of a
+     * @var ContainerCollection $containerCollection
+     *                                             An instance of a
      *                                             ContainerCollection
      *                                             implementation to
      *                                             test.
      */
-    protected ContainerCollection $containerLocation;
+    protected ContainerCollection $containerCollection;
 
     /**
-     * @var array<int, Container> The array of Container instances
-     *                            that is expected to be returned
-     *                            by the ContainerCollection instance
-     *                            being tested's collection() method.
+     * @var array<int, Container> $expectedCollection
+     *                                The array of Container instances
+     *                                that is expected to be returned
+     *                                by the ContainerCollection
+     *                                instance being tested's
+     *                                collection() method.
      */
     private array $expectedCollection = [];
 
@@ -91,15 +94,15 @@ trait ContainerCollectionTestTrait
      * @return ContainerCollection
      *
      */
-    protected function containerLocationTestInstance(): ContainerCollection
+    protected function containerCollectionTestInstance(): ContainerCollection
     {
-        return $this->containerLocation;
+        return $this->containerCollection;
     }
 
     /**
      * Set the ContainerCollection implementation instance to test.
      *
-     * @param ContainerCollection $containerLocationTestInstance
+     * @param ContainerCollection $containerCollectionTestInstance
      *                                           An instance of an
      *                                           implementation of
      *                                           the
@@ -110,10 +113,10 @@ trait ContainerCollectionTestTrait
      *
      */
     protected function setContainerCollectionTestInstance(
-        ContainerCollection $containerLocationTestInstance
+        ContainerCollection $containerCollectionTestInstance
     ): void
     {
-        $this->containerLocation = $containerLocationTestInstance;
+        $this->containerCollection = $containerCollectionTestInstance;
     }
 
     /**
@@ -157,14 +160,17 @@ trait ContainerCollectionTestTrait
     {
         $this->assertEquals(
             $this->expectedCollection(),
-            $this->containerLocationTestInstance()->collection(),
+            $this->containerCollectionTestInstance()->collection(),
             $this->testFailedMessage(
-                $this->containerLocationTestInstance(),
+                $this->containerCollectionTestInstance(),
                 'collection',
                 'return the expected array of Container instances'
             ),
         );
     }
+
+    abstract protected static function assertEquals(mixed $expected, mixed $actual, string $message = ''): void;
+    abstract protected function testFailedMessage(object $object, string $method, string $message): string;
 
 }
 

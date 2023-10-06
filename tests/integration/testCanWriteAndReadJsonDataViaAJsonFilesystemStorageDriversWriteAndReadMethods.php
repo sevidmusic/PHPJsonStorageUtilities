@@ -1,28 +1,84 @@
 <?php
 
+namespace Darling\PHPJsonStorageUtilities\tests\integration;
+
 include(dirname(__DIR__, 2) . DIRECTORY_SEPARATOR . 'vendor' . DIRECTORY_SEPARATOR . 'autoload.php');
 
-$data = [new \Darling\PHPTextTypes\classes\strings\Id(), 'Foo', rand(PHP_INT_MIN, PHP_INT_MAX)];
+use \Darling\PHPJsonStorageUtilities\classes\filesystem\paths\JsonFilePath;
+use \Darling\PHPJsonStorageUtilities\classes\filesystem\paths\JsonStorageDirectoryPath;
+use \Darling\PHPJsonStorageUtilities\classes\filesystem\storage\drivers\JsonFilesystemStorageDriver;
+use \Darling\PHPJsonStorageUtilities\classes\filesystem\storage\queries\JsonFilesystemStorageQuery;
+use \Darling\PHPJsonStorageUtilities\classes\named\identifiers\Container;
+use \Darling\PHPJsonStorageUtilities\classes\named\identifiers\Location;
+use \Darling\PHPJsonStorageUtilities\classes\named\identifiers\Owner;
+use \Darling\PHPJsonStorageUtilities\tests\IntegrationTestUtilities;
+use \Darling\PHPJsonUtilities\classes\decoders\JsonDecoder;
+use \Darling\PHPJsonUtilities\classes\encoded\data\Json;
+use \Darling\PHPTextTypes\classes\strings\Id;
+use \Darling\PHPTextTypes\classes\strings\Name;
+use \Darling\PHPTextTypes\classes\strings\Text;
 
-$json = new \Darling\PHPJsonUtilities\classes\encoded\data\Json($data);
+$jsonDecoder = new JsonDecoder();
 
-$jfsd = new \Darling\PHPJsonStorageUtilities\classes\filesystem\storage\drivers\JsonFilesystemStorageDriver();
+$data = [new Id(), 'Foo', rand(PHP_INT_MIN, PHP_INT_MAX)];
 
-$jsdp = new \Darling\PHPJsonStorageUtilities\classes\filesystem\paths\JsonStorageDirectoryPath(new \Darling\PHPTextTypes\classes\strings\Name(new \Darling\PHPTextTypes\classes\strings\Text('Data')));
+$json = new Json($data);
 
-$loc = new \Darling\PHPJsonStorageUtilities\classes\named\identifiers\Location(new \Darling\PHPTextTypes\classes\strings\Name(new \Darling\PHPTextTypes\classes\strings\Text('Location')));
+$jsonFilesystemStorageDriver = new JsonFilesystemStorageDriver();
 
-$own = new \Darling\PHPJsonStorageUtilities\classes\named\identifiers\Owner(new \Darling\PHPTextTypes\classes\strings\Name(new \Darling\PHPTextTypes\classes\strings\Text('Owner')));
+$jsonStorageDirectoryPath = new JsonStorageDirectoryPath(
+    new Name(new Text('Data'))
+);
 
-$name = new \Darling\PHPTextTypes\classes\strings\Name(new \Darling\PHPTextTypes\classes\strings\Text('Name'));
+$location = new Location(new Name(new Text('Location')));
 
-$id = new \Darling\PHPTextTypes\classes\strings\Id();
+$container = new Container(
+    IntegrationTestUtilities::determineType($json)
+);
+$owner = new Owner(new Name(new Text('Owner')));
 
-var_dump($jfsd->write($json, $jsdp, $loc, $own, $name, $id));
+$name = new Name(new Text('Name'));
 
-$conToQuery = new \Darling\PHPJsonStorageUtilities\classes\named\identifiers\Container(\Darling\PHPJsonStorageUtilities\enumerations\Type::Array);
+$id = new Id();
 
-$jfsq = new \Darling\PHPJsonStorageUtilities\classes\filesystem\storage\queries\JsonFilesystemStorageQuery(container: $conToQuery);
+$expectedJsonFilePath = new JsonFilePath(
+    jsonStorageDirectoryPath: $jsonStorageDirectoryPath,
+    location: $location,
+    container: $container,
+    owner: $owner,
+    name: $name,
+    id: $id,
+);
 
-var_dump($jfsd->read($jfsq));
+$jsonFilesystemStorageDriver->write(
+    $json,
+    $jsonStorageDirectoryPath,
+    $location,
+    $owner,
+    $name,
+    $id,
+);
+
+$jsonFilesystemStorageQuery = new JsonFilesystemStorageQuery(
+    jsonFilePath: $expectedJsonFilePath
+);
+
+$expectedCount = glob($jsonFilesystemStorageQuery->__toString());
+
+$jsonCollection = $jsonFilesystemStorageDriver->read(
+    $jsonFilesystemStorageQuery
+);
+
+echo match(
+    count($jsonCollection->collection())
+    ===
+    count(is_array($expectedCount) ? $expectedCount : [])
+) {
+    true => IntegrationTestUtilities::applyANSIColor('Test Passed', 85),
+    false => IntegrationTestUtilities::applyANSIColor('Test Failed', 196),
+};
+
+IntegrationTestUtilities::deleteTestJsonStorageDirectory(
+    $jsonStorageDirectoryPath
+);
 

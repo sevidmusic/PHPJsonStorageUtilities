@@ -6,18 +6,18 @@ use \Darling\PHPTextTypes\interfaces\strings\Name;
 use \Stringable;
 
 /**
- * The path to the directory used by implementations of the
- * \Darling\PHPJsonStorageUtilities\interfaces\drivers\storage\filesystem\JsonStorageDriver
- * interface to store `json` data.
+ * A JsonStorageDirectoryPath can be used to construct an appropriate
+ * path to a json storage directory.
+ *
+ * The complete path to the json storage directory can be obtained
+ * via the __toString() method.
  *
  */
 interface JsonStorageDirectoryPath extends \Stringable
 {
 
    /**
-    * The path to the directory used by implementations of the
-    * \Darling\PHPJsonStorageUtilities\interfaces\drivers\storage\filesystem\JsonStorageDriver
-    * interface to store `json` data.
+    * The complete path to the json storage directory.
     *
     * This path will either be:
     *
@@ -31,35 +31,19 @@ interface JsonStorageDirectoryPath extends \Stringable
     * /tmp/darling/data/$this->name()->__toString()
     * ```
     *
-    * The `/tmp/darling/data` directory will be used in the following
-    * circumstances:
+    * Note: The `/tmp/darling/data` directory will only be used if:
     *
     * 1. The path to `~/.local/share` cannot be determined.
     * 2. The path to `~/.local/share` does not exist.
     * 3. The path to `~/.local/share` exists but is not writable.
     *
-    * @example
+    * @return string
     *
-    * ```
-    * $jsonStorageDirectoryPath = new JsonStorageDirectoryPath();
-    *
-    * var_dump($jsonStorageDirectoryPath);
-    *
-    * # If path to ~/.local/share/ exists and is writable then the path
-    * # will be:
-    * #
-    * # ~/.local/share/darling/data/$jsonStorageDirectoryPath->name()
-    * #
-    * # Otherwise it will be:
-    * #
-    * # /tmp/darling/data/$jsonStorageDirectoryPath->name()
-    * #
-    * ```
     */
     public function __toString(): string;
 
     /**
-     * The name of the directory located at the JsonStorageDirectoryPath.
+     * The json storage directory's name.
      *
      * @return Name
      *

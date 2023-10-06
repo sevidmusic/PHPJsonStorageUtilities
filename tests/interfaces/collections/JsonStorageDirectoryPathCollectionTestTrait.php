@@ -25,15 +25,16 @@ trait JsonStorageDirectoryPathCollectionTestTrait
     protected JsonStorageDirectoryPathCollection $jsonStorageDirectoryPathCollection;
 
     /**
-     * @var array<int, JsonStorageDirectoryPath> The array of
-     *                                           JsonStorageDirectoryPath
-     *                                           instances that is
-     *                                           expected to be
-     *                                           returned by the
-     *                                           JsonStorageDirectoryPathCollection
-     *                                           instance being
-     *                                           tested's collection()
-     *                                           method.
+     * @var array<int, JsonStorageDirectoryPath> $expectedCollection
+     *                              The array of
+     *                              JsonStorageDirectoryPath
+     *                              instances that is
+     *                              expected to be
+     *                              returned by the
+     *                              JsonStorageDirectoryPathCollection
+     *                              instance being
+     *                              tested's collection()
+     *                              method.
      */
     private array $expectedCollection = [];
 
@@ -121,7 +122,8 @@ trait JsonStorageDirectoryPathCollectionTestTrait
         JsonStorageDirectoryPathCollection $jsonStorageDirectoryPathCollectionTestInstance
     ): void
     {
-        $this->jsonStorageDirectoryPathCollection = $jsonStorageDirectoryPathCollectionTestInstance;
+        $this->jsonStorageDirectoryPathCollection =
+            $jsonStorageDirectoryPathCollectionTestInstance;
     }
 
     /**
@@ -173,6 +175,9 @@ trait JsonStorageDirectoryPathCollectionTestTrait
             ),
         );
     }
+
+    abstract protected static function assertEquals(mixed $expected, mixed $actual, string $message = ''): void;
+    abstract protected function testFailedMessage(object $object, string $method, string $message): string;
 
 }
 
