@@ -279,8 +279,45 @@ final class JsonFilesystemStorageDriver implements JsonFilesystemStorageDriverIn
                 ? unlink($jsonFilePath->__toString())
                 : false
             );
+            $idDirectoryPath = dirname($jsonFilePath->__toString(), 1);
+            $nameDirectoryPath = dirname($jsonFilePath->__toString(), 2);
+            $ownerDirectoryPath = dirname($jsonFilePath->__toString(), 3);
+            $containerDirectoryPath = dirname($jsonFilePath->__toString(), 4);
+            $locationDirectoryPath = dirname($jsonFilePath->__toString(), 5);
+            if($this->directoryIsEmpty($idDirectoryPath)) {
+                rmdir($idDirectoryPath);
+            }
+            if($this->directoryIsEmpty($nameDirectoryPath)) {
+                rmdir($nameDirectoryPath);
+            }
+            if($this->directoryIsEmpty($ownerDirectoryPath)) {
+                rmdir($ownerDirectoryPath);
+            }
+            if($this->directoryIsEmpty($containerDirectoryPath)) {
+                rmdir($containerDirectoryPath);
+            }
+            if($this->directoryIsEmpty($locationDirectoryPath)) {
+                rmdir($locationDirectoryPath);
+            }
+            if($this->directoryIsEmpty($jsonFilePath->jsonStorageDirectoryPath()->__toString())) {
+                rmdir($jsonFilePath->jsonStorageDirectoryPath()->__toString());
+            }
+
         }
         return !empty($status) && !in_array(false, $status);
+    }
+
+    /**
+     * Return true if a directory is empty, false otherwise.
+     *
+     * @param string $path The path to the directory to check.
+     *
+     * @return bool
+     *
+     */
+    private function directoryIsEmpty(string $path) : bool
+    {
+        return is_dir($path) && (!(new \FilesystemIterator($path))->valid());
     }
 
 }
