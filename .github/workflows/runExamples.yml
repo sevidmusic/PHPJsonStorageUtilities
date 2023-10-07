@@ -1,4 +1,4 @@
-name: R
+name: Run Examples
 
 on:
   push:
