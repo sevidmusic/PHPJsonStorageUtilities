@@ -1758,6 +1758,48 @@ trait JsonFilesystemStorageDriverTestTrait
         );
     }
 
+    /**
+     * Test delete() deletes to the expected JsonFilePath.
+     *
+     * @return void
+     *
+     * @covers JsonFilesystemStorageDriver->delete()
+     *
+     */
+    public function test_delete_deletes_empty_directories_that_exist_after_deleting_json_files(): void
+    {
+        $this->jsonFilesystemStorageDriverTestInstance()
+                       ->write(
+                           $this->expectedJson(),
+                           $this->expectedJsonFilePath()
+                                ->jsonStorageDirectoryPath(),
+                           $this->expectedJsonFilePath->location(),
+                           $this->expectedJsonFilePath->owner(),
+                           $this->expectedJsonFilePath->name(),
+                           $this->expectedJsonFilePath()->id(),
+                       );
+        $jsonFilesystemStorageQuery = new JsonFilesystemStorageQuery(
+            jsonFilePath: $this->expectedJsonFilePath()
+        );
+        $this->jsonFilesystemStorageDriverTestInstance()->delete($jsonFilesystemStorageQuery);
+        sleep(1);
+        $this->assertFalse(
+            is_dir(
+                $this->expectedJsonFilePath()->jsonStorageDirectoryPath()
+            ),
+            $this->testFailedMessage(
+                $this->jsonFilesystemStorageDriverTestInstance(),
+                'delete',
+                'delete empty storage directories after deleting json files:' .
+                PHP_EOL .
+                PHP_EOL .
+                $this->expectedJsonFilePath() .
+                PHP_EOL .
+                PHP_EOL,
+            ),
+        );
+    }
+
     abstract protected function randomChars(): string;
     abstract protected function randomClassStringOrObjectInstance(): string|object;
     abstract protected function testFailedMessage(object $object, string $method, string $message): string;
