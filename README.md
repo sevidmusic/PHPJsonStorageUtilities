@@ -11,8 +11,6 @@ instance.
 
   - [ContainerCollection](#darlingphpjsonstorageutilitiesclassescollectionscontainercollection)
 
-  - [IdCollection](#darlingphpjsonstorageutilitiesclassescollectionsidcollection)
-
   - [JsonCollection](#darlingphpjsonstorageutilitiesclassescollectionsjsoncollection)
 
   - [JsonFilePathCollection](#darlingphpjsonstorageutilitiesclassescollectionsjsonfilepathcollection)
@@ -20,8 +18,6 @@ instance.
   - [JsonStorageDirectoryPathCollection](#darlingphpjsonstorageutilitiesclassescollectionsjsonstoragedirectorypathcollection)
 
   - [LocationCollection](#darlingphpjsonstorageutilitiesclassescollectionslocationcollection)
-
-  - [NameCollection](#darlingphpjsonstorageutilitiesclassescollectionsnamecollection)
 
   - [OwnerCollection](#darlingphpjsonstorageutilitiesclassescollectionsownercollection)
 
@@ -93,48 +89,6 @@ foreach($containerCollection->collection() as $index => $container) {
     echo PHP_EOL . 'Container[' . strval($index) . ']: ' .
         IntegrationTestUtilities::applyANSIColor(
             $container->__toString(),
-            rand(1, 231)
-        );
-}
-
-```
-
-### \Darling\PHPJsonStorageUtilities\classes\collections\IdCollection
-
-```
-<?php
-
-/**
- * This file demonstrates the usage of a IdCollection.
- */
-
-namespace Darling\PHPJsonStorageUtilities\examples;
-
-include(
-    dirname(__DIR__, 1) .
-    DIRECTORY_SEPARATOR .
-    'vendor' .
-    DIRECTORY_SEPARATOR .
-    'autoload.php'
-);
-
-use \Darling\PHPJsonStorageUtilities\classes\collections\IdCollection;
-use \Darling\PHPJsonStorageUtilities\tests\IntegrationTestUtilities;
-use \Darling\PHPTextTypes\classes\strings\Id;
-
-$idCollection = new IdCollection(
-    new Id(),
-    new Id(),
-    new Id(),
-    new Id(),
-    new Id(),
-    new Id(),
-);
-
-foreach($idCollection->collection() as $index => $id) {
-    echo PHP_EOL . 'Id[' . strval($index) . ']: ' .
-        IntegrationTestUtilities::applyANSIColor(
-            $id->__toString(),
             rand(1, 231)
         );
 }
@@ -494,49 +448,6 @@ foreach($locationCollection->collection() as $index => $location) {
     echo PHP_EOL . 'Location[' . strval($index) . ']: ' .
         IntegrationTestUtilities::applyANSIColor(
             $location->__toString(),
-            rand(1, 231)
-        );
-}
-
-```
-
-### \Darling\PHPJsonStorageUtilities\classes\collections\NameCollection
-
-```
-<?php
-
-/**
- * This file demonstrates the usage of a NameCollection.
- */
-
-namespace Darling\PHPJsonStorageUtilities\examples;
-
-include(
-    dirname(__DIR__, 1) .
-    DIRECTORY_SEPARATOR .
-    'vendor' .
-    DIRECTORY_SEPARATOR .
-    'autoload.php'
-);
-
-use \Darling\PHPJsonStorageUtilities\classes\collections\NameCollection;
-use \Darling\PHPJsonStorageUtilities\tests\IntegrationTestUtilities;
-use \Darling\PHPTextTypes\classes\strings\Name;
-use \Darling\PHPTextTypes\classes\strings\Text;
-
-$nameCollection = new NameCollection(
-    new Name(new Text('Name' . strval(rand(1, 100)))),
-    new Name(new Text('Name' . strval(rand(1, 100)))),
-    new Name(new Text('Name' . strval(rand(1, 100)))),
-    new Name(new Text('Name' . strval(rand(1, 100)))),
-    new Name(new Text('Name' . strval(rand(1, 100)))),
-    new Name(new Text('Name' . strval(rand(1, 100)))),
-);
-
-foreach($nameCollection->collection() as $index => $name) {
-    echo PHP_EOL . 'Name[' . strval($index) . ']: ' .
-        IntegrationTestUtilities::applyANSIColor(
-            $name->__toString(),
             rand(1, 231)
         );
 }
@@ -1574,5 +1485,5 @@ echo IntegrationTestUtilities::applyANSIColor(
     rand(1, 231),
 );
 
-
+```
 
