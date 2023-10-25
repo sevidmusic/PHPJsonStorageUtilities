@@ -102,16 +102,16 @@
         },
         {
             "name": "darling/php-mocking-utilities",
-            "version": "v1.0.8",
+            "version": "v1.0.9",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sevidmusic/PHPMockingUtilities.git",
-                "reference": "bc8d3706ca48f754065a8d4a836963ef59cfc464"
+                "reference": "e859a2c6672d7ebdc090441e6c08b3d24835d0ec"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sevidmusic/PHPMockingUtilities/zipball/bc8d3706ca48f754065a8d4a836963ef59cfc464",
-                "reference": "bc8d3706ca48f754065a8d4a836963ef59cfc464",
+                "url": "https://api.github.com/repos/sevidmusic/PHPMockingUtilities/zipball/e859a2c6672d7ebdc090441e6c08b3d24835d0ec",
+                "reference": "e859a2c6672d7ebdc090441e6c08b3d24835d0ec",
                 "shasum": ""
             },
             "require": {
@@ -145,9 +145,9 @@
             "description": "The PHPMockingUtilities library provides classes that can be used to mock various types of values.",
             "support": {
                 "issues": "https://github.com/sevidmusic/PHPMockingUtilities/issues",
-                "source": "https://github.com/sevidmusic/PHPMockingUtilities/tree/v1.0.8"
+                "source": "https://github.com/sevidmusic/PHPMockingUtilities/tree/v1.0.9"
             },
-            "time": "2023-08-29T05:50:01+00:00"
+            "time": "2023-10-25T19:00:20+00:00"
         },
         {
             "name": "darling/php-reflection-utilities",
@@ -198,19 +198,20 @@
         },
         {
             "name": "darling/php-text-types",
-            "version": "v1.1.2",
+            "version": "v1.1.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sevidmusic/PHPTextTypes.git",
-                "reference": "7cf0544318cbc24e20bbc0dafb23b06e14d12b5f"
+                "reference": "8c3012e0e42ca67eb605d4b0e3b8f6667c2fbc98"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sevidmusic/PHPTextTypes/zipball/7cf0544318cbc24e20bbc0dafb23b06e14d12b5f",
-                "reference": "7cf0544318cbc24e20bbc0dafb23b06e14d12b5f",
+                "url": "https://api.github.com/repos/sevidmusic/PHPTextTypes/zipball/8c3012e0e42ca67eb605d4b0e3b8f6667c2fbc98",
+                "reference": "8c3012e0e42ca67eb605d4b0e3b8f6667c2fbc98",
                 "shasum": ""
             },
             "require": {
+                "darling/php-darling-dev-tools": "^1.0",
                 "darling/php-unit-test-utilities": "^1.0",
                 "php": "^8.1"
             },
@@ -222,7 +223,7 @@
             "autoload": {
                 "psr-4": {
                     "Darling\\PHPTextTypes\\": "src/",
-                    "Darling\\PHPTextTypes\\Tests\\": "tests/"
+                    "Darling\\PHPTextTypes\\tests\\": "tests/"
                 }
             },
             "notification-url": "https://packagist.org/downloads/",
@@ -238,9 +239,9 @@
             "description": "A collection of classes that represent various types of text.",
             "support": {
                 "issues": "https://github.com/sevidmusic/PHPTextTypes/issues",
-                "source": "https://github.com/sevidmusic/PHPTextTypes/tree/v1.1.2"
+                "source": "https://github.com/sevidmusic/PHPTextTypes/tree/v1.1.4"
             },
-            "time": "2023-07-09T01:49:57+00:00"
+            "time": "2023-10-25T18:36:01+00:00"
         },
         {
             "name": "darling/php-unit-test-utilities",
@@ -517,16 +518,16 @@
         },
         {
             "name": "phpstan/phpstan",
-            "version": "1.10.38",
+            "version": "1.10.39",
             "source": {
                 "type": "git",
                 "url": "https://github.com/phpstan/phpstan.git",
-                "reference": "5302bb402c57f00fb3c2c015bac86e0827e4b691"
+                "reference": "d9dedb0413f678b4d03cbc2279a48f91592c97c4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phpstan/phpstan/zipball/5302bb402c57f00fb3c2c015bac86e0827e4b691",
-                "reference": "5302bb402c57f00fb3c2c015bac86e0827e4b691",
+                "url": "https://api.github.com/repos/phpstan/phpstan/zipball/d9dedb0413f678b4d03cbc2279a48f91592c97c4",
+                "reference": "d9dedb0413f678b4d03cbc2279a48f91592c97c4",
                 "shasum": ""
             },
             "require": {
@@ -575,7 +576,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2023-10-06T14:19:14+00:00"
+            "time": "2023-10-17T15:46:26+00:00"
         },
         {
             "name": "phpunit/php-code-coverage",
@@ -900,16 +901,16 @@
         },
         {
             "name": "phpunit/phpunit",
-            "version": "10.4.0",
+            "version": "10.4.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/phpunit.git",
-                "reference": "9784e877e3700de37475545bdbdce8383ff53d25"
+                "reference": "62bd7af13d282deeb95650077d28ba3600ca321c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/9784e877e3700de37475545bdbdce8383ff53d25",
-                "reference": "9784e877e3700de37475545bdbdce8383ff53d25",
+                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/62bd7af13d282deeb95650077d28ba3600ca321c",
+                "reference": "62bd7af13d282deeb95650077d28ba3600ca321c",
                 "shasum": ""
             },
             "require": {
@@ -981,7 +982,7 @@
             "support": {
                 "issues": "https://github.com/sebastianbergmann/phpunit/issues",
                 "security": "https://github.com/sebastianbergmann/phpunit/security/policy",
-                "source": "https://github.com/sebastianbergmann/phpunit/tree/10.4.0"
+                "source": "https://github.com/sebastianbergmann/phpunit/tree/10.4.1"
             },
             "funding": [
                 {
@@ -997,7 +998,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2023-10-06T03:41:22+00:00"
+            "time": "2023-10-08T05:01:11+00:00"
         },
         {
             "name": "sebastian/cli-parser",
